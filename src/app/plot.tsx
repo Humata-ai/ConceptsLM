@@ -1,18 +1,26 @@
 'use client'
 import Plot from 'react-plotly.js';
 
-export function PlotExample() {
+export interface Point {
+  x: number;
+  y: number;
+  z: number;
+  color: string;
+  text: string;
+}
+
+export function PlotExample({ points }: { points: Point[] }) {
   const data = [
     {
-      x: [-0.9352136, -0.9926135, 0.92076135], // x-coordinates
-      y: [0.35395238, 0.06285654, 0.27803382], // y-coordinates
-      z: [0.009655553, 0.10376623, -0.27367073], // z-coordinates
-      text: ["cat", "dog", "baseball"], // labels
+      x: points.map((point) => point.x), // Extract x-coordinates
+      y: points.map((point) => point.y), // Extract y-coordinates
+      z: points.map((point) => point.z), // Extract z-coordinates
+      text: points.map((point) => point.text), // Extract labels
       mode: "markers+text",
       type: "scatter3d",
       marker: {
         size: 10,
-        color: ["blue", "green", "red"],
+        color: points.map((point) => point.color), // Use colors from points
       },
       textposition: "top center",
       textfont: {
