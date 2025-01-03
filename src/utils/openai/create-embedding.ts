@@ -1,6 +1,9 @@
 import { Embedding } from "openai/resources/embeddings.mjs";
 
-export async function createEmbeddings(input: string[]): Promise<Array<Embedding>> {
+export async function createEmbeddings(
+  input: string[],
+  options?: { dimensions: number }
+): Promise<Array<Embedding>> {
   if (!process.env.OPENAI_API_KEY) {
     throw new Error('OPENAI_API_KEY was not set');
   }
@@ -16,6 +19,7 @@ export async function createEmbeddings(input: string[]): Promise<Array<Embedding
     body: JSON.stringify({
       model: 'text-embedding-3-large',
       input,
+      ...(options ? options : {})
     }),
   })
     .then((res) => res.json())
