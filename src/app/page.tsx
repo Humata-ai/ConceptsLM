@@ -27,7 +27,18 @@ export default async function Home() {
   const [{ embedding: catEmbeddingFull }] = await createEmbeddings(['cat'])
   const [{ embedding: catEmbeddingThree }] = await createEmbeddings(['cat'], { dimensions: 3 })
   const words = [
-    "cat", "cats", "dimensions"
+    "cat",
+    "cats",
+    "dog",
+
+    "pineapple",
+    "banana",
+    "apple",
+
+    "dimensions",
+    "Jesus",
+    "Christian",
+    "Mormon",
   ];
 
   const wordsWithEmbeddings = await addCoordinatesToWords(words)
