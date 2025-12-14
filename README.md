@@ -42,7 +42,7 @@ Know uses geometric space to mirror how humans actually think about concepts.
 <details>
 <summary>Don't LLMs already do this?</summary>
 
-Neural networks excel at perception and pattern recognition but fail where we need them most:
+Neural networks excel at perception and pattern recognition but have limitations:
 
 - **Explainability** — Black box decisions can't be debugged or audited
 - **Logic** — Neural nets approximate reasoning but don't guarantee correctness
