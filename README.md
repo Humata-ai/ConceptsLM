@@ -16,6 +16,10 @@ Build a conceptual map in digital geometric space that humans and AI share. When
 
 **Personalized Learning Maps** — Map an individual's conceptual understanding to create personalized learning paths. By visualizing knowledge gaps and connections in a learner's mental model, Know enables adaptive education tailored to each person's unique cognitive structure.
 
+**Personalized AI** — Enable AI agents to learn and remember information about you in a queryable way. For example, a web agent booking travel can remember you prefer aisle seats, avoid early morning flights, and always need vegetarian meals—then automatically apply these preferences without asking each time.
+
+**KnowDB** — Get structured database benefits without the setup cost. Know learns conceptual schemas from natural language, so you can query knowledge like a database without spending weeks designing tables and normalizing data. The structure emerges automatically from understanding our natural languages.
+
 ## FAQ
 
 <details>
