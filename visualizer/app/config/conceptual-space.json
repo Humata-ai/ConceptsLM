@@ -1,5 +1,6 @@
 {
-  "xRange": [-10, 10],
-  "yRange": [-10, 10],
-  "zRange": [-10, 10]
+  "xRange": [-128, 127],
+  "yRange": [0, 100],
+  "zRange": [-128, 127],
+  "samplingRate": 6
 }
