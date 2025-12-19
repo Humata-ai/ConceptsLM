@@ -3,7 +3,12 @@ import { useMemo } from 'react';
 
 interface ColorSpaceProps {
   position?: [number, number, number];
-  highlightColor?: { r: number; g: number; b: number };
+  highlightColor?: {
+    colorRegion?: {
+      min: { r: number; g: number; b: number };
+      max: { r: number; g: number; b: number };
+    };
+  };
 }
 
 export default function ColorSpace({
@@ -21,7 +26,30 @@ export default function ColorSpace({
           data[index] = (x / (size - 1)) * 255;
           data[index + 1] = (y / (size - 1)) * 255;
           data[index + 2] = (z / (size - 1)) * 255;
-          data[index + 3] = 255;
+
+          // Alpha channel - calculate based on color region bounds
+          if (highlightColor?.colorRegion) {
+            // Normalize voxel position to 0-1 range
+            const voxelR = x / (size - 1);
+            const voxelG = y / (size - 1);
+            const voxelB = z / (size - 1);
+
+            // Check if voxel is within the min/max bounds
+            const inRegion = (
+              voxelR >= highlightColor.colorRegion.min.r &&
+              voxelR <= highlightColor.colorRegion.max.r &&
+              voxelG >= highlightColor.colorRegion.min.g &&
+              voxelG <= highlightColor.colorRegion.max.g &&
+              voxelB >= highlightColor.colorRegion.min.b &&
+              voxelB <= highlightColor.colorRegion.max.b
+            );
+
+            // Set alpha: 255 (opaque) inside region, 26 (0.1 opacity) outside
+            data[index + 3] = inRegion ? 255 : 26;
+          } else {
+            // Backward compatibility: fully opaque if no region defined
+            data[index + 3] = 255;
+          }
         }
       }
     }
@@ -34,7 +62,7 @@ export default function ColorSpace({
     texture3D.needsUpdate = true;
 
     return texture3D;
-  }, []);
+  }, [highlightColor]);
 
   const material = useMemo(() => {
     return new THREE.ShaderMaterial({
@@ -57,38 +85,83 @@ export default function ColorSpace({
           gl_FragColor = texture(colorTexture, vPosition);
         }
       `,
-      side: THREE.FrontSide,
+      side: THREE.DoubleSide,
+      transparent: true,
+      depthWrite: false,
     });
   }, [texture]);
 
-  // Calculate highlight sphere position if color is provided
-  const highlightPosition = useMemo(() => {
-    if (!highlightColor) return null;
-    // Map [0,1] RGB values to cube coordinates
-    // Cube goes from [0,0,0] to [1,1,1], centered at [0.5, 0.5, 0.5]
-    return [
-      highlightColor.r,
-      highlightColor.g,
-      highlightColor.b,
-    ] as [number, number, number];
+
+  // Calculate colorRegion box geometry if region is defined
+  const regionBox = useMemo(() => {
+    if (!highlightColor?.colorRegion) return null;
+
+    const { min, max } = highlightColor.colorRegion;
+
+    // Calculate dimensions and center position in 0-1 space
+    const width = max.r - min.r;
+    const height = max.g - min.g;
+    const depth = max.b - min.b;
+
+    // Center in 0-1 color space (same as full cube coordinates)
+    const centerX = (min.r + max.r) / 2;
+    const centerY = (min.g + max.g) / 2;
+    const centerZ = (min.b + max.b) / 2;
+
+    return {
+      position: [centerX, centerY, centerZ] as [number, number, number],
+      scale: [width, height, depth] as [number, number, number],
+      min,
+      max,
+    };
   }, [highlightColor]);
+
+  // Create material for the colorRegion box
+  const regionMaterial = useMemo(() => {
+    if (!regionBox) return null;
+
+    return new THREE.ShaderMaterial({
+      uniforms: {
+        colorTexture: { value: texture },
+        regionMin: { value: new THREE.Vector3(regionBox.min.r, regionBox.min.g, regionBox.min.b) },
+        regionMax: { value: new THREE.Vector3(regionBox.max.r, regionBox.max.g, regionBox.max.b) },
+      },
+      vertexShader: `
+        varying vec3 vPosition;
+
+        void main() {
+          vPosition = position + 0.5;
+          gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+        }
+      `,
+      fragmentShader: `
+        uniform highp sampler3D colorTexture;
+        uniform vec3 regionMin;
+        uniform vec3 regionMax;
+        varying vec3 vPosition;
+
+        void main() {
+          // Map position to region coordinates
+          vec3 regionCoord = regionMin + vPosition * (regionMax - regionMin);
+          gl_FragColor = texture(colorTexture, regionCoord);
+        }
+      `,
+      side: THREE.DoubleSide,
+      transparent: false,
+    });
+  }, [texture, regionBox]);
 
   return (
     <group position={position}>
-      {/* RGB Cube */}
+      {/* Full RGB Cube (mostly transparent) */}
       <mesh position={[0.5, 0.5, 0.5]} material={material}>
         <boxGeometry args={[1, 1, 1, 16, 16, 16]} />
       </mesh>
 
-      {/* Highlight sphere at the item's color */}
-      {highlightPosition && (
-        <mesh position={[highlightPosition[0] + 0.5, highlightPosition[1] + 0.5, highlightPosition[2] + 0.5]}>
-          <sphereGeometry args={[0.08, 16, 16]} />
-          <meshStandardMaterial
-            color={new THREE.Color(highlightColor!.r, highlightColor!.g, highlightColor!.b)}
-            emissive={new THREE.Color(highlightColor!.r, highlightColor!.g, highlightColor!.b)}
-            emissiveIntensity={0.5}
-          />
+      {/* ColorRegion box (opaque, shows gradient) */}
+      {regionBox && regionMaterial && (
+        <mesh position={regionBox.position} scale={regionBox.scale} material={regionMaterial}>
+          <boxGeometry args={[1, 1, 1, 16, 16, 16]} />
         </mesh>
       )}
     </group>

@@ -13,8 +13,9 @@ export interface DictionaryItem {
     umami: number;
   };
   color: {
-    r: number;
-    g: number;
-    b: number;
+    colorRegion?: {
+      min: { r: number; g: number; b: number };
+      max: { r: number; g: number; b: number };
+    };
   };
 }
