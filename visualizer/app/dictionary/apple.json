@@ -1,0 +1,20 @@
+{
+  "name": "apple",
+  "shape": {
+    "modelPath": "/models/apple.obj",
+    "targetSize": 7.5,
+    "unit": "cm"
+  },
+  "taste": {
+    "sweet": 0.75,
+    "sour": 0.55,
+    "salty": 0.05,
+    "bitter": 0.08,
+    "umami": 0.06
+  },
+  "color": {
+    "r": 0.8,
+    "g": 0.2,
+    "b": 0.15
+  }
+}

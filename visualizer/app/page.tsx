@@ -1,7 +1,8 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import UnifiedVisualization from './components/UnifiedVisualization';
+import Viewer from './viewer';
+import appleData from './dictionary/apple.json';
 import { loadOBJ, scaleMeshData, calculateBoundingBox } from './utils/objParser';
 import { MeshData } from './utils/appleShape';
 
@@ -16,21 +17,20 @@ export default function Home() {
         // Model: "Apple Fruit 3D" by Pixel (https://sketchfab.com/stefan.lengyel1)
         // Licensed under CC Attribution: https://creativecommons.org/licenses/by/4.0/
         // Source: https://sketchfab.com/3d-models/apple-fruit-3d-3cb3ac28e00940cca19f4d0566d34be5
-        const mesh = await loadOBJ('/models/apple.obj');
+        const mesh = await loadOBJ(appleData.shape.modelPath);
 
         // Check the bounding box to determine scale
         const bbox = calculateBoundingBox(mesh);
         console.log('Original apple size:', bbox.size);
 
-        // Scale to approximately 7.5cm (assuming original is in different units)
-        // If the model is roughly 1 unit across, scale to 7.5cm
+        // Scale to target size from dictionary
         const currentSize = Math.max(...bbox.size);
-        const targetSize = 7.5; // cm
+        const targetSize = appleData.shape.targetSize;
         const scale = targetSize / currentSize;
 
         const scaledMesh = scaleMeshData(mesh, scale);
         const scaledBbox = calculateBoundingBox(scaledMesh);
-        console.log('Scaled apple size (cm):', scaledBbox.size);
+        console.log(`Scaled apple size (${appleData.shape.unit}):`, scaledBbox.size);
 
         setAppleMesh(scaledMesh);
         setLoading(false);
@@ -56,7 +56,7 @@ export default function Home() {
           color: '#666',
         }}
       >
-        Loading apple model...
+        Loading {appleData.name} model...
       </div>
     );
   }
@@ -74,21 +74,10 @@ export default function Home() {
           color: '#ff0000',
         }}
       >
-        Error loading apple model
+        Error loading {appleData.name} model
       </div>
     );
   }
 
-  return (
-    <UnifiedVisualization
-      appleMesh={appleMesh}
-      tasteValues={{
-        sweet: 0.75,
-        sour: 0.55,
-        salty: 0.05,
-        bitter: 0.08,
-        umami: 0.06,
-      }}
-    />
-  );
+  return <Viewer dictionaryData={appleData} meshData={appleMesh} />;
 }
