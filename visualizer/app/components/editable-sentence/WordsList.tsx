@@ -10,16 +10,16 @@ interface WordsListProps {
 export function WordsList({ words, selectedWordIndex, onWordClick }: WordsListProps) {
   return (
     <div className={styles.wordsContainer}>
-      {words.map((word) => {
+      {words.map((word, arrayIndex) => {
         if (!word.isWord) {
-          return <span key={word.index}>{word.text}</span>;
+          return <span key={arrayIndex}>{word.text}</span>;
         }
 
         const isSelected = selectedWordIndex === word.index;
 
         return (
           <span
-            key={word.index}
+            key={arrayIndex}
             onClick={() => onWordClick(word)}
             className={`${styles.clickableWord} ${isSelected ? styles.selected : ''}`}
           >

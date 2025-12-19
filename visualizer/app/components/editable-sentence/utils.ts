@@ -2,7 +2,7 @@ import { ParsedWord } from './types';
 
 export function parseTextIntoWords(text: string): ParsedWord[] {
   const words: ParsedWord[] = [];
-  let currentIndex = 0;
+  let wordIndex = 0;
 
   const wordRegex = /[\w']+|[^\w']+/g;
   const matches = text.matchAll(wordRegex);
@@ -13,12 +13,14 @@ export function parseTextIntoWords(text: string): ParsedWord[] {
 
     words.push({
       text: segment,
-      index: currentIndex,
+      index: isWord ? wordIndex : -1,
       isWord: isWord,
       originalIndex: match.index || 0,
     });
 
-    currentIndex++;
+    if (isWord) {
+      wordIndex++;
+    }
   }
 
   return words;
