@@ -26,9 +26,9 @@ const shapeAngle = (4 * Math.PI / 3) + ANGLE_OFFSET;
 
 const POSITIONS = {
   taste: [
-    Math.cos(tasteAngle) * RADIUS,
-    -5, // Below the center text
-    Math.sin(tasteAngle) * RADIUS + BACKGROUND_Z
+    0, // Centered horizontally
+    -12, // Much further below the center text
+    -15 // Much closer to apple
   ] as [number, number, number],
 
   color: [
@@ -206,7 +206,7 @@ export default function ConceptualSpaceDefinition({
 
       <Canvas
         camera={{
-          position: [0, 0, 25],
+          position: [0, 0, 35],
           fov: 50,
         }}
         gl={{ antialias: true }}
