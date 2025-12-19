@@ -183,8 +183,10 @@ export default function ConceptualSpaceDefinition({
     );
   }
 
-  // Error state - show message in 3D scene
-  if (error) {
+  // Error state or no definition - show message in 3D scene
+  if (error || (!loading && !dictionaryData)) {
+    const message = error || `No definition yet for "${word}"`;
+
     return (
       <div className={className} style={{ width, height, position: 'relative' }}>
         <Canvas
@@ -206,14 +208,14 @@ export default function ConceptualSpaceDefinition({
 
           <Text
             position={[0, 0, 5]}
-            fontSize={2}
+            fontSize={1}
             color="#666666"
             anchorX="center"
             anchorY="middle"
             textAlign="center"
             maxWidth={40}
           >
-            {`No definition for "${word}"`}
+            {message}
           </Text>
         </Canvas>
       </div>
