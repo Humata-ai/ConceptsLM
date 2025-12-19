@@ -1,8 +1,76 @@
+'use client';
+
+import { useEffect, useState } from 'react';
 import ShapeGraph from './components/ShapeGraph';
-import { generateAppleShape } from './utils/appleShape';
+import { loadOBJ, scaleMeshData, calculateBoundingBox } from './utils/objParser';
+import { MeshData } from './utils/appleShape';
 
 export default function Home() {
-  const appleMesh = generateAppleShape(7.5);
+  const [appleMesh, setAppleMesh] = useState<MeshData | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function loadApple() {
+      try {
+        // Load the OBJ file
+        const mesh = await loadOBJ('/models/apple.obj');
+
+        // Check the bounding box to determine scale
+        const bbox = calculateBoundingBox(mesh);
+        console.log('Original apple size:', bbox.size);
+
+        // Scale to approximately 7.5cm (assuming original is in different units)
+        // If the model is roughly 1 unit across, scale to 7.5cm
+        const currentSize = Math.max(...bbox.size);
+        const targetSize = 7.5; // cm
+        const scale = targetSize / currentSize;
+
+        const scaledMesh = scaleMeshData(mesh, scale);
+        const scaledBbox = calculateBoundingBox(scaledMesh);
+        console.log('Scaled apple size (cm):', scaledBbox.size);
+
+        setAppleMesh(scaledMesh);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error loading apple model:', error);
+        setLoading(false);
+      }
+    }
+
+    loadApple();
+  }, []);
+
+  if (loading) {
+    return (
+      <div style={{
+        width: '100vw',
+        height: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        fontSize: '1.5rem',
+        color: '#666'
+      }}>
+        Loading apple model...
+      </div>
+    );
+  }
+
+  if (!appleMesh) {
+    return (
+      <div style={{
+        width: '100vw',
+        height: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        fontSize: '1.5rem',
+        color: '#ff0000'
+      }}>
+        Error loading apple model
+      </div>
+    );
+  }
 
   return (
     <ShapeGraph
@@ -11,8 +79,13 @@ export default function Home() {
       showAxes={true}
       showGrid={true}
       showLabels={true}
-      meshColor="#ff6b6b"
-      meshOpacity={0.9}
+      meshColor="#ffffff"
+      meshOpacity={1.0}
+      axisColors={{
+        x: "#888888",
+        y: "#888888",
+        z: "#888888",
+      }}
     />
   );
 }
