@@ -213,7 +213,7 @@ export default function ShapeGraph(props: ShapeGraphProps) {
   const centerZ = zMax / 2;
 
   return (
-    <div style={{ width: '100vw', height: '100vh' }}>
+    <div style={{ width: '100%', height: '100%' }}>
       <Canvas
         camera={{
           position: [xMax * 1.2, yMax * 1.2, zMax * 1.2],

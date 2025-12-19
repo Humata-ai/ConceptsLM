@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import ShapeGraph from './components/ShapeGraph';
+import UnifiedVisualization from './components/UnifiedVisualization';
 import { loadOBJ, scaleMeshData, calculateBoundingBox } from './utils/objParser';
 import { MeshData } from './utils/appleShape';
 
@@ -45,15 +45,17 @@ export default function Home() {
 
   if (loading) {
     return (
-      <div style={{
-        width: '100vw',
-        height: '100vh',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        fontSize: '1.5rem',
-        color: '#666'
-      }}>
+      <div
+        style={{
+          width: '100vw',
+          height: '100vh',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          fontSize: '1.5rem',
+          color: '#666',
+        }}
+      >
         Loading apple model...
       </div>
     );
@@ -61,33 +63,31 @@ export default function Home() {
 
   if (!appleMesh) {
     return (
-      <div style={{
-        width: '100vw',
-        height: '100vh',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        fontSize: '1.5rem',
-        color: '#ff0000'
-      }}>
+      <div
+        style={{
+          width: '100vw',
+          height: '100vh',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          fontSize: '1.5rem',
+          color: '#ff0000',
+        }}
+      >
         Error loading apple model
       </div>
     );
   }
 
   return (
-    <ShapeGraph
-      meshData={appleMesh}
-      unit="cm"
-      showAxes={true}
-      showGrid={true}
-      showLabels={true}
-      meshColor="#ffffff"
-      meshOpacity={1.0}
-      axisColors={{
-        x: "#888888",
-        y: "#888888",
-        z: "#888888",
+    <UnifiedVisualization
+      appleMesh={appleMesh}
+      tasteValues={{
+        sweet: 0.8,
+        sour: 0.3,
+        salty: 0.6,
+        bitter: 0.2,
+        umami: 0.7,
       }}
     />
   );
