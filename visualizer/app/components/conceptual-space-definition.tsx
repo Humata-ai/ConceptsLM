@@ -1,14 +1,62 @@
 'use client';
 
 import { Canvas } from '@react-three/fiber';
-import { OrbitControls } from '@react-three/drei';
+import { OrbitControls, Text } from '@react-three/drei';
 import { useEffect, useState } from 'react';
+import * as THREE from 'three';
 import ShapeSpace from './conceptual-spaces/shape-space';
 import TasteSpace from './conceptual-spaces/taste-space';
 import ColorSpace from './conceptual-spaces/color-space';
+import BoundingBox from './conceptual-spaces/bounding-box';
+import ConnectionLine from './conceptual-spaces/connection-line';
 import { loadOBJ, scaleMeshData, calculateBoundingBox } from '../utils/objParser';
 import { MeshData } from '../utils/appleShape';
 import { DictionaryItem } from '../types/dictionary';
+
+// Layout configuration
+const CENTER_POS: [number, number, number] = [0, 3, 0];
+const RADIUS = 15;
+const ANGLE_OFFSET = -Math.PI / 2; // Start from top
+
+// Calculate circular positions (120° apart)
+const tasteAngle = 0 + ANGLE_OFFSET;
+const colorAngle = (2 * Math.PI / 3) + ANGLE_OFFSET;
+const shapeAngle = (4 * Math.PI / 3) + ANGLE_OFFSET;
+
+const POSITIONS = {
+  taste: [
+    Math.cos(tasteAngle) * RADIUS,
+    3,
+    Math.sin(tasteAngle) * RADIUS
+  ] as [number, number, number],
+
+  color: [
+    Math.cos(colorAngle) * RADIUS,
+    3,
+    Math.sin(colorAngle) * RADIUS
+  ] as [number, number, number],
+
+  shape: [
+    Math.cos(shapeAngle) * RADIUS,
+    3,
+    Math.sin(shapeAngle) * RADIUS
+  ] as [number, number, number],
+};
+
+// Styling constants
+const COLORS = {
+  centerText: '#333333',
+  connectionLine: '#666666',
+  boundingBox: '#444444',
+  spaceTitle: '#222222',
+  mainTitle: '#000000',
+};
+
+const FONT_SIZES = {
+  mainTitle: 1.2,
+  centerNode: 1.0,
+  spaceTitle: 0.8,
+};
 
 interface ConceptualSpaceDefinitionProps {
   word: string;
@@ -140,8 +188,8 @@ export default function ConceptualSpaceDefinition({
     <div className={className} style={{ width, height }}>
       <Canvas
         camera={{
-          position: [0, 12, 25],
-          fov: 50,
+          position: [0, 18, 30],
+          fov: 60,
         }}
         gl={{ antialias: true }}
       >
@@ -151,24 +199,101 @@ export default function ConceptualSpaceDefinition({
 
         <OrbitControls
           makeDefault
-          target={[0, 3, 0]}
+          target={[0, 5, 0]}
           enableDamping={true}
           dampingFactor={0.05}
-          minDistance={10}
-          maxDistance={60}
+          minDistance={15}
+          maxDistance={70}
         />
 
-        {/* Shape Space - Left */}
-        <group position={[-12, 0, 0]} scale={0.5}>
-          <ShapeSpace meshData={meshData} unit={dictionaryData.shape.unit} />
+        {/* Main Scene Title */}
+        <Text
+          position={[0, 12, 0]}
+          fontSize={FONT_SIZES.mainTitle}
+          color={COLORS.mainTitle}
+          fontWeight="bold"
+          anchorX="center"
+          anchorY="bottom"
+          maxWidth={40}
+        >
+          Conceptual Space Definition of {dictionaryData.name}
+        </Text>
+
+        {/* Center Node */}
+        <Text
+          position={CENTER_POS}
+          fontSize={FONT_SIZES.centerNode}
+          color={COLORS.centerText}
+          fontWeight="bold"
+          anchorX="center"
+          anchorY="middle"
+        >
+          {dictionaryData.name}
+        </Text>
+
+        {/* Connecting Lines */}
+        <ConnectionLine
+          start={CENTER_POS}
+          end={[0, 3, 11.4]}
+          color={COLORS.connectionLine}
+        />
+        <ConnectionLine
+          start={CENTER_POS}
+          end={[-7.99, 5.5, -2.5]}
+          color={COLORS.connectionLine}
+        />
+        <ConnectionLine
+          start={CENTER_POS}
+          end={[12.99, 5.5, -2.5]}
+          color={COLORS.connectionLine}
+        />
+
+        {/* Taste Space - Top */}
+        <group position={POSITIONS.taste}>
+          <TasteSpace tasteValues={dictionaryData.taste} radius={3} />
+          <BoundingBox size={[7.2, 0.2, 7.2]} color={COLORS.boundingBox} />
+          <Text
+            position={[0, 1, 0]}
+            fontSize={FONT_SIZES.spaceTitle}
+            color={COLORS.spaceTitle}
+            fontWeight="bold"
+            anchorX="center"
+            anchorY="bottom"
+          >
+            Taste
+          </Text>
         </group>
 
-        {/* Taste Space - Center */}
-        <TasteSpace tasteValues={dictionaryData.taste} position={[0, 3, 0]} radius={3} />
-
-        {/* Color Space - Right (scaled up) */}
-        <group position={[12, 3, 0]} scale={5}>
+        {/* Color Space - Bottom Left */}
+        <group position={POSITIONS.color} scale={5}>
           <ColorSpace highlightColor={dictionaryData.color} />
+          <BoundingBox size={[1, 1, 1]} position={[0.5, 0.5, 0.5]} color={COLORS.boundingBox} />
+          <Text
+            position={[0.5, 1.2, 0.5]}
+            fontSize={FONT_SIZES.spaceTitle / 5}
+            color={COLORS.spaceTitle}
+            fontWeight="bold"
+            anchorX="center"
+            anchorY="bottom"
+          >
+            Color
+          </Text>
+        </group>
+
+        {/* Shape Space - Bottom Right */}
+        <group position={POSITIONS.shape} scale={0.5}>
+          <ShapeSpace meshData={meshData} unit={dictionaryData.shape.unit} />
+          <BoundingBox size={[10, 10, 10]} position={[5, 5, 5]} color={COLORS.boundingBox} />
+          <Text
+            position={[5, 11, 5]}
+            fontSize={FONT_SIZES.spaceTitle * 2}
+            color={COLORS.spaceTitle}
+            fontWeight="bold"
+            anchorX="center"
+            anchorY="bottom"
+          >
+            Shape
+          </Text>
         </group>
       </Canvas>
     </div>
