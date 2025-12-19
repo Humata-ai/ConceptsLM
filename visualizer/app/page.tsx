@@ -83,11 +83,11 @@ export default function Home() {
     <UnifiedVisualization
       appleMesh={appleMesh}
       tasteValues={{
-        sweet: 0.8,
-        sour: 0.3,
-        salty: 0.6,
-        bitter: 0.2,
-        umami: 0.7,
+        sweet: 0.75,
+        sour: 0.55,
+        salty: 0.05,
+        bitter: 0.08,
+        umami: 0.06,
       }}
     />
   );
