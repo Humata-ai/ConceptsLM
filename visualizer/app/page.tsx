@@ -13,6 +13,9 @@ export default function Home() {
     async function loadApple() {
       try {
         // Load the OBJ file
+        // Model: "Apple Fruit 3D" by Pixel (https://sketchfab.com/stefan.lengyel1)
+        // Licensed under CC Attribution: https://creativecommons.org/licenses/by/4.0/
+        // Source: https://sketchfab.com/3d-models/apple-fruit-3d-3cb3ac28e00940cca19f4d0566d34be5
         const mesh = await loadOBJ('/models/apple.obj');
 
         // Check the bounding box to determine scale
