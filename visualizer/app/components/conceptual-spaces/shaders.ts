@@ -4,8 +4,9 @@ const COLOR_VERTEX_SHADER = `
   varying vec3 vPosition;
 
   void main() {
-    // Position is in [0, 255] space, normalize to [0, 1] for texture sampling
-    vPosition = position / 255.0;
+    // BoxGeometry creates vertices in [-127.5, 127.5] range (centered)
+    // Convert to [0, 1] for texture sampling: [-127.5, 127.5] → [-0.5, 0.5] → [0, 1]
+    vPosition = position / 255.0 + 0.5;
     gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
   }
 `;
@@ -37,8 +38,9 @@ const REGION_FRAGMENT_SHADER = `
   varying vec3 vPosition;
 
   void main() {
-    // Sample texture directly at vertex position (already in 0-1 space)
-    gl_FragColor = texture(colorTexture, vPosition);
+    // Sample texture and force alpha to 1.0 (fully opaque)
+    vec4 texColor = texture(colorTexture, vPosition);
+    gl_FragColor = vec4(texColor.rgb, 1.0);
   }
 `;
 
