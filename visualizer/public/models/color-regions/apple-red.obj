@@ -1,26 +1,27 @@
-# Red apple color region - Realistic red apple colors
-# Deep red to bright red with some orange tones
+# Red apple color region - Large stretched octahedron
+# Elongated along R axis (red direction)
 
-# 8 vertices - Red HIGH (153-255), Green LOW (0-64), Blue VERY LOW (0-26)
-v 191 38 13
-v 255 46 20
-v 242 64 26
-v 166 56 20
-v 153 31 8
-v 179 13 5
-v 204 51 31
-v 191 26 3
+# Top vertex (positive R extreme)
+v 255 50 30
 
-# Faces
-f 1 2 7
-f 2 3 7
-f 3 4 7
-f 4 5 7
-f 5 6 7
-f 6 1 7
-f 1 6 8
-f 6 5 8
-f 5 4 8
-f 4 3 8
-f 3 2 8
-f 2 1 8
+# Middle ring (4 vertices forming a square)
+v 120 50 30
+v 190 110 30
+v 190 50 90
+v 190 0 30
+
+# Bottom vertex (negative R direction)
+v 100 50 30
+
+# 8 triangular faces forming octahedron
+# Upper pyramid (4 faces)
+f 1 2 3
+f 1 3 4
+f 1 4 5
+f 1 5 2
+
+# Lower pyramid (4 faces)
+f 6 3 2
+f 6 4 3
+f 6 5 4
+f 6 2 5

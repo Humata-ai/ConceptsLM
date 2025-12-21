@@ -1,26 +1,27 @@
-# Green apple color region - Realistic green apple colors
-# Deep green to bright green with some yellow-green tones
+# Green apple color region - Large stretched octahedron
+# Elongated along G axis (green direction)
 
-# 8 vertices - Red LOW (0-64), Green HIGH (153-255), Blue VERY LOW (0-26)
-v 38 191 13
-v 46 255 20
-v 64 242 26
-v 56 166 20
-v 31 153 8
-v 13 179 5
-v 51 204 31
-v 26 191 3
+# Top vertex (positive G extreme)
+v 50 255 30
 
-# Faces
-f 1 2 7
-f 2 3 7
-f 3 4 7
-f 4 5 7
-f 5 6 7
-f 6 1 7
-f 1 6 8
-f 6 5 8
-f 5 4 8
-f 4 3 8
-f 3 2 8
-f 2 1 8
+# Middle ring (4 vertices forming a square)
+v 50 120 30
+v 110 190 30
+v 50 190 90
+v 0 190 30
+
+# Bottom vertex (negative G direction)
+v 50 100 30
+
+# 8 triangular faces forming octahedron
+# Upper pyramid (4 faces)
+f 1 2 3
+f 1 3 4
+f 1 4 5
+f 1 5 2
+
+# Lower pyramid (4 faces)
+f 6 3 2
+f 6 4 3
+f 6 5 4
+f 6 2 5

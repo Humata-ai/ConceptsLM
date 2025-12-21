@@ -38,14 +38,9 @@ const REGION_FRAGMENT_SHADER = `
   varying vec3 vPosition;
 
   void main() {
-    // DEBUG: Output texture coordinate as color to verify
-    // vPosition should be in [0,1] range
-    // Red region vertices (191,38,13) should give (~0.75, ~0.15, ~0.05)
-    gl_FragColor = vec4(vPosition, 1.0);
-
-    // UNCOMMENT to see actual texture color:
-    // vec4 texColor = texture(colorTexture, vPosition);
-    // gl_FragColor = vec4(texColor.rgb, 1.0);
+    // Sample texture and force alpha to 1.0 (fully opaque)
+    vec4 texColor = texture(colorTexture, vPosition);
+    gl_FragColor = vec4(texColor.rgb, 1.0);
   }
 `;
 
