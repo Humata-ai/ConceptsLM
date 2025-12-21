@@ -6,6 +6,7 @@ import {
   createTransparentCubeMaterial,
   createRegionMaterials,
 } from './shaders';
+import { COLOR_SPACE_SIZE, COLOR_SPACE_CENTER } from './constants';
 
 function useMeshLoader(highlightColor?: ColorSpaceProps['highlightColor']) {
   const [regionMeshes, setRegionMeshes] = useState<LoadedMesh[]>([]);
@@ -47,7 +48,7 @@ interface ColorCubeProps {
 function ColorCube({ position, material }: ColorCubeProps) {
   return (
     <mesh position={position} material={material}>
-      <boxGeometry args={[1, 1, 1, 16, 16, 16]} />
+      <boxGeometry args={[COLOR_SPACE_SIZE, COLOR_SPACE_SIZE, COLOR_SPACE_SIZE, 16, 16, 16]} />
     </mesh>
   );
 }
@@ -88,18 +89,22 @@ export default function ColorSpace({
     [texture, regionMeshes.length]
   );
 
-  const cubePosition: [number, number, number] = [0.5, 0.5, 0.5];
+  const cubePosition: [number, number, number] = [
+    COLOR_SPACE_CENTER,
+    COLOR_SPACE_CENTER,
+    COLOR_SPACE_CENTER,
+  ];
 
   if (isLoading) {
     return (
-      <group position={position}>
+      <group position={position} scale={1/255}>
         <ColorCube position={cubePosition} material={cubeMaterial} />
       </group>
     );
   }
 
   return (
-    <group position={position}>
+    <group position={position} scale={1/255}>
       <ColorCube position={cubePosition} material={cubeMaterial} />
       <RegionMeshes meshes={regionMeshes} materials={regionMaterials} />
     </group>

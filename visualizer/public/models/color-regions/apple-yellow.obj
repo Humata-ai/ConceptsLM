@@ -1,15 +1,15 @@
 # Yellow apple color region - Realistic yellow apple colors
 # Golden yellow to pale yellow (like Golden Delicious)
 
-# 8 vertices - Red HIGH (0.75-1.0), Green HIGH (0.75-1.0), Blue VERY LOW (0.0-0.15)
-v 0.85 0.85 0.08
-v 1.0 0.90 0.12
-v 0.95 1.0 0.15
-v 0.80 0.95 0.10
-v 0.75 0.80 0.05
-v 0.82 0.75 0.03
-v 0.90 0.88 0.18
-v 0.88 0.85 0.02
+# 8 vertices - Red HIGH (191-255), Green HIGH (191-255), Blue VERY LOW (0-38)
+v 217 217 20
+v 255 230 31
+v 242 255 38
+v 204 242 26
+v 191 204 13
+v 209 191 8
+v 230 224 46
+v 224 217 5
 
 # Faces
 f 1 2 7

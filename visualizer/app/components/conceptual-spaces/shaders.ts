@@ -4,7 +4,8 @@ const COLOR_VERTEX_SHADER = `
   varying vec3 vPosition;
 
   void main() {
-    vPosition = position + 0.5;
+    // Position is in [0, 255] space, normalize to [0, 1] for texture sampling
+    vPosition = position / 255.0;
     gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
   }
 `;
@@ -22,8 +23,11 @@ const REGION_VERTEX_SHADER = `
   varying vec3 vPosition;
 
   void main() {
-    // Vertex positions are already in 0-1 RGB space
-    vPosition = position;
+    // Position is in [0, 255] space from OBJ
+    // Normalize to [0, 1] for texture sampling
+    vPosition = position / 255.0;
+
+    // Position is already in [0, 255] space, no centering needed
     gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
   }
 `;

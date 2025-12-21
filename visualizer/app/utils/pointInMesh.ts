@@ -171,7 +171,7 @@ export function rayIntersectsTriangle(
  * - AABB pre-check to skip expensive ray casts
  * - Suitable for 64³ voxel grids (~262k checks)
  *
- * @param point Point to test [x, y, z] in 0-1 normalized space
+ * @param point Point to test [x, y, z] in 0-255 coordinate space
  * @param meshData Mesh data with triangles
  * @param bbox Optional precomputed bounding box for optimization
  * @returns true if point is inside mesh

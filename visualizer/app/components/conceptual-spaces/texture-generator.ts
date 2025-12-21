@@ -1,32 +1,11 @@
 import * as THREE from 'three';
 import { isPointInMesh } from '../../utils/pointInMesh';
 import type { LoadedMesh } from './types';
+import { TEXTURE_SIZE } from './constants';
+import { voxelToWorldPosition, worldCoordToRGB } from './coordinate-utils';
 
-const TEXTURE_SIZE = 64;
 const OPAQUE_ALPHA = 255;
 const TRANSPARENT_ALPHA = 26;
-
-function calculateVoxelPosition(
-  x: number,
-  y: number,
-  z: number,
-  size: number
-): [number, number, number] {
-  return [x / (size - 1), y / (size - 1), z / (size - 1)];
-}
-
-function calculateRGBValues(
-  x: number,
-  y: number,
-  z: number,
-  size: number
-): [number, number, number] {
-  return [
-    (x / (size - 1)) * 255,
-    (y / (size - 1)) * 255,
-    (z / (size - 1)) * 255,
-  ];
-}
 
 function isVoxelInAnyMesh(
   voxelPos: [number, number, number],
@@ -38,18 +17,14 @@ function isVoxelInAnyMesh(
 }
 
 function calculateAlpha(
-  x: number,
-  y: number,
-  z: number,
-  size: number,
+  worldPos: [number, number, number],
   meshes: LoadedMesh[]
 ): number {
   if (meshes.length === 0) {
     return OPAQUE_ALPHA;
   }
 
-  const voxelPos = calculateVoxelPosition(x, y, z, size);
-  const inAnyMesh = isVoxelInAnyMesh(voxelPos, meshes);
+  const inAnyMesh = isVoxelInAnyMesh(worldPos, meshes);
 
   return inAnyMesh ? OPAQUE_ALPHA : TRANSPARENT_ALPHA;
 }
@@ -63,8 +38,15 @@ function fillVoxelData(
   meshes: LoadedMesh[]
 ): void {
   const index = (z * size * size + y * size + x) * 4;
-  const [r, g, b] = calculateRGBValues(x, y, z, size);
-  const alpha = calculateAlpha(x, y, z, size, meshes);
+
+  // Convert voxel indices to world coordinates (0-255 space)
+  const worldPos = voxelToWorldPosition(x, y, z, size);
+
+  // World coordinates ARE the RGB values (direct mapping!)
+  const [r, g, b] = worldCoordToRGB(...worldPos);
+
+  // Check if this world position is inside any mesh
+  const alpha = calculateAlpha(worldPos, meshes);
 
   data[index] = r;
   data[index + 1] = g;
@@ -93,8 +75,8 @@ function createTexture3D(data: Uint8Array): THREE.Data3DTexture {
 
   texture.format = THREE.RGBAFormat;
   texture.type = THREE.UnsignedByteType;
-  texture.minFilter = THREE.LinearFilter;
-  texture.magFilter = THREE.LinearFilter;
+  texture.minFilter = THREE.NearestFilter;
+  texture.magFilter = THREE.NearestFilter;
   texture.wrapS = THREE.ClampToEdgeWrapping;
   texture.wrapT = THREE.ClampToEdgeWrapping;
   texture.wrapR = THREE.ClampToEdgeWrapping;
