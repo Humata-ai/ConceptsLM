@@ -27,13 +27,13 @@ The current ambition of ConceptsDB is to model modern English semantics and its 
 <details>
 <summary>Why use ConceptsDB instead of a Knowledge Graph?</summary>
 
-ConceptsDBledge graphs work well for explicit relationships, but have limitations:
+Knowledge graphs work well for explicit relationships, but have limitations:
 
 **They can't model continuous space** — Everything must be a discrete node. Hard to represent things like color gradients or spatial dimensions.
 
-**Similarity is distance** — Conceptual spaces naturally show "how similar" through geometric proximity. ConceptsDBledge graphs need artificial relationship types instead.
+**Similarity is distance** — Conceptual spaces naturally show "how similar" through geometric proximity. Knowledge graphs need artificial relationship types instead.
 
-**Concepts combine smoothly** — ConceptsDBledge graphs struggle with "pet fish" - when you combine concepts, the meaning emerges naturally through geometric blending in conceptual spaces.
+**Concepts combine smoothly** — Knowledge graphs struggle with "pet fish" - when you combine concepts, the meaning emerges naturally through geometric blending in conceptual spaces.
 
 **Grounded in perception** — Instead of symbols pointing to other symbols, concepts connect to actual perceptual dimensions.
 
