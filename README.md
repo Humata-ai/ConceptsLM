@@ -25,7 +25,7 @@ The current ambition of ConceptsDB is to model modern English semantics and its 
 ## FAQ
 
 <details>
-<summary>Why use ConceptsDB instead of a ConceptsDBledge Graph?</summary>
+<summary>Why use ConceptsDB instead of a Knowledge Graph?</summary>
 
 ConceptsDBledge graphs work well for explicit relationships, but have limitations:
 
