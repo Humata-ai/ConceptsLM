@@ -19,6 +19,7 @@
     "react": "19.2.0",
     "react-device-detect": "^2.2.3",
     "react-dom": "19.2.0",
+    "supabase-cli": "^0.0.21",
     "three": "^0.182.0"
   },
   "devDependencies": {
