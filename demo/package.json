@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "build:types": "npx supabase gen types typescript --project-id tnuohaidpcqriecdwcly > types/supabase.ts",
     "start": "next start",
     "lint": "eslint"
   },
