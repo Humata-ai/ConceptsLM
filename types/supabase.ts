@@ -46,42 +46,6 @@ export type Database = {
           },
         ]
       }
-      concept_space_membership: {
-        Row: {
-          concept_id: string
-          conceptual_space_id: string
-          created_at: string
-          id: string
-        }
-        Insert: {
-          concept_id: string
-          conceptual_space_id: string
-          created_at?: string
-          id?: string
-        }
-        Update: {
-          concept_id?: string
-          conceptual_space_id?: string
-          created_at?: string
-          id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "concept_space_membership_concept_id_fkey"
-            columns: ["concept_id"]
-            isOneToOne: false
-            referencedRelation: "concepts"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "concept_space_membership_conceptual_space_id_fkey"
-            columns: ["conceptual_space_id"]
-            isOneToOne: false
-            referencedRelation: "conceptual_spaces"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       concept_space_objects: {
         Row: {
           concept_id: string

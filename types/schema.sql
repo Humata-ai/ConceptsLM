@@ -1,5 +1,5 @@
 -- Auto-generated schema file from Supabase
--- Generated at: 2025-12-28 00:24:02 UTC
+-- Generated at: 2025-12-28 01:07:19 UTC
 -- Project ID: tnuohaidpcqriecdwcly
 
 
@@ -41,17 +41,6 @@ CREATE TABLE IF NOT EXISTS "public"."concept_labels" (
 
 
 ALTER TABLE "public"."concept_labels" OWNER TO "postgres";
-
-
-CREATE TABLE IF NOT EXISTS "public"."concept_space_membership" (
-    "id" "uuid" DEFAULT "gen_random_uuid"() NOT NULL,
-    "concept_id" "uuid" NOT NULL,
-    "conceptual_space_id" "uuid" NOT NULL,
-    "created_at" timestamp with time zone DEFAULT "now"() NOT NULL
-);
-
-
-ALTER TABLE "public"."concept_space_membership" OWNER TO "postgres";
 
 
 CREATE TABLE IF NOT EXISTS "public"."concept_space_objects" (
@@ -122,16 +111,6 @@ ALTER TABLE ONLY "public"."concept_labels"
 
 
 
-ALTER TABLE ONLY "public"."concept_space_membership"
-    ADD CONSTRAINT "concept_space_membership_pkey" PRIMARY KEY ("id");
-
-
-
-ALTER TABLE ONLY "public"."concept_space_membership"
-    ADD CONSTRAINT "concept_space_membership_unique" UNIQUE ("concept_id", "conceptual_space_id");
-
-
-
 ALTER TABLE ONLY "public"."concept_space_objects"
     ADD CONSTRAINT "concept_space_objects_pkey" PRIMARY KEY ("id");
 
@@ -180,14 +159,6 @@ CREATE INDEX "idx_concept_labels_language" ON "public"."concept_labels" USING "b
 
 
 
-CREATE INDEX "idx_concept_space_membership_concept" ON "public"."concept_space_membership" USING "btree" ("concept_id");
-
-
-
-CREATE INDEX "idx_concept_space_membership_space" ON "public"."concept_space_membership" USING "btree" ("conceptual_space_id");
-
-
-
 CREATE INDEX "idx_concept_space_objects_concept" ON "public"."concept_space_objects" USING "btree" ("concept_id");
 
 
@@ -210,16 +181,6 @@ CREATE INDEX "idx_quality_dimensions_space_id" ON "public"."quality_dimensions" 
 
 ALTER TABLE ONLY "public"."concept_labels"
     ADD CONSTRAINT "concept_labels_concept_id_fkey" FOREIGN KEY ("concept_id") REFERENCES "public"."concepts"("id") ON DELETE CASCADE;
-
-
-
-ALTER TABLE ONLY "public"."concept_space_membership"
-    ADD CONSTRAINT "concept_space_membership_concept_id_fkey" FOREIGN KEY ("concept_id") REFERENCES "public"."concepts"("id") ON DELETE CASCADE;
-
-
-
-ALTER TABLE ONLY "public"."concept_space_membership"
-    ADD CONSTRAINT "concept_space_membership_conceptual_space_id_fkey" FOREIGN KEY ("conceptual_space_id") REFERENCES "public"."conceptual_spaces"("id") ON DELETE CASCADE;
 
 
 
@@ -253,12 +214,6 @@ GRANT USAGE ON SCHEMA "public" TO "service_role";
 GRANT ALL ON TABLE "public"."concept_labels" TO "anon";
 GRANT ALL ON TABLE "public"."concept_labels" TO "authenticated";
 GRANT ALL ON TABLE "public"."concept_labels" TO "service_role";
-
-
-
-GRANT ALL ON TABLE "public"."concept_space_membership" TO "anon";
-GRANT ALL ON TABLE "public"."concept_space_membership" TO "authenticated";
-GRANT ALL ON TABLE "public"."concept_space_membership" TO "service_role";
 
 
 
