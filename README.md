@@ -22,6 +22,10 @@ The current ambition of ConceptsDB is to model modern English semantics and its 
 
 **Big Data Searching** — Get structured database benefits without the setup cost. ConceptsDB learns conceptual schemas from natural language, so you can query knowledge like a database without spending weeks designing tables and normalizing data. The structure emerges automatically from understanding our natural languages.
 
+## MVP Roadmap
+
+Follow and contribute to the [MVP Release](https://github.com/Humata-ai/ConceptsDB/issues/1).
+
 ## FAQ
 
 <details>
