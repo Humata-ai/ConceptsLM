@@ -1,11 +1,11 @@
-Large language models are powerful but opaque, expensive, and difficult to control. ConceptsLM is the first conceptual representations language model (CRLM), replacing statistical patterns with geometric concept representations. By structuring the semantic meaning of natural language geometrically, CRLMs achieve intelligent language generation with full transparency and near-zero computational cost.
+Large language models are powerful but opaque, expensive, and difficult to control. ConceptsLM is building the first conceptual representations language model (CRLM), replacing statistical patterns with geometric concept representations. By structuring the semantic meaning of natural language geometrically, ConceptsLM will achieve intelligent language generation with full transparency and near-zero computational cost.
 
-1. A CRLM is composed of only human-readable code and is fully CPU executable, traceable, debuggable, modifiable, versionable, and portable to any runtime or device.
-2. The speed of inference is near instantaneous.
-3. The cost of inference is near zero.
-4. There is no context limit.
-5. CRLMs support memory and runtime updating.
-6. CRLMs are also queryable like a relational database.
+1. ConceptsLM will be composed of only human-readable code and will be fully CPU executable, traceable, debuggable, modifiable, versionable, and portable to any runtime or device.
+2. The speed of inference will be near instantaneous.
+3. The cost of inference will be near zero.
+4. There will be no context limit.
+5. ConceptsLM will support memory and recall
+6. ConceptsLM will be queryable like a relational database.
 
 The heart of ConceptsLM is the quality of its representational model. The current focus of this project is to model the approximately 100,000 words and the semantics of modern day English. This work is ongoing. 
 
