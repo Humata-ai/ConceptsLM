@@ -2,10 +2,6 @@ ConceptsLM is the first of its kind conceptual representations language model. B
 
 The current focus of ConceptsLM is to model the approximately 100,000 words and the semantics of modern day English. 
 
-## Example
-
-<insert-example-here>
-
 ## Applications
 
 **RAG Pipeline Accuracy** — Solve retrieval intelligence problems: finding precise knowledge, recognizing gaps, handling distributed information across large documents, synthesizing cross-document insights.
