@@ -1,4 +1,4 @@
-ConceptsLM is the first of its kind conceptual representations language model. By structuring the meaning of natural language as geometric representations ConceptsLM is able to able to generate natural language responses in a fully traceable, debuggable, modifiable, and logical way. This is a drastic evolution from current day langauge models whose internal logic is inscrutable.
+ConceptsLM is the first of its kind conceptual representations language model (CRLM). By structuring the meaning of natural language as geometric representations, CRLMs are able to generate natural language responses in a fully traceable, debuggable, modifiable, and logical way. This is a drastic evolution from current day langauge models whose internal neural nets are inscrutable. While LLMs use neural networks to emulate the brain's biological mechanisms, CRLMs use conceptual representations to emulate how humans consciously structure and organize thoughts.
 
 The current focus of ConceptsLM is to model the approximately 100,000 words and the semantics of modern day English. 
 
