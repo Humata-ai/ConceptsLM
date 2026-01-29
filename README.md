@@ -1,6 +1,6 @@
-ConceptsDB is a PostgreSQL extension that structures natural language meaning into a queryable geometric representation. This enables developers to write SQL queries that operate on meaning rather than surface syntax or spelling.
+ConceptsLM is the first of its kind conceptual representations language model. By structuring the meaning of natural language as geometric representations ConceptsLM is able to able to generate natural language responses in a fully traceable, debuggable, modifiable, and logical way. This is a drastic evolution from current day langauge models whose internal logic is inscrutable.
 
-The current ambition of ConceptsDB is to model modern English semantics and its vocabulary of approximately 100,000 words.
+The current focus of ConceptsLM is to model the approximately 100,000 words and the semantics of modern day English. 
 
 ## Example
 
