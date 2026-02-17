@@ -1,0 +1,8 @@
+interface QualityDimension {
+
+}
+
+interface QualityDomain {
+
+}
+
