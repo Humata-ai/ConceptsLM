@@ -38,12 +38,10 @@ jobs:
             cp "$file" "processed-wiki/$filename"
 
             # Add "Edit this page" footer
-            cat >> "processed-wiki/$filename" << EOF
-
----
-
-[Edit this page on GitHub](https://github.com/Humata-ai/ConceptsLM/edit/main/wiki/$filename)
-EOF
+            echo "" >> "processed-wiki/$filename"
+            echo "---" >> "processed-wiki/$filename"
+            echo "" >> "processed-wiki/$filename"
+            echo "[Edit this page on GitHub](https://github.com/Humata-ai/ConceptsLM/edit/main/wiki/$filename)" >> "processed-wiki/$filename"
           done
 
           # Copy data directory if it exists
