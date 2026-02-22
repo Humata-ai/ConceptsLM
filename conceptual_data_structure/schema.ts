@@ -1,8 +1,6 @@
-interface QualityDimension {
+import { z } from "zod";
 
-}
+const QualityDimensionSchema = z.object({});
 
-interface QualityDomain {
-
-}
+const QualityDomainSchema = z.object({});
 

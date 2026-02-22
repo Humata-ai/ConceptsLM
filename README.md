@@ -6,6 +6,7 @@ Large language models are powerful but opaque, expensive, and difficult to contr
 4. There will be no context limit.
 5. ConceptsLM will support memory and recall
 6. ConceptsLM will be queryable like a relational database.
+7. Deductive and inductive reasoning are possible based on the structure of the representation.
 
 The heart of ConceptsLM is the quality of its representational model. The current focus of this project is to model the approximately 100,000 words and the semantics of modern day English. This work is ongoing. 
 
