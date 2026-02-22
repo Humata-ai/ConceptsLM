@@ -1,0 +1,100 @@
+name: Sync Wiki
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'wiki/**'
+  workflow_dispatch:
+
+jobs:
+  sync-wiki:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout main repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Checkout wiki repository
+        uses: actions/checkout@v4
+        with:
+          repository: Humata-ai/ConceptsLM.wiki
+          token: ${{ secrets.WIKI_SYNC_TOKEN }}
+          path: wiki-repo
+
+      - name: Prepare wiki content with edit links
+        run: |
+          # Create temporary directory for processed files
+          mkdir -p processed-wiki
+
+          # Process each markdown file (except README.md)
+          find wiki -name '*.md' -not -name 'README.md' | while read file; do
+            filename=$(basename "$file")
+
+            # Copy file content
+            cp "$file" "processed-wiki/$filename"
+
+            # Add "Edit this page" footer
+            cat >> "processed-wiki/$filename" << EOF
+
+---
+
+[Edit this page on GitHub](https://github.com/Humata-ai/ConceptsLM/edit/main/wiki/$filename)
+EOF
+          done
+
+          # Copy data directory if it exists
+          if [ -d "wiki/data" ]; then
+            cp -r wiki/data processed-wiki/
+          fi
+
+      - name: Sync to wiki repository
+        run: |
+          # Remove all existing content in wiki repo (except .git)
+          find wiki-repo -mindepth 1 -maxdepth 1 -not -name '.git' -exec rm -rf {} +
+
+          # Copy processed content
+          cp -r processed-wiki/* wiki-repo/
+
+      - name: Commit and push changes
+        working-directory: wiki-repo
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          # Check if there are changes
+          if git diff --quiet && git diff --cached --quiet; then
+            echo "No changes to sync"
+            exit 0
+          fi
+
+          # Stage all changes
+          git add -A
+
+          # Get original commit info
+          cd ..
+          COMMIT_MSG=$(git log -1 --pretty=%B)
+          COMMIT_SHA=$(git rev-parse HEAD)
+          COMMIT_AUTHOR=$(git log -1 --pretty=format:'%an')
+
+          # Commit with metadata
+          cd wiki-repo
+          git commit -m "[Wiki Sync] ${COMMIT_MSG}" \
+                     -m "Source commit: ${COMMIT_SHA}" \
+                     -m "Author: ${COMMIT_AUTHOR}"
+
+          # Push to wiki
+          git push origin master
+
+      - name: Report sync status
+        if: success()
+        run: echo "✅ Wiki synced successfully"
+
+      - name: Report sync failure
+        if: failure()
+        run: |
+          echo "❌ Wiki sync failed"
+          exit 1
