@@ -3,8 +3,3 @@ The framework we are applying to model concepts as geometry is built upon the wo
 
 That being said, this document details how the process unfolds.
 
-## Overview
-
-The conceptual space framework provides a geometric representation of concepts, allowing us to model semantic relationships spatially.
-
-**Status:** Work in Progress - Testing wiki sync functionality
