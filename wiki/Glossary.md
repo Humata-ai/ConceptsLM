@@ -288,3 +288,7 @@ A path through conceptual space representing change.
 ### Typicality Gradient
 
 Graded membership determined by distance from prototype.
+
+### Verb
+
+A verb root refers either to the force vector or to the result vector of an event (but not both).
