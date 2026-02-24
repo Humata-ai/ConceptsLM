@@ -140,7 +140,7 @@ Dimensions that cannot vary independently (e.g., hue and brightness).
 
 ### Manner Verb
 
-A manner verb is a verb that lexicalizes a particular way in which an action is carried out. In the conceptual spaces framework, a manner verb corresponds to a convex region within the force domain.
+A manner verb is a verb that lexicalizes a particular way in which an action is carried out. In the conceptual spaces framework, a manner verb corresponds to a convex region within the force domain. The distinction between manner verbs and other verb types is determined by the domain associated with the verb: if the domain is that of the force patterns underlying actions, it is a manner verb.
 
 For example:
 	•	walk, jog, and run each denote different regions in the force domain.
@@ -222,6 +222,12 @@ Examples:
 
 Entity undergoing change due to force.
 
+### Path Verb
+
+A path verb is a verb that lexicalizes the trajectory or spatial configuration of motion. The distinction between path verbs and other verb types is determined by the domain associated with the verb: if the domain is the visuospatial domain, it is a path verb.
+
+For example, verbs like *enter*, *exit*, *ascend*, *descend*, and *cross* encode spatial paths or directions rather than the manner of motion or the resulting state.
+
 ### Property (Adjective)
 
 A property is a convex region of a domain. For example in the color domain there is a convex region labeled "red" which we call a property of that space. As it turns out convex regions of a conceptual space correspond to adjectives in english.
@@ -265,7 +271,7 @@ Final state reached after trajectory.
 
 ### Result Verb
 
-Encodes outcome of event (e.g., *break*).
+Encodes outcome of event (e.g., *break*). The distinction between result verbs and other verb types is determined by the domain associated with the verb: for all domains other than force patterns (manner verbs) or visuospatial (path verbs)—for example, object category domains—it is a proper result verb. Result verbs focus on the state change or outcome rather than how the event unfolds or the path taken.
 
 ### Salience
 
