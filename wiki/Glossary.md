@@ -108,6 +108,17 @@ A stored instance within a concept region.
 
 A vector representing magnitude and direction of causal influence.
 
+### Force Domain
+
+A force domain is a conceptual domain in which actions are represented as structured patterns of forces. It is a geometric space whose dimensions correspond to force vectors and their coordination (e.g., direction, magnitude, interaction across body parts).
+
+In this framework:
+	•	Actions are not primarily defined by visible movement, but by the pattern of forces that generates the movement.
+	•	Different actions (e.g., walking, running, throwing) correspond to different regions within this domain.
+	•	The force domain is continuous and pre-linguistic; it is part of the cognitive structure underlying action understanding.
+
+The force domain thus provides the conceptual geometry that grounds dynamic meanings in language.
+
 ### Generics
 
 Statements about kinds (e.g., "Dogs bark").
@@ -131,7 +142,17 @@ Dimensions that cannot vary independently (e.g., hue and brightness).
 
 ### Manner Verb
 
-Encodes how an action occurs (e.g., *run*). Quality domain.
+A manner verb is a verb that lexicalizes a particular way in which an action is carried out. In the conceptual spaces framework, a manner verb corresponds to a convex region within the force domain.
+
+For example:
+	•	walk, jog, and run each denote different regions in the force domain.
+	•	What distinguishes them is not the result of the action, but the specific pattern of forces involved.
+
+Thus:
+	•	The force domain is the continuous conceptual space of possible force patterns.
+	•	A manner verb is a conventionalized linguistic label for a region within that space.
+
+Manner verbs encode how an action unfolds, rather than what state it results in.
 
 ### Mass Noun
 
