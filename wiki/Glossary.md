@@ -291,4 +291,4 @@ Graded membership determined by distance from prototype.
 
 ### Verb
 
-A verb root refers either to the force vector or to the result vector of an event (but not both).
+A verb root refers either to the force vector or to the result vector of an event (but not both). The meaning of a verb root is a convex region of vectors that depends only on a single domain.
