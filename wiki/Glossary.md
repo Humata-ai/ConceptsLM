@@ -71,13 +71,11 @@ A geometric representational framework defined by quality dimensions.
 
 ### Construal
 
-A way of structuring and foregrounding aspects of a conceptual space.
-Implemented via salience weighting. Representation of perspective.
+A way of structuring and foregrounding aspects of a conceptual space. Implemented via salience weighting. Representation of perspective.
 
 ### Convexity
 
-If two points belong to a concept, all intermediate points belong.
-Crucial for induction and generalization.
+If two points belong to a concept, all intermediate points belong. Crucial for induction and generalization.
 
 ### Count Noun
 
