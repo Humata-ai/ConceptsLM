@@ -96,6 +96,10 @@ A feature appearing in conceptual combination not prominent in components.
 
 A trajectory or structured change over time in conceptual space.
 
+### Event Construal
+
+This is the internal mental representation of a scene. Models an event as a complex structure in conceptual spaces, typically involving a force vector (the cause) and a result vector (the effect). A construal is the specific way a speaker chooses to focus their attention on certain parts of that event.
+
 ### Exemplar
 
 A stored instance within a concept region.
