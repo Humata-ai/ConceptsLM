@@ -228,7 +228,7 @@ A path verb is a verb that lexicalizes the trajectory or spatial configuration o
 
 For example, verbs like *enter*, *exit*, *ascend*, *descend*, and *cross* encode spatial paths or directions rather than the manner of motion or the resulting state.
 
-### Property (Adjective)
+### Property
 
 A property is a convex region of a domain. For example in the color domain there is a convex region labeled "red" which we call a property of that space. As it turns out convex regions of a conceptual space correspond to adjectives in english.
 
