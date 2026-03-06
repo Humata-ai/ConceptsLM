@@ -47,7 +47,7 @@ Require an ordered metric structure.
 
 ### Concept
 
-A convex region in a conceptual space.
+A concept is a set of convex regions within a conceptual space
 
 ### Concept Formation
 
