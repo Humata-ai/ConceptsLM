@@ -47,7 +47,7 @@ Require an ordered metric structure.
 
 ### Concept
 
-A concept is a set of proprieties.
+A concept is a classification of a category of objects, defined by either a set of properties (convex regions in domains) and/or a set of other concepts, delineating possible instances that share those characteristics.
 
 ### Concept Formation
 
