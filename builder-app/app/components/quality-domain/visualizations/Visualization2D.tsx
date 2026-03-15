@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useMemo, type ReactElement } from 'react'
 import { Text } from '@react-three/drei'
 import * as THREE from 'three'
 import type { QualityDomain } from '../types'
@@ -19,7 +19,7 @@ export default function Visualization2D({ domain }: Visualization2DProps) {
 
   // Create grid lines
   const gridLines = useMemo(() => {
-    const lines: JSX.Element[] = []
+    const lines: ReactElement[] = []
     const stepX = sizeX / gridDivisions
     const stepY = sizeY / gridDivisions
 

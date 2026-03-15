@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useMemo, type ReactElement } from 'react'
 import { Text } from '@react-three/drei'
 import * as THREE from 'three'
 import type { QualityDomain } from '../types'
@@ -22,7 +22,7 @@ export default function Visualization3D({ domain }: Visualization3DProps) {
 
   // Create grid lines on all three faces
   const gridLines = useMemo(() => {
-    const lines: JSX.Element[] = []
+    const lines: ReactElement[] = []
     const step = sizeX / gridDivisions
 
     // XY plane (front face)
