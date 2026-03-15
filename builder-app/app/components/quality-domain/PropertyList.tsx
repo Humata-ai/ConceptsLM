@@ -1,0 +1,69 @@
+'use client'
+
+import { useState } from 'react'
+import { useQualityDomain } from './context/QualityDomainContext'
+import PropertyCard from './PropertyCard'
+import PropertyModal from './PropertyModal'
+
+export default function PropertyList() {
+  const { state, getSelectedDomain } = useQualityDomain()
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [editingPropertyId, setEditingPropertyId] = useState<string | null>(null)
+
+  const selectedDomain = getSelectedDomain()
+
+  if (!selectedDomain) {
+    return null
+  }
+
+  return (
+    <>
+      <div className="absolute top-4 right-4 z-30 bg-white/90 backdrop-blur-sm rounded-lg shadow-lg p-4 max-h-[calc(100vh-2rem)] overflow-y-auto max-w-xs">
+        <div className="flex items-center justify-between mb-3">
+          <h2 className="text-lg font-bold">Properties</h2>
+          <button
+            onClick={() => {
+              setEditingPropertyId(null)
+              setIsModalOpen(true)
+            }}
+            className="px-3 py-1 bg-green-600 text-white text-sm rounded hover:bg-green-700 font-medium"
+          >
+            + Add Property
+          </button>
+        </div>
+
+        <div className="text-xs text-gray-600 mb-3 px-1">
+          Domain: <span className="font-medium">{selectedDomain.name}</span>
+        </div>
+
+        {selectedDomain.properties.length === 0 ? (
+          <div className="text-center py-8 text-gray-500">
+            <p className="text-sm">No properties yet.</p>
+            <p className="text-xs mt-1">Click "+ Add Property" to create one.</p>
+          </div>
+        ) : (
+          <div className="space-y-2">
+            {selectedDomain.properties.map((property) => (
+              <PropertyCard
+                key={property.id}
+                property={property}
+                domain={selectedDomain}
+                onEdit={(id) => {
+                  setEditingPropertyId(id)
+                  setIsModalOpen(true)
+                }}
+              />
+            ))}
+          </div>
+        )}
+      </div>
+
+      <PropertyModal
+        isOpen={isModalOpen}
+        domainId={selectedDomain.id}
+        editingPropertyId={editingPropertyId}
+        onClose={() => setIsModalOpen(false)}
+      />
+    </>
+  )
+}

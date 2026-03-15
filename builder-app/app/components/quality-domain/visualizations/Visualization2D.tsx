@@ -2,6 +2,7 @@ import { useMemo, type ReactElement } from 'react'
 import { Text } from '@react-three/drei'
 import * as THREE from 'three'
 import type { QualityDomain } from '../types'
+import PropertyVisualization2D from './PropertyVisualization2D'
 
 interface Visualization2DProps {
   domain: QualityDomain
@@ -131,6 +132,16 @@ export default function Visualization2D({ domain }: Visualization2DProps) {
       >
         {maxY.toString()}
       </Text>
+
+      {/* Render properties */}
+      {domain.properties.map((property, index) => (
+        <PropertyVisualization2D
+          key={property.id}
+          property={property}
+          domain={domain}
+          index={index}
+        />
+      ))}
     </group>
   )
 }

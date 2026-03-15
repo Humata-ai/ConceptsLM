@@ -1,0 +1,627 @@
+
+Running 2 tests using 1 worker
+
+[1A[2K[1/2] [chromium] › tests/debug-blinking.spec.ts:48:7 › Property Blinking Debug › should detect re-renders during camera pan
+[1A[2K[chromium] › tests/debug-blinking.spec.ts:48:7 › Property Blinking Debug › should detect re-renders during camera pan
+[2026-03-15T02:12:08.471Z] [PropertyViz3D] Computing ranges for Red
+
+[1A[2K[2026-03-15T02:12:08.472Z] [PropertyViz3D] Computing ranges for Red
+
+[1A[2K[2026-03-15T02:12:08.472Z] [PropertyViz3D] Creating edges geometry for Red
+
+[1A[2K[2026-03-15T02:12:08.473Z] [PropertyViz3D] Creating edges geometry for Red
+
+[1A[2K[2026-03-15T02:12:08.473Z] [PropertyViz3D] Computing ranges for Bright
+
+[1A[2K[2026-03-15T02:12:08.473Z] [PropertyViz3D] Computing ranges for Bright
+
+[1A[2K[2026-03-15T02:12:08.473Z] [PropertyViz3D] Creating edges geometry for Bright
+
+[1A[2K[2026-03-15T02:12:08.473Z] [PropertyViz3D] Creating edges geometry for Bright
+
+[1A[2K[2026-03-15T02:12:08.576Z] [PropertyViz3D] Computing ranges for Red
+
+[1A[2K[2026-03-15T02:12:08.576Z] [PropertyViz3D] Computing ranges for Red
+
+[1A[2K[2026-03-15T02:12:08.576Z] [PropertyViz3D] Creating edges geometry for Red
+
+[1A[2K[2026-03-15T02:12:08.576Z] [PropertyViz3D] Creating edges geometry for Red
+
+[1A[2K[2026-03-15T02:12:08.577Z] [PropertyViz3D] Computing ranges for Bright
+
+[1A[2K[2026-03-15T02:12:08.577Z] [PropertyViz3D] Computing ranges for Bright
+
+[1A[2K[2026-03-15T02:12:08.577Z] [PropertyViz3D] Creating edges geometry for Bright
+
+[1A[2K[2026-03-15T02:12:08.577Z] [PropertyViz3D] Creating edges geometry for Bright
+
+[1A[2K[2026-03-15T02:12:08.891Z] [PropertyViz3D] RENDER #1 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:08.890Z}
+
+[1A[2K[2026-03-15T02:12:08.891Z] [PropertyViz3D] RENDER #1 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:08.891Z}
+
+[1A[2K[2026-03-15T02:12:08.893Z] [PropertyViz3D] RENDER #2 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:08.892Z}
+
+[1A[2K[2026-03-15T02:12:08.893Z] [PropertyViz3D] RENDER #2 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:08.892Z}
+
+[1A[2K[2026-03-15T02:12:08.965Z] [PropertyViz3D] RENDER #3 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:08.964Z}
+
+[1A[2K[2026-03-15T02:12:08.966Z] [PropertyViz3D] RENDER #3 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:08.965Z}
+
+[1A[2K[2026-03-15T02:12:09.167Z] [PropertyViz3D] RENDER #4 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:09.166Z}
+
+[1A[2K[2026-03-15T02:12:09.175Z] [PropertyViz3D] RENDER #5 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:09.174Z}
+
+[1A[2K[2026-03-15T02:12:09.175Z] [PropertyViz3D] RENDER #4 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:09.174Z}
+
+[1A[2K[2026-03-15T02:12:09.184Z] [PropertyViz3D] RENDER #5 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:09.183Z}
+
+[1A[2K[2026-03-15T02:12:09.377Z] [PropertyViz3D] RENDER #6 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:09.376Z}
+
+[1A[2K[2026-03-15T02:12:09.385Z] [PropertyViz3D] RENDER #7 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:09.384Z}
+
+[1A[2K[2026-03-15T02:12:09.386Z] [PropertyViz3D] RENDER #6 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:09.385Z}
+
+[1A[2K[2026-03-15T02:12:09.387Z] [PropertyViz3D] RENDER #7 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:09.386Z}
+
+[1A[2K[2026-03-15T02:12:09.586Z] [PropertyViz3D] RENDER #8 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:09.585Z}
+
+[1A[2K[2026-03-15T02:12:09.594Z] [PropertyViz3D] RENDER #9 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:09.593Z}
+
+[1A[2K[2026-03-15T02:12:09.596Z] [PropertyViz3D] RENDER #8 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:09.595Z}
+
+[1A[2K[2026-03-15T02:12:09.597Z] [PropertyViz3D] RENDER #9 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:09.596Z}
+
+[1A[2K[2026-03-15T02:12:09.795Z] [PropertyViz3D] RENDER #10 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:09.794Z}
+
+[1A[2K[2026-03-15T02:12:09.802Z] [PropertyViz3D] RENDER #11 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:09.801Z}
+
+[1A[2K[2026-03-15T02:12:09.804Z] [PropertyViz3D] RENDER #10 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:09.803Z}
+
+[1A[2K[2026-03-15T02:12:09.805Z] [PropertyViz3D] RENDER #11 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:09.804Z}
+
+[1A[2K[2026-03-15T02:12:10.004Z] [PropertyViz3D] RENDER #12 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:10.003Z}
+
+[1A[2K[2026-03-15T02:12:10.012Z] [PropertyViz3D] RENDER #13 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:10.011Z}
+
+[1A[2K[2026-03-15T02:12:10.020Z] [PropertyViz3D] RENDER #12 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:10.020Z}
+
+[1A[2K[2026-03-15T02:12:10.021Z] [PropertyViz3D] RENDER #13 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:10.020Z}
+
+[1A[2K[2026-03-15T02:12:10.213Z] [PropertyViz3D] RENDER #14 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:10.212Z}
+
+[1A[2K[2026-03-15T02:12:10.221Z] [PropertyViz3D] RENDER #15 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:10.220Z}
+
+[1A[2K[2026-03-15T02:12:10.223Z] [PropertyViz3D] RENDER #14 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:10.222Z}
+
+[1A[2K[2026-03-15T02:12:10.224Z] [PropertyViz3D] RENDER #15 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:10.223Z}
+
+[1A[2K[2026-03-15T02:12:10.423Z] [PropertyViz3D] RENDER #16 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:10.422Z}
+
+[1A[2K[2026-03-15T02:12:10.430Z] [PropertyViz3D] RENDER #17 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:10.429Z}
+
+[1A[2K[2026-03-15T02:12:10.438Z] [PropertyViz3D] RENDER #16 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:10.437Z}
+
+[1A[2K[2026-03-15T02:12:10.439Z] [PropertyViz3D] RENDER #17 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:10.438Z}
+
+[1A[2K[2026-03-15T02:12:10.631Z] [PropertyViz3D] RENDER #18 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:10.631Z}
+
+[1A[2K[2026-03-15T02:12:10.640Z] [PropertyViz3D] RENDER #19 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:10.638Z}
+
+[1A[2K[2026-03-15T02:12:10.641Z] [PropertyViz3D] RENDER #18 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:10.640Z}
+
+[1A[2K[2026-03-15T02:12:10.642Z] [PropertyViz3D] RENDER #19 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:10.641Z}
+
+[1A[2K[2026-03-15T02:12:10.841Z] [PropertyViz3D] RENDER #20 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:10.840Z}
+
+[1A[2K[2026-03-15T02:12:10.849Z] [PropertyViz3D] RENDER #21 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:10.848Z}
+
+[1A[2K[2026-03-15T02:12:10.868Z] [PropertyViz3D] RENDER #20 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:10.867Z}
+
+[1A[2K[2026-03-15T02:12:10.869Z] [PropertyViz3D] RENDER #21 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:10.868Z}
+
+[1A[2K[2026-03-15T02:12:11.051Z] [PropertyViz3D] RENDER #22 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:11.050Z}
+
+[1A[2K[2026-03-15T02:12:11.062Z] [PropertyViz3D] RENDER #23 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:11.061Z}
+
+[1A[2K[2026-03-15T02:12:11.072Z] [PropertyViz3D] RENDER #22 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:11.071Z}
+
+[1A[2K[2026-03-15T02:12:11.072Z] [PropertyViz3D] RENDER #23 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:11.072Z}
+
+[1A[2K[2026-03-15T02:12:11.263Z] [PropertyViz3D] RENDER #24 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:11.262Z}
+
+[1A[2K[2026-03-15T02:12:11.271Z] [PropertyViz3D] RENDER #25 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:11.270Z}
+
+[1A[2K[2026-03-15T02:12:11.274Z] [PropertyViz3D] RENDER #24 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:11.273Z}
+
+[1A[2K[2026-03-15T02:12:11.275Z] [PropertyViz3D] RENDER #25 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:11.274Z}
+
+[1A[2K
+=== Starting Camera Pan Test ===
+
+
+[1A[2KCanvas found, starting camera pan simulation...
+
+
+[1A[2K[2026-03-15T02:12:11.479Z] [PropertyViz3D] RENDER #26 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:11.478Z}
+
+[1A[2K[2026-03-15T02:12:11.488Z] [PropertyViz3D] RENDER #27 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:11.488Z}
+
+[1A[2K[2026-03-15T02:12:11.490Z] [PropertyViz3D] RENDER #26 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:11.489Z}
+
+[1A[2K[2026-03-15T02:12:11.490Z] [PropertyViz3D] RENDER #27 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:11.490Z}
+
+[1A[2K[2026-03-15T02:12:11.690Z] [PropertyViz3D] RENDER #28 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:11.689Z}
+
+[1A[2K[2026-03-15T02:12:11.690Z] [PropertyViz3D] RENDER #29 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:11.690Z}
+
+[1A[2K[2026-03-15T02:12:11.691Z] [PropertyViz3D] RENDER #28 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:11.691Z}
+
+[1A[2K[2026-03-15T02:12:11.701Z] [PropertyViz3D] RENDER #29 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:11.699Z}
+
+[1A[2K[2026-03-15T02:12:11.898Z] [PropertyViz3D] RENDER #30 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:11.897Z}
+
+[1A[2K[2026-03-15T02:12:11.899Z] [PropertyViz3D] RENDER #31 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:11.899Z}
+
+[1A[2K[2026-03-15T02:12:11.901Z] [PropertyViz3D] RENDER #30 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:11.901Z}
+
+[1A[2K[2026-03-15T02:12:11.902Z] [PropertyViz3D] RENDER #31 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:11.901Z}
+
+[1A[2K[2026-03-15T02:12:12.101Z] [PropertyViz3D] RENDER #32 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:12.100Z}
+
+[1A[2K[2026-03-15T02:12:12.101Z] [PropertyViz3D] RENDER #33 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:12.100Z}
+
+[1A[2K[2026-03-15T02:12:12.103Z] [PropertyViz3D] RENDER #32 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:12.102Z}
+
+[1A[2K[2026-03-15T02:12:12.104Z] [PropertyViz3D] RENDER #33 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:12.103Z}
+
+[1A[2K[2026-03-15T02:12:12.303Z] [PropertyViz3D] RENDER #34 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:12.302Z}
+
+[1A[2K[2026-03-15T02:12:12.304Z] [PropertyViz3D] RENDER #35 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:12.303Z}
+
+[1A[2K[2026-03-15T02:12:12.306Z] [PropertyViz3D] RENDER #34 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:12.305Z}
+
+[1A[2K[2026-03-15T02:12:12.307Z] [PropertyViz3D] RENDER #35 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:12.306Z}
+
+[1A[2K[2026-03-15T02:12:12.506Z] [PropertyViz3D] RENDER #36 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:12.504Z}
+
+[1A[2K[2026-03-15T02:12:12.506Z] [PropertyViz3D] RENDER #37 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:12.506Z}
+
+[1A[2K[2026-03-15T02:12:12.507Z] [PropertyViz3D] RENDER #36 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:12.507Z}
+
+[1A[2K[2026-03-15T02:12:12.515Z] [PropertyViz3D] RENDER #37 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:12.514Z}
+
+[1A[2K[2026-03-15T02:12:12.708Z] [PropertyViz3D] RENDER #38 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:12.707Z}
+
+[1A[2K[2026-03-15T02:12:12.716Z] [PropertyViz3D] RENDER #39 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:12.715Z}
+
+[1A[2K[2026-03-15T02:12:12.717Z] [PropertyViz3D] RENDER #38 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:12.716Z}
+
+[1A[2K[2026-03-15T02:12:12.718Z] [PropertyViz3D] RENDER #39 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:12.717Z}
+
+[1A[2K[2026-03-15T02:12:12.925Z] [PropertyViz3D] RENDER #40 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:12.924Z}
+
+[1A[2K[2026-03-15T02:12:12.926Z] [PropertyViz3D] RENDER #41 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:12.925Z}
+
+[1A[2K[2026-03-15T02:12:12.927Z] [PropertyViz3D] RENDER #40 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:12.926Z}
+
+[1A[2K[2026-03-15T02:12:12.929Z] [PropertyViz3D] RENDER #41 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:12.927Z}
+
+[1A[2K[2026-03-15T02:12:13.127Z] [PropertyViz3D] RENDER #42 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:13.126Z}
+
+[1A[2K[2026-03-15T02:12:13.128Z] [PropertyViz3D] RENDER #43 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:13.127Z}
+
+[1A[2K[2026-03-15T02:12:13.129Z] [PropertyViz3D] RENDER #42 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:13.128Z}
+
+[1A[2K[2026-03-15T02:12:13.129Z] [PropertyViz3D] RENDER #43 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:13.129Z}
+
+[1A[2K[2026-03-15T02:12:13.329Z] [PropertyViz3D] RENDER #44 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:13.328Z}
+
+[1A[2K[2026-03-15T02:12:13.330Z] [PropertyViz3D] RENDER #45 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:13.329Z}
+
+[1A[2K[2026-03-15T02:12:13.331Z] [PropertyViz3D] RENDER #44 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:13.330Z}
+
+[1A[2K[2026-03-15T02:12:13.331Z] [PropertyViz3D] RENDER #45 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:13.331Z}
+
+[1A[2K[2026-03-15T02:12:13.532Z] [PropertyViz3D] RENDER #46 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:13.530Z}
+
+[1A[2K[2026-03-15T02:12:13.532Z] [PropertyViz3D] RENDER #47 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:13.531Z}
+
+[1A[2K[2026-03-15T02:12:13.533Z] [PropertyViz3D] RENDER #46 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:13.532Z}
+
+[1A[2K[2026-03-15T02:12:13.534Z] [PropertyViz3D] RENDER #47 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:13.533Z}
+
+[1A[2K[2026-03-15T02:12:13.735Z] [PropertyViz3D] RENDER #48 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:13.732Z}
+
+[1A[2K[2026-03-15T02:12:13.735Z] [PropertyViz3D] RENDER #49 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:13.733Z}
+
+[1A[2K[2026-03-15T02:12:13.735Z] [PropertyViz3D] RENDER #48 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:13.734Z}
+
+[1A[2K[2026-03-15T02:12:13.736Z] [PropertyViz3D] RENDER #49 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:13.735Z}
+
+[1A[2K[2026-03-15T02:12:13.936Z] [PropertyViz3D] RENDER #50 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:13.935Z}
+
+[1A[2K[2026-03-15T02:12:13.936Z] [PropertyViz3D] RENDER #51 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:13.936Z}
+
+[1A[2K[2026-03-15T02:12:13.937Z] [PropertyViz3D] RENDER #50 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:13.937Z}
+
+[1A[2K[2026-03-15T02:12:13.938Z] [PropertyViz3D] RENDER #51 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:13.938Z}
+
+[1A[2K[2026-03-15T02:12:14.137Z] [PropertyViz3D] RENDER #52 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:14.137Z}
+
+[1A[2K[2026-03-15T02:12:14.138Z] [PropertyViz3D] RENDER #53 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:14.137Z}
+
+[1A[2K[2026-03-15T02:12:14.139Z] [PropertyViz3D] RENDER #52 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:14.138Z}
+
+[1A[2K[2026-03-15T02:12:14.140Z] [PropertyViz3D] RENDER #53 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:14.139Z}
+
+[1A[2K[2026-03-15T02:12:14.339Z] [PropertyViz3D] RENDER #54 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:14.339Z}
+
+[1A[2K[2026-03-15T02:12:14.340Z] [PropertyViz3D] RENDER #55 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:14.339Z}
+
+[1A[2K[2026-03-15T02:12:14.341Z] [PropertyViz3D] RENDER #54 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:14.340Z}
+
+[1A[2K[2026-03-15T02:12:14.350Z] [PropertyViz3D] RENDER #55 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:14.349Z}
+
+[1A[2K[2026-03-15T02:12:14.549Z] [PropertyViz3D] RENDER #56 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:14.548Z}
+
+[1A[2K[2026-03-15T02:12:14.550Z] [PropertyViz3D] RENDER #57 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:14.549Z}
+
+[1A[2K[2026-03-15T02:12:14.550Z] [PropertyViz3D] RENDER #56 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:14.550Z}
+
+[1A[2K[2026-03-15T02:12:14.551Z] [PropertyViz3D] RENDER #57 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:14.551Z}
+
+[1A[2K[2026-03-15T02:12:14.751Z] [PropertyViz3D] RENDER #58 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:14.750Z}
+
+[1A[2K[2026-03-15T02:12:14.751Z] [PropertyViz3D] RENDER #59 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:14.751Z}
+
+[1A[2K[2026-03-15T02:12:14.752Z] [PropertyViz3D] RENDER #58 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:14.752Z}
+
+[1A[2K[2026-03-15T02:12:14.753Z] [PropertyViz3D] RENDER #59 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:14.752Z}
+
+[1A[2K[2026-03-15T02:12:14.953Z] [PropertyViz3D] RENDER #60 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:14.952Z}
+
+[1A[2K[2026-03-15T02:12:14.953Z] [PropertyViz3D] RENDER #61 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:14.953Z}
+
+[1A[2K[2026-03-15T02:12:14.955Z] [PropertyViz3D] RENDER #60 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:14.954Z}
+
+[1A[2K[2026-03-15T02:12:14.955Z] [PropertyViz3D] RENDER #61 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:14.954Z}
+
+[1A[2K[2026-03-15T02:12:15.155Z] [PropertyViz3D] RENDER #62 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:15.154Z}
+
+[1A[2K[2026-03-15T02:12:15.155Z] [PropertyViz3D] RENDER #63 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:15.155Z}
+
+[1A[2K[2026-03-15T02:12:15.156Z] [PropertyViz3D] RENDER #62 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:15.156Z}
+
+[1A[2K[2026-03-15T02:12:15.157Z] [PropertyViz3D] RENDER #63 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:15.156Z}
+
+[1A[2K
+Camera pan completed (3967ms)
+
+
+[1A[2K[2026-03-15T02:12:15.357Z] [PropertyViz3D] RENDER #64 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:15.356Z}
+
+[1A[2K[2026-03-15T02:12:15.366Z] [PropertyViz3D] RENDER #65 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:15.365Z}
+
+[1A[2K[2026-03-15T02:12:15.384Z] [PropertyViz3D] RENDER #64 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:15.383Z}
+
+[1A[2K[2026-03-15T02:12:15.384Z] [PropertyViz3D] RENDER #65 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:15.384Z}
+
+[1A[2K[2026-03-15T02:12:15.567Z] [PropertyViz3D] RENDER #66 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:15.566Z}
+
+[1A[2K[2026-03-15T02:12:15.576Z] [PropertyViz3D] RENDER #67 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:15.575Z}
+
+[1A[2K[2026-03-15T02:12:15.587Z] [PropertyViz3D] RENDER #66 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:15.586Z}
+
+[1A[2K[2026-03-15T02:12:15.588Z] [PropertyViz3D] RENDER #67 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:15.587Z}
+
+[1A[2K[2026-03-15T02:12:15.777Z] [PropertyViz3D] RENDER #68 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:15.777Z}
+
+[1A[2K[2026-03-15T02:12:15.786Z] [PropertyViz3D] RENDER #69 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:15.785Z}
+
+[1A[2K[2026-03-15T02:12:15.789Z] [PropertyViz3D] RENDER #68 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:15.788Z}
+
+[1A[2K[2026-03-15T02:12:15.790Z] [PropertyViz3D] RENDER #69 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:15.789Z}
+
+[1A[2K[2026-03-15T02:12:15.987Z] [PropertyViz3D] RENDER #70 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:15.987Z}
+
+[1A[2K[2026-03-15T02:12:15.996Z] [PropertyViz3D] RENDER #71 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:15.995Z}
+
+[1A[2K[2026-03-15T02:12:16.006Z] [PropertyViz3D] RENDER #70 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:16.005Z}
+
+[1A[2K[2026-03-15T02:12:16.006Z] [PropertyViz3D] RENDER #71 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:16.006Z}
+
+[1A[2K[2026-03-15T02:12:16.198Z] [PropertyViz3D] RENDER #72 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:16.197Z}
+
+[1A[2K[2026-03-15T02:12:16.206Z] [PropertyViz3D] RENDER #73 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:16.205Z}
+
+[1A[2K[2026-03-15T02:12:16.207Z] [PropertyViz3D] RENDER #72 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:16.207Z}
+
+[1A[2K[2026-03-15T02:12:16.208Z] [PropertyViz3D] RENDER #73 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:16.208Z}
+
+[1A[2K
+=== Test Results ===
+
+
+[1A[2KTotal renders during pan: 146
+
+[1A[2KInitial render count: 50
+
+[1A[2KNew renders: 96
+
+[1A[2KRenders per second during pan: 24.20
+
+[1A[2KAverage time between renders: 49.78ms
+
+[1A[2K
+areEqual logs found: 0
+
+[1A[2K
+=== Analysis ===
+
+
+[1A[2K✗ BAD: Many re-renders detected during camera pan
+
+[1A[2K  This indicates the blinking issue is present
+
+[1A[2K
+Full logs saved to: tests/debug-blinking-results.json
+
+
+[1A[2K[2/2] [chromium] › tests/debug-blinking.spec.ts:187:7 › Property Blinking Debug › should detect re-renders when camera is stationary
+[1A[2K[chromium] › tests/debug-blinking.spec.ts:187:7 › Property Blinking Debug › should detect re-renders when camera is stationary
+[2026-03-15T02:12:16.723Z] [PropertyViz3D] Computing ranges for Red
+
+[1A[2K[2026-03-15T02:12:16.724Z] [PropertyViz3D] Computing ranges for Red
+
+[1A[2K[2026-03-15T02:12:16.724Z] [PropertyViz3D] Creating edges geometry for Red
+
+[1A[2K[2026-03-15T02:12:16.724Z] [PropertyViz3D] Creating edges geometry for Red
+
+[1A[2K[2026-03-15T02:12:16.725Z] [PropertyViz3D] Computing ranges for Bright
+
+[1A[2K[2026-03-15T02:12:16.725Z] [PropertyViz3D] Computing ranges for Bright
+
+[1A[2K[2026-03-15T02:12:16.725Z] [PropertyViz3D] Creating edges geometry for Bright
+
+[1A[2K[2026-03-15T02:12:16.725Z] [PropertyViz3D] Creating edges geometry for Bright
+
+[1A[2K[2026-03-15T02:12:16.801Z] [PropertyViz3D] Computing ranges for Red
+
+[1A[2K[2026-03-15T02:12:16.801Z] [PropertyViz3D] Computing ranges for Red
+
+[1A[2K[2026-03-15T02:12:16.801Z] [PropertyViz3D] Creating edges geometry for Red
+
+[1A[2K[2026-03-15T02:12:16.801Z] [PropertyViz3D] Creating edges geometry for Red
+
+[1A[2K[2026-03-15T02:12:16.801Z] [PropertyViz3D] Computing ranges for Bright
+
+[1A[2K[2026-03-15T02:12:16.801Z] [PropertyViz3D] Computing ranges for Bright
+
+[1A[2K[2026-03-15T02:12:16.801Z] [PropertyViz3D] Creating edges geometry for Bright
+
+[1A[2K[2026-03-15T02:12:16.801Z] [PropertyViz3D] Creating edges geometry for Bright
+
+[1A[2K[2026-03-15T02:12:17.130Z] [PropertyViz3D] RENDER #1 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:17.129Z}
+
+[1A[2K[2026-03-15T02:12:17.131Z] [PropertyViz3D] RENDER #1 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:17.130Z}
+
+[1A[2K[2026-03-15T02:12:17.132Z] [PropertyViz3D] RENDER #2 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:17.131Z}
+
+[1A[2K[2026-03-15T02:12:17.132Z] [PropertyViz3D] RENDER #2 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:17.131Z}
+
+[1A[2K[2026-03-15T02:12:17.206Z] [PropertyViz3D] RENDER #3 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:17.205Z}
+
+[1A[2K[2026-03-15T02:12:17.206Z] [PropertyViz3D] RENDER #3 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:17.206Z}
+
+[1A[2K[2026-03-15T02:12:17.416Z] [PropertyViz3D] RENDER #4 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:17.415Z}
+
+[1A[2K[2026-03-15T02:12:17.417Z] [PropertyViz3D] RENDER #5 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:17.417Z}
+
+[1A[2K[2026-03-15T02:12:17.417Z] [PropertyViz3D] RENDER #4 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:17.417Z}
+
+[1A[2K[2026-03-15T02:12:17.419Z] [PropertyViz3D] RENDER #5 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:17.418Z}
+
+[1A[2K[2026-03-15T02:12:17.619Z] [PropertyViz3D] RENDER #6 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:17.619Z}
+
+[1A[2K[2026-03-15T02:12:17.628Z] [PropertyViz3D] RENDER #7 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:17.627Z}
+
+[1A[2K[2026-03-15T02:12:17.638Z] [PropertyViz3D] RENDER #6 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:17.637Z}
+
+[1A[2K[2026-03-15T02:12:17.639Z] [PropertyViz3D] RENDER #7 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:17.639Z}
+
+[1A[2K[2026-03-15T02:12:17.829Z] [PropertyViz3D] RENDER #8 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:17.829Z}
+
+[1A[2K[2026-03-15T02:12:17.838Z] [PropertyViz3D] RENDER #9 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:17.837Z}
+
+[1A[2K[2026-03-15T02:12:17.841Z] [PropertyViz3D] RENDER #8 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:17.840Z}
+
+[1A[2K[2026-03-15T02:12:17.842Z] [PropertyViz3D] RENDER #9 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:17.841Z}
+
+[1A[2K[2026-03-15T02:12:18.039Z] [PropertyViz3D] RENDER #10 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:18.038Z}
+
+[1A[2K[2026-03-15T02:12:18.047Z] [PropertyViz3D] RENDER #11 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:18.046Z}
+
+[1A[2K[2026-03-15T02:12:18.049Z] [PropertyViz3D] RENDER #10 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:18.048Z}
+
+[1A[2K[2026-03-15T02:12:18.050Z] [PropertyViz3D] RENDER #11 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:18.049Z}
+
+[1A[2K[2026-03-15T02:12:18.248Z] [PropertyViz3D] RENDER #12 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:18.247Z}
+
+[1A[2K[2026-03-15T02:12:18.256Z] [PropertyViz3D] RENDER #13 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:18.255Z}
+
+[1A[2K[2026-03-15T02:12:18.258Z] [PropertyViz3D] RENDER #12 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:18.257Z}
+
+[1A[2K[2026-03-15T02:12:18.258Z] [PropertyViz3D] RENDER #13 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:18.258Z}
+
+[1A[2K[2026-03-15T02:12:18.458Z] [PropertyViz3D] RENDER #14 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:18.457Z}
+
+[1A[2K[2026-03-15T02:12:18.466Z] [PropertyViz3D] RENDER #15 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:18.465Z}
+
+[1A[2K[2026-03-15T02:12:18.467Z] [PropertyViz3D] RENDER #14 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:18.466Z}
+
+[1A[2K[2026-03-15T02:12:18.468Z] [PropertyViz3D] RENDER #15 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:18.467Z}
+
+[1A[2K[2026-03-15T02:12:18.667Z] [PropertyViz3D] RENDER #16 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:18.666Z}
+
+[1A[2K[2026-03-15T02:12:18.676Z] [PropertyViz3D] RENDER #17 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:18.674Z}
+
+[1A[2K[2026-03-15T02:12:18.684Z] [PropertyViz3D] RENDER #16 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:18.683Z}
+
+[1A[2K[2026-03-15T02:12:18.685Z] [PropertyViz3D] RENDER #17 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:18.684Z}
+
+[1A[2K[2026-03-15T02:12:18.877Z] [PropertyViz3D] RENDER #18 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:18.876Z}
+
+[1A[2K[2026-03-15T02:12:18.885Z] [PropertyViz3D] RENDER #19 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:18.884Z}
+
+[1A[2K[2026-03-15T02:12:18.886Z] [PropertyViz3D] RENDER #18 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:18.885Z}
+
+[1A[2K[2026-03-15T02:12:18.887Z] [PropertyViz3D] RENDER #19 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:18.886Z}
+
+[1A[2K[2026-03-15T02:12:19.086Z] [PropertyViz3D] RENDER #20 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:19.085Z}
+
+[1A[2K[2026-03-15T02:12:19.094Z] [PropertyViz3D] RENDER #21 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:19.093Z}
+
+[1A[2K[2026-03-15T02:12:19.103Z] [PropertyViz3D] RENDER #20 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:19.102Z}
+
+[1A[2K[2026-03-15T02:12:19.104Z] [PropertyViz3D] RENDER #21 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:19.103Z}
+
+[1A[2K[2026-03-15T02:12:19.296Z] [PropertyViz3D] RENDER #22 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:19.295Z}
+
+[1A[2K[2026-03-15T02:12:19.303Z] [PropertyViz3D] RENDER #23 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:19.302Z}
+
+[1A[2K[2026-03-15T02:12:19.305Z] [PropertyViz3D] RENDER #22 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:19.304Z}
+
+[1A[2K[2026-03-15T02:12:19.306Z] [PropertyViz3D] RENDER #23 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:19.305Z}
+
+[1A[2K[2026-03-15T02:12:19.505Z] [PropertyViz3D] RENDER #24 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:19.504Z}
+
+[1A[2K[2026-03-15T02:12:19.513Z] [PropertyViz3D] RENDER #25 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:19.512Z}
+
+[1A[2K[2026-03-15T02:12:19.522Z] [PropertyViz3D] RENDER #24 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:19.521Z}
+
+[1A[2K[2026-03-15T02:12:19.523Z] [PropertyViz3D] RENDER #25 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:19.522Z}
+
+[1A[2K
+=== Testing Stationary Camera ===
+
+
+[1A[2K[2026-03-15T02:12:19.715Z] [PropertyViz3D] RENDER #26 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:19.714Z}
+
+[1A[2K[2026-03-15T02:12:19.723Z] [PropertyViz3D] RENDER #27 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:19.722Z}
+
+[1A[2K[2026-03-15T02:12:19.724Z] [PropertyViz3D] RENDER #26 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:19.723Z}
+
+[1A[2K[2026-03-15T02:12:19.725Z] [PropertyViz3D] RENDER #27 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:19.724Z}
+
+[1A[2K[2026-03-15T02:12:19.924Z] [PropertyViz3D] RENDER #28 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:19.923Z}
+
+[1A[2K[2026-03-15T02:12:19.932Z] [PropertyViz3D] RENDER #29 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:19.931Z}
+
+[1A[2K[2026-03-15T02:12:19.933Z] [PropertyViz3D] RENDER #28 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:19.933Z}
+
+[1A[2K[2026-03-15T02:12:19.934Z] [PropertyViz3D] RENDER #29 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:19.933Z}
+
+[1A[2K[2026-03-15T02:12:20.134Z] [PropertyViz3D] RENDER #30 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:20.133Z}
+
+[1A[2K[2026-03-15T02:12:20.142Z] [PropertyViz3D] RENDER #31 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:20.141Z}
+
+[1A[2K[2026-03-15T02:12:20.151Z] [PropertyViz3D] RENDER #30 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:20.150Z}
+
+[1A[2K[2026-03-15T02:12:20.151Z] [PropertyViz3D] RENDER #31 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:20.151Z}
+
+[1A[2K[2026-03-15T02:12:20.343Z] [PropertyViz3D] RENDER #32 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:20.342Z}
+
+[1A[2K[2026-03-15T02:12:20.351Z] [PropertyViz3D] RENDER #33 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:20.350Z}
+
+[1A[2K[2026-03-15T02:12:20.353Z] [PropertyViz3D] RENDER #32 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:20.352Z}
+
+[1A[2K[2026-03-15T02:12:20.353Z] [PropertyViz3D] RENDER #33 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:20.353Z}
+
+[1A[2K[2026-03-15T02:12:20.553Z] [PropertyViz3D] RENDER #34 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:20.552Z}
+
+[1A[2K[2026-03-15T02:12:20.561Z] [PropertyViz3D] RENDER #35 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:20.560Z}
+
+[1A[2K[2026-03-15T02:12:20.571Z] [PropertyViz3D] RENDER #34 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:20.570Z}
+
+[1A[2K[2026-03-15T02:12:20.572Z] [PropertyViz3D] RENDER #35 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:20.571Z}
+
+[1A[2K[2026-03-15T02:12:20.762Z] [PropertyViz3D] RENDER #36 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:20.761Z}
+
+[1A[2K[2026-03-15T02:12:20.770Z] [PropertyViz3D] RENDER #37 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:20.769Z}
+
+[1A[2K[2026-03-15T02:12:20.773Z] [PropertyViz3D] RENDER #36 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:20.772Z}
+
+[1A[2K[2026-03-15T02:12:20.774Z] [PropertyViz3D] RENDER #37 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:20.773Z}
+
+[1A[2K[2026-03-15T02:12:20.972Z] [PropertyViz3D] RENDER #38 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:20.971Z}
+
+[1A[2K[2026-03-15T02:12:20.980Z] [PropertyViz3D] RENDER #39 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:20.979Z}
+
+[1A[2K[2026-03-15T02:12:20.989Z] [PropertyViz3D] RENDER #38 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:20.988Z}
+
+[1A[2K[2026-03-15T02:12:20.989Z] [PropertyViz3D] RENDER #39 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:20.989Z}
+
+[1A[2K[2026-03-15T02:12:21.182Z] [PropertyViz3D] RENDER #40 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:21.180Z}
+
+[1A[2K[2026-03-15T02:12:21.190Z] [PropertyViz3D] RENDER #41 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:21.188Z}
+
+[1A[2K[2026-03-15T02:12:21.191Z] [PropertyViz3D] RENDER #40 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:21.190Z}
+
+[1A[2K[2026-03-15T02:12:21.191Z] [PropertyViz3D] RENDER #41 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:21.191Z}
+
+[1A[2K[2026-03-15T02:12:21.391Z] [PropertyViz3D] RENDER #42 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:21.390Z}
+
+[1A[2K[2026-03-15T02:12:21.399Z] [PropertyViz3D] RENDER #43 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:21.398Z}
+
+[1A[2K[2026-03-15T02:12:21.400Z] [PropertyViz3D] RENDER #42 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:21.399Z}
+
+[1A[2K[2026-03-15T02:12:21.401Z] [PropertyViz3D] RENDER #43 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:21.400Z}
+
+[1A[2K[2026-03-15T02:12:21.600Z] [PropertyViz3D] RENDER #44 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:21.599Z}
+
+[1A[2K[2026-03-15T02:12:21.608Z] [PropertyViz3D] RENDER #45 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:21.607Z}
+
+[1A[2K[2026-03-15T02:12:21.617Z] [PropertyViz3D] RENDER #44 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:21.616Z}
+
+[1A[2K[2026-03-15T02:12:21.617Z] [PropertyViz3D] RENDER #45 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:21.617Z}
+
+[1A[2K[2026-03-15T02:12:21.809Z] [PropertyViz3D] RENDER #46 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:21.808Z}
+
+[1A[2K[2026-03-15T02:12:21.817Z] [PropertyViz3D] RENDER #47 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:21.816Z}
+
+[1A[2K[2026-03-15T02:12:21.818Z] [PropertyViz3D] RENDER #46 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:21.817Z}
+
+[1A[2K[2026-03-15T02:12:21.819Z] [PropertyViz3D] RENDER #47 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:21.818Z}
+
+[1A[2K[2026-03-15T02:12:22.018Z] [PropertyViz3D] RENDER #48 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:22.018Z}
+
+[1A[2K[2026-03-15T02:12:22.026Z] [PropertyViz3D] RENDER #49 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:22.025Z}
+
+[1A[2K[2026-03-15T02:12:22.035Z] [PropertyViz3D] RENDER #48 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:22.034Z}
+
+[1A[2K[2026-03-15T02:12:22.035Z] [PropertyViz3D] RENDER #49 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:22.035Z}
+
+[1A[2K[2026-03-15T02:12:22.228Z] [PropertyViz3D] RENDER #50 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:22.227Z}
+
+[1A[2K[2026-03-15T02:12:22.235Z] [PropertyViz3D] RENDER #51 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:22.234Z}
+
+[1A[2K[2026-03-15T02:12:22.236Z] [PropertyViz3D] RENDER #50 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:22.236Z}
+
+[1A[2K[2026-03-15T02:12:22.237Z] [PropertyViz3D] RENDER #51 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:22.237Z}
+
+[1A[2K[2026-03-15T02:12:22.437Z] [PropertyViz3D] RENDER #52 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:22.436Z}
+
+[1A[2K[2026-03-15T02:12:22.445Z] [PropertyViz3D] RENDER #53 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:22.444Z}
+
+[1A[2K[2026-03-15T02:12:22.454Z] [PropertyViz3D] RENDER #52 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:22.453Z}
+
+[1A[2K[2026-03-15T02:12:22.454Z] [PropertyViz3D] RENDER #53 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:12:22.454Z}
+
+[1A[2K
+Renders during 3s stationary: 56
+
+[1A[2K✗ BAD: Re-renders occurring even without camera movement
+
+[1A[2K  This suggests continuous re-rendering, not just pan-related
+
+[1A[2K  2 passed (15.3s)

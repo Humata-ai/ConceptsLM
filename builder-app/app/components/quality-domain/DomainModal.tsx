@@ -89,6 +89,7 @@ export default function DomainModal({ isOpen, editingDomainId, onClose }: Domain
       id: editingDomain?.id || generateId(),
       name,
       dimensions,
+      properties: editingDomain?.properties || [],
       createdAt: editingDomain?.createdAt || new Date(),
     }
 

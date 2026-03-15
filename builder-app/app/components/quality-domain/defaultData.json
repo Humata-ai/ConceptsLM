@@ -1,0 +1,94 @@
+{
+  "domains": [
+    {
+      "id": "1773537022103-fmb1ksh",
+      "name": "Spatial Domain",
+      "dimensions": [
+        {
+          "id": "1773537006501-mu15unh",
+          "name": "Width Dimension",
+          "range": [0, 100],
+          "type": "continuous"
+        },
+        {
+          "id": "1773536996362-eti1pe4",
+          "name": "Height Dimension",
+          "range": [0, 100],
+          "type": "continuous"
+        },
+        {
+          "id": "1773537013229-lttyoq6",
+          "name": "Depth Dimension",
+          "range": [0, 100],
+          "type": "continuous"
+        }
+      ],
+      "properties": []
+    },
+    {
+      "id": "1773537259656-e39cnyu",
+      "name": "Color Domain",
+      "dimensions": [
+        {
+          "id": "1773537213940-flo1fpt",
+          "name": "Hue Dimension",
+          "range": [0, 360],
+          "type": "continuous"
+        },
+        {
+          "id": "1773537231699-cmwcz89",
+          "name": "Saturation Dimension",
+          "range": [0, 1],
+          "type": "continuous"
+        },
+        {
+          "id": "1773537244427-kklfhux",
+          "name": "Brightness Dimension",
+          "range": [0, 1],
+          "type": "continuous"
+        }
+      ],
+      "properties": [
+        {
+          "id": "1773537300000-prop001",
+          "name": "Red",
+          "description": "Red color property",
+          "dimensions": [
+            {
+              "dimensionId": "1773537213940-flo1fpt",
+              "range": [0, 20]
+            },
+            {
+              "dimensionId": "1773537231699-cmwcz89",
+              "range": [0.6, 1]
+            },
+            {
+              "dimensionId": "1773537244427-kklfhux",
+              "range": [0.3, 0.8]
+            }
+          ]
+        },
+        {
+          "id": "1773537300001-prop002",
+          "name": "Bright",
+          "description": "Bright color property",
+          "dimensions": [
+            {
+              "dimensionId": "1773537213940-flo1fpt",
+              "range": [0, 360]
+            },
+            {
+              "dimensionId": "1773537231699-cmwcz89",
+              "range": [0, 1]
+            },
+            {
+              "dimensionId": "1773537244427-kklfhux",
+              "range": [0.8, 1]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "selectedDomainId": "1773537259656-e39cnyu"
+}

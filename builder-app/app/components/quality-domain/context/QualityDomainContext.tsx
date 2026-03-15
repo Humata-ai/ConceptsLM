@@ -1,7 +1,8 @@
 'use client'
 
-import { createContext, useContext, useReducer, type ReactNode } from 'react'
-import type { QualityDomain, QualityDomainState, QualityDomainAction } from '../types'
+import { createContext, useContext, useReducer, useMemo, useCallback, type ReactNode } from 'react'
+import type { QualityDomain, QualityDomainState, QualityDomainAction, Property } from '../types'
+import defaultDataJson from '../defaultData.json'
 
 interface QualityDomainContextType {
   state: QualityDomainState
@@ -11,14 +12,15 @@ interface QualityDomainContextType {
   deleteDomain: (id: string) => void
   selectDomain: (id: string | null) => void
   getSelectedDomain: () => QualityDomain | null
+  addProperty: (domainId: string, property: Property) => void
+  updateProperty: (domainId: string, property: Property) => void
+  deleteProperty: (domainId: string, propertyId: string) => void
 }
 
 const QualityDomainContext = createContext<QualityDomainContextType | undefined>(undefined)
 
-const initialState: QualityDomainState = {
-  domains: [],
-  selectedDomainId: null,
-}
+// Load default data from JSON file (can be easily updated by pasting new JSON)
+const initialState: QualityDomainState = defaultDataJson as QualityDomainState
 
 function qualityDomainReducer(
   state: QualityDomainState,
@@ -50,6 +52,43 @@ function qualityDomainReducer(
         ...state,
         selectedDomainId: action.payload,
       }
+    case 'ADD_PROPERTY':
+      return {
+        ...state,
+        domains: state.domains.map((domain) =>
+          domain.id === action.payload.domainId
+            ? { ...domain, properties: [...domain.properties, action.payload.property] }
+            : domain
+        ),
+      }
+    case 'UPDATE_PROPERTY':
+      return {
+        ...state,
+        domains: state.domains.map((domain) =>
+          domain.id === action.payload.domainId
+            ? {
+                ...domain,
+                properties: domain.properties.map((prop) =>
+                  prop.id === action.payload.property.id ? action.payload.property : prop
+                ),
+              }
+            : domain
+        ),
+      }
+    case 'DELETE_PROPERTY':
+      return {
+        ...state,
+        domains: state.domains.map((domain) =>
+          domain.id === action.payload.domainId
+            ? {
+                ...domain,
+                properties: domain.properties.filter(
+                  (prop) => prop.id !== action.payload.propertyId
+                ),
+              }
+            : domain
+        ),
+      }
     default:
       return state
   }
@@ -58,28 +97,42 @@ function qualityDomainReducer(
 export function QualityDomainProvider({ children }: { children: ReactNode }) {
   const [state, dispatch] = useReducer(qualityDomainReducer, initialState)
 
-  const addDomain = (domain: QualityDomain) => {
+  // Memoize helper functions to prevent recreation on every render
+  const addDomain = useCallback((domain: QualityDomain) => {
     dispatch({ type: 'ADD_DOMAIN', payload: domain })
-  }
+  }, [])
 
-  const updateDomain = (domain: QualityDomain) => {
+  const updateDomain = useCallback((domain: QualityDomain) => {
     dispatch({ type: 'UPDATE_DOMAIN', payload: domain })
-  }
+  }, [])
 
-  const deleteDomain = (id: string) => {
+  const deleteDomain = useCallback((id: string) => {
     dispatch({ type: 'DELETE_DOMAIN', payload: id })
-  }
+  }, [])
 
-  const selectDomain = (id: string | null) => {
+  const selectDomain = useCallback((id: string | null) => {
     dispatch({ type: 'SELECT_DOMAIN', payload: id })
-  }
+  }, [])
 
-  const getSelectedDomain = () => {
+  const getSelectedDomain = useCallback(() => {
     if (!state.selectedDomainId) return null
     return state.domains.find((d) => d.id === state.selectedDomainId) || null
-  }
+  }, [state.selectedDomainId, state.domains])
 
-  const value: QualityDomainContextType = {
+  const addProperty = useCallback((domainId: string, property: Property) => {
+    dispatch({ type: 'ADD_PROPERTY', payload: { domainId, property } })
+  }, [])
+
+  const updateProperty = useCallback((domainId: string, property: Property) => {
+    dispatch({ type: 'UPDATE_PROPERTY', payload: { domainId, property } })
+  }, [])
+
+  const deleteProperty = useCallback((domainId: string, propertyId: string) => {
+    dispatch({ type: 'DELETE_PROPERTY', payload: { domainId, propertyId } })
+  }, [])
+
+  // Memoize context value to only recreate when state changes
+  const value: QualityDomainContextType = useMemo(() => ({
     state,
     dispatch,
     addDomain,
@@ -87,7 +140,10 @@ export function QualityDomainProvider({ children }: { children: ReactNode }) {
     deleteDomain,
     selectDomain,
     getSelectedDomain,
-  }
+    addProperty,
+    updateProperty,
+    deleteProperty,
+  }), [state, addDomain, updateDomain, deleteDomain, selectDomain, getSelectedDomain, addProperty, updateProperty, deleteProperty])
 
   return (
     <QualityDomainContext.Provider value={value}>

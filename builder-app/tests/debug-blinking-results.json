@@ -1,0 +1,712 @@
+{
+  "summary": {
+    "totalRenders": 150,
+    "initialRenders": 50,
+    "newRenders": 100,
+    "panDuration": 4004,
+    "renderTimestamps": [
+      1773541049839,
+      1773541049839,
+      1773541049840,
+      1773541049840,
+      1773541050041,
+      1773541050041,
+      1773541050042,
+      1773541050043,
+      1773541050243,
+      1773541050243,
+      1773541050244,
+      1773541050245,
+      1773541050445,
+      1773541050453,
+      1773541050455,
+      1773541050456,
+      1773541050655,
+      1773541050656,
+      1773541050656,
+      1773541050656,
+      1773541050856,
+      1773541050857,
+      1773541050858,
+      1773541050859,
+      1773541051059,
+      1773541051059,
+      1773541051060,
+      1773541051061,
+      1773541051260,
+      1773541051261,
+      1773541051272,
+      1773541051272,
+      1773541051471,
+      1773541051472,
+      1773541051473,
+      1773541051473,
+      1773541051673,
+      1773541051673,
+      1773541051674,
+      1773541051675,
+      1773541051875,
+      1773541051875,
+      1773541051877,
+      1773541051877,
+      1773541052077,
+      1773541052078,
+      1773541052087,
+      1773541052088,
+      1773541052287,
+      1773541052288,
+      1773541052289,
+      1773541052290,
+      1773541052490,
+      1773541052490,
+      1773541052491,
+      1773541052492,
+      1773541052692,
+      1773541052692,
+      1773541052693,
+      1773541052694,
+      1773541052894,
+      1773541052894,
+      1773541052895,
+      1773541052904,
+      1773541053104,
+      1773541053105,
+      1773541053106,
+      1773541053106,
+      1773541053306,
+      1773541053306,
+      1773541053307,
+      1773541053308,
+      1773541053508,
+      1773541053508,
+      1773541053509,
+      1773541053510,
+      1773541053710,
+      1773541053710,
+      1773541053711,
+      1773541053720,
+      1773541053912,
+      1773541053922,
+      1773541053923,
+      1773541053924,
+      1773541054123,
+      1773541054124,
+      1773541054125,
+      1773541054125,
+      1773541054325,
+      1773541054326,
+      1773541054327,
+      1773541054327,
+      1773541054527,
+      1773541054527,
+      1773541054537,
+      1773541054538,
+      1773541054737,
+      1773541054738,
+      1773541054739,
+      1773541054739
+    ]
+  },
+  "consoleLogs": [
+    {
+      "type": "log",
+      "text": "[PropertyViz3D] RENDER #26 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:17:29.838Z}",
+      "timestamp": 1773541049839,
+      "relativeTime": 52
+    },
+    {
+      "type": "log",
+      "text": "[PropertyViz3D] RENDER #27 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:17:29.838Z}",
+      "timestamp": 1773541049839,
+      "relativeTime": 52
+    },
+    {
+      "type": "log",
+      "text": "[PropertyViz3D] RENDER #26 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:17:29.839Z}",
+      "timestamp": 1773541049840,
+      "relativeTime": 53
+    },
+    {
+      "type": "log",
+      "text": "[PropertyViz3D] RENDER #27 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:17:29.840Z}",
+      "timestamp": 1773541049840,
+      "relativeTime": 53
+    },
+    {
+      "type": "log",
+      "text": "[PropertyViz3D] RENDER #28 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:17:30.040Z}",
+      "timestamp": 1773541050041,
+      "relativeTime": 254
+    },
+    {
+      "type": "log",
+      "text": "[PropertyViz3D] RENDER #29 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:17:30.041Z}",
+      "timestamp": 1773541050041,
+      "relativeTime": 254
+    },
+    {
+      "type": "log",
+      "text": "[PropertyViz3D] RENDER #28 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:17:30.042Z}",
+      "timestamp": 1773541050042,
+      "relativeTime": 255
+    },
+    {
+      "type": "log",
+      "text": "[PropertyViz3D] RENDER #29 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:17:30.042Z}",
+      "timestamp": 1773541050043,
+      "relativeTime": 256
+    },
+    {
+      "type": "log",
+      "text": "[PropertyViz3D] RENDER #30 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:17:30.242Z}",
+      "timestamp": 1773541050243,
+      "relativeTime": 456
+    },
+    {
+      "type": "log",
+      "text": "[PropertyViz3D] RENDER #31 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:17:30.243Z}",
+      "timestamp": 1773541050243,
+      "relativeTime": 456
+    },
+    {
+      "type": "log",
+      "text": "[PropertyViz3D] RENDER #30 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:17:30.243Z}",
+      "timestamp": 1773541050244,
+      "relativeTime": 457
+    },
+    {
+      "type": "log",
+      "text": "[PropertyViz3D] RENDER #31 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:17:30.244Z}",
+      "timestamp": 1773541050245,
+      "relativeTime": 458
+    },
+    {
+      "type": "log",
+      "text": "[PropertyViz3D] RENDER #32 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:17:30.444Z}",
+      "timestamp": 1773541050445,
+      "relativeTime": 658
+    },
+    {
+      "type": "log",
+      "text": "[PropertyViz3D] RENDER #33 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:17:30.452Z}",
+      "timestamp": 1773541050453,
+      "relativeTime": 666
+    },
+    {
+      "type": "log",
+      "text": "[PropertyViz3D] RENDER #32 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:17:30.454Z}",
+      "timestamp": 1773541050455,
+      "relativeTime": 668
+    },
+    {
+      "type": "log",
+      "text": "[PropertyViz3D] RENDER #33 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:17:30.454Z}",
+      "timestamp": 1773541050456,
+      "relativeTime": 669
+    },
+    {
+      "type": "log",
+      "text": "[PropertyViz3D] RENDER #34 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:17:30.653Z}",
+      "timestamp": 1773541050655,
+      "relativeTime": 868
+    },
+    {
+      "type": "log",
+      "text": "[PropertyViz3D] RENDER #35 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:17:30.654Z}",
+      "timestamp": 1773541050656,
+      "relativeTime": 869
+    },
+    {
+      "type": "log",
+      "text": "[PropertyViz3D] RENDER #34 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:17:30.655Z}",
+      "timestamp": 1773541050656,
+      "relativeTime": 869
+    },
+    {
+      "type": "log",
+      "text": "[PropertyViz3D] RENDER #35 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:17:30.656Z}",
+      "timestamp": 1773541050656,
+      "relativeTime": 869
+    },
+    {
+      "type": "log",
+      "text": "[PropertyViz3D] RENDER #36 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:17:30.856Z}",
+      "timestamp": 1773541050856,
+      "relativeTime": 1069
+    },
+    {
+      "type": "log",
+      "text": "[PropertyViz3D] RENDER #37 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:17:30.857Z}",
+      "timestamp": 1773541050857,
+      "relativeTime": 1070
+    },
+    {
+      "type": "log",
+      "text": "[PropertyViz3D] RENDER #36 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:17:30.858Z}",
+      "timestamp": 1773541050858,
+      "relativeTime": 1071
+    },
+    {
+      "type": "log",
+      "text": "[PropertyViz3D] RENDER #37 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:17:30.858Z}",
+      "timestamp": 1773541050859,
+      "relativeTime": 1072
+    },
+    {
+      "type": "log",
+      "text": "[PropertyViz3D] RENDER #38 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:17:31.058Z}",
+      "timestamp": 1773541051059,
+      "relativeTime": 1272
+    },
+    {
+      "type": "log",
+      "text": "[PropertyViz3D] RENDER #39 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:17:31.059Z}",
+      "timestamp": 1773541051059,
+      "relativeTime": 1272
+    },
+    {
+      "type": "log",
+      "text": "[PropertyViz3D] RENDER #38 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:17:31.060Z}",
+      "timestamp": 1773541051060,
+      "relativeTime": 1273
+    },
+    {
+      "type": "log",
+      "text": "[PropertyViz3D] RENDER #39 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:17:31.060Z}",
+      "timestamp": 1773541051061,
+      "relativeTime": 1274
+    },
+    {
+      "type": "log",
+      "text": "[PropertyViz3D] RENDER #40 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:17:31.260Z}",
+      "timestamp": 1773541051260,
+      "relativeTime": 1473
+    },
+    {
+      "type": "log",
+      "text": "[PropertyViz3D] RENDER #41 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:17:31.261Z}",
+      "timestamp": 1773541051261,
+      "relativeTime": 1474
+    },
+    {
+      "type": "log",
+      "text": "[PropertyViz3D] RENDER #40 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:17:31.270Z}",
+      "timestamp": 1773541051272,
+      "relativeTime": 1485
+    },
+    {
+      "type": "log",
+      "text": "[PropertyViz3D] RENDER #41 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:17:31.271Z}",
+      "timestamp": 1773541051272,
+      "relativeTime": 1485
+    },
+    {
+      "type": "log",
+      "text": "[PropertyViz3D] RENDER #42 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:17:31.470Z}",
+      "timestamp": 1773541051471,
+      "relativeTime": 1684
+    },
+    {
+      "type": "log",
+      "text": "[PropertyViz3D] RENDER #43 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:17:31.471Z}",
+      "timestamp": 1773541051472,
+      "relativeTime": 1685
+    },
+    {
+      "type": "log",
+      "text": "[PropertyViz3D] RENDER #42 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:17:31.472Z}",
+      "timestamp": 1773541051473,
+      "relativeTime": 1686
+    },
+    {
+      "type": "log",
+      "text": "[PropertyViz3D] RENDER #43 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:17:31.473Z}",
+      "timestamp": 1773541051473,
+      "relativeTime": 1686
+    },
+    {
+      "type": "log",
+      "text": "[PropertyViz3D] RENDER #44 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:17:31.672Z}",
+      "timestamp": 1773541051673,
+      "relativeTime": 1886
+    },
+    {
+      "type": "log",
+      "text": "[PropertyViz3D] RENDER #45 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:17:31.673Z}",
+      "timestamp": 1773541051673,
+      "relativeTime": 1886
+    },
+    {
+      "type": "log",
+      "text": "[PropertyViz3D] RENDER #44 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:17:31.674Z}",
+      "timestamp": 1773541051674,
+      "relativeTime": 1887
+    },
+    {
+      "type": "log",
+      "text": "[PropertyViz3D] RENDER #45 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:17:31.674Z}",
+      "timestamp": 1773541051675,
+      "relativeTime": 1888
+    },
+    {
+      "type": "log",
+      "text": "[PropertyViz3D] RENDER #46 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:17:31.874Z}",
+      "timestamp": 1773541051875,
+      "relativeTime": 2088
+    },
+    {
+      "type": "log",
+      "text": "[PropertyViz3D] RENDER #47 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:17:31.875Z}",
+      "timestamp": 1773541051875,
+      "relativeTime": 2088
+    },
+    {
+      "type": "log",
+      "text": "[PropertyViz3D] RENDER #46 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:17:31.876Z}",
+      "timestamp": 1773541051877,
+      "relativeTime": 2090
+    },
+    {
+      "type": "log",
+      "text": "[PropertyViz3D] RENDER #47 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:17:31.877Z}",
+      "timestamp": 1773541051877,
+      "relativeTime": 2090
+    },
+    {
+      "type": "log",
+      "text": "[PropertyViz3D] RENDER #48 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:17:32.076Z}",
+      "timestamp": 1773541052077,
+      "relativeTime": 2290
+    },
+    {
+      "type": "log",
+      "text": "[PropertyViz3D] RENDER #49 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:17:32.077Z}",
+      "timestamp": 1773541052078,
+      "relativeTime": 2291
+    },
+    {
+      "type": "log",
+      "text": "[PropertyViz3D] RENDER #48 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:17:32.086Z}",
+      "timestamp": 1773541052087,
+      "relativeTime": 2300
+    },
+    {
+      "type": "log",
+      "text": "[PropertyViz3D] RENDER #49 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:17:32.087Z}",
+      "timestamp": 1773541052088,
+      "relativeTime": 2301
+    },
+    {
+      "type": "log",
+      "text": "[PropertyViz3D] RENDER #50 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:17:32.286Z}",
+      "timestamp": 1773541052287,
+      "relativeTime": 2500
+    },
+    {
+      "type": "log",
+      "text": "[PropertyViz3D] RENDER #51 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:17:32.288Z}",
+      "timestamp": 1773541052288,
+      "relativeTime": 2501
+    },
+    {
+      "type": "log",
+      "text": "[PropertyViz3D] RENDER #50 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:17:32.288Z}",
+      "timestamp": 1773541052289,
+      "relativeTime": 2502
+    },
+    {
+      "type": "log",
+      "text": "[PropertyViz3D] RENDER #51 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:17:32.289Z}",
+      "timestamp": 1773541052290,
+      "relativeTime": 2503
+    },
+    {
+      "type": "log",
+      "text": "[PropertyViz3D] RENDER #52 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:17:32.489Z}",
+      "timestamp": 1773541052490,
+      "relativeTime": 2703
+    },
+    {
+      "type": "log",
+      "text": "[PropertyViz3D] RENDER #53 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:17:32.490Z}",
+      "timestamp": 1773541052490,
+      "relativeTime": 2703
+    },
+    {
+      "type": "log",
+      "text": "[PropertyViz3D] RENDER #52 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:17:32.491Z}",
+      "timestamp": 1773541052491,
+      "relativeTime": 2704
+    },
+    {
+      "type": "log",
+      "text": "[PropertyViz3D] RENDER #53 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:17:32.491Z}",
+      "timestamp": 1773541052492,
+      "relativeTime": 2705
+    },
+    {
+      "type": "log",
+      "text": "[PropertyViz3D] RENDER #54 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:17:32.691Z}",
+      "timestamp": 1773541052692,
+      "relativeTime": 2905
+    },
+    {
+      "type": "log",
+      "text": "[PropertyViz3D] RENDER #55 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:17:32.692Z}",
+      "timestamp": 1773541052692,
+      "relativeTime": 2905
+    },
+    {
+      "type": "log",
+      "text": "[PropertyViz3D] RENDER #54 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:17:32.693Z}",
+      "timestamp": 1773541052693,
+      "relativeTime": 2906
+    },
+    {
+      "type": "log",
+      "text": "[PropertyViz3D] RENDER #55 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:17:32.693Z}",
+      "timestamp": 1773541052694,
+      "relativeTime": 2907
+    },
+    {
+      "type": "log",
+      "text": "[PropertyViz3D] RENDER #56 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:17:32.893Z}",
+      "timestamp": 1773541052894,
+      "relativeTime": 3107
+    },
+    {
+      "type": "log",
+      "text": "[PropertyViz3D] RENDER #57 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:17:32.894Z}",
+      "timestamp": 1773541052894,
+      "relativeTime": 3107
+    },
+    {
+      "type": "log",
+      "text": "[PropertyViz3D] RENDER #56 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:17:32.894Z}",
+      "timestamp": 1773541052895,
+      "relativeTime": 3108
+    },
+    {
+      "type": "log",
+      "text": "[PropertyViz3D] RENDER #57 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:17:32.903Z}",
+      "timestamp": 1773541052904,
+      "relativeTime": 3117
+    },
+    {
+      "type": "log",
+      "text": "[PropertyViz3D] RENDER #58 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:17:33.103Z}",
+      "timestamp": 1773541053104,
+      "relativeTime": 3317
+    },
+    {
+      "type": "log",
+      "text": "[PropertyViz3D] RENDER #59 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:17:33.104Z}",
+      "timestamp": 1773541053105,
+      "relativeTime": 3318
+    },
+    {
+      "type": "log",
+      "text": "[PropertyViz3D] RENDER #58 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:17:33.105Z}",
+      "timestamp": 1773541053106,
+      "relativeTime": 3319
+    },
+    {
+      "type": "log",
+      "text": "[PropertyViz3D] RENDER #59 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:17:33.106Z}",
+      "timestamp": 1773541053106,
+      "relativeTime": 3319
+    },
+    {
+      "type": "log",
+      "text": "[PropertyViz3D] RENDER #60 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:17:33.305Z}",
+      "timestamp": 1773541053306,
+      "relativeTime": 3519
+    },
+    {
+      "type": "log",
+      "text": "[PropertyViz3D] RENDER #61 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:17:33.306Z}",
+      "timestamp": 1773541053306,
+      "relativeTime": 3519
+    },
+    {
+      "type": "log",
+      "text": "[PropertyViz3D] RENDER #60 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:17:33.307Z}",
+      "timestamp": 1773541053307,
+      "relativeTime": 3520
+    },
+    {
+      "type": "log",
+      "text": "[PropertyViz3D] RENDER #61 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:17:33.308Z}",
+      "timestamp": 1773541053308,
+      "relativeTime": 3521
+    },
+    {
+      "type": "log",
+      "text": "[PropertyViz3D] RENDER #62 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:17:33.507Z}",
+      "timestamp": 1773541053508,
+      "relativeTime": 3721
+    },
+    {
+      "type": "log",
+      "text": "[PropertyViz3D] RENDER #63 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:17:33.508Z}",
+      "timestamp": 1773541053508,
+      "relativeTime": 3721
+    },
+    {
+      "type": "log",
+      "text": "[PropertyViz3D] RENDER #62 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:17:33.509Z}",
+      "timestamp": 1773541053509,
+      "relativeTime": 3722
+    },
+    {
+      "type": "log",
+      "text": "[PropertyViz3D] RENDER #63 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:17:33.509Z}",
+      "timestamp": 1773541053510,
+      "relativeTime": 3723
+    },
+    {
+      "type": "log",
+      "text": "[PropertyViz3D] RENDER #64 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:17:33.709Z}",
+      "timestamp": 1773541053710,
+      "relativeTime": 3923
+    },
+    {
+      "type": "log",
+      "text": "[PropertyViz3D] RENDER #65 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:17:33.710Z}",
+      "timestamp": 1773541053710,
+      "relativeTime": 3923
+    },
+    {
+      "type": "log",
+      "text": "[PropertyViz3D] RENDER #64 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:17:33.711Z}",
+      "timestamp": 1773541053711,
+      "relativeTime": 3924
+    },
+    {
+      "type": "log",
+      "text": "[PropertyViz3D] RENDER #65 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:17:33.720Z}",
+      "timestamp": 1773541053720,
+      "relativeTime": 3933
+    },
+    {
+      "type": "log",
+      "text": "[PropertyViz3D] RENDER #66 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:17:33.911Z}",
+      "timestamp": 1773541053912,
+      "relativeTime": 4125
+    },
+    {
+      "type": "log",
+      "text": "[PropertyViz3D] RENDER #67 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:17:33.921Z}",
+      "timestamp": 1773541053922,
+      "relativeTime": 4135
+    },
+    {
+      "type": "log",
+      "text": "[PropertyViz3D] RENDER #66 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:17:33.922Z}",
+      "timestamp": 1773541053923,
+      "relativeTime": 4136
+    },
+    {
+      "type": "log",
+      "text": "[PropertyViz3D] RENDER #67 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:17:33.923Z}",
+      "timestamp": 1773541053924,
+      "relativeTime": 4137
+    },
+    {
+      "type": "log",
+      "text": "[PropertyViz3D] RENDER #68 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:17:34.122Z}",
+      "timestamp": 1773541054123,
+      "relativeTime": 4336
+    },
+    {
+      "type": "log",
+      "text": "[PropertyViz3D] RENDER #69 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:17:34.123Z}",
+      "timestamp": 1773541054124,
+      "relativeTime": 4337
+    },
+    {
+      "type": "log",
+      "text": "[PropertyViz3D] RENDER #68 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:17:34.124Z}",
+      "timestamp": 1773541054125,
+      "relativeTime": 4338
+    },
+    {
+      "type": "log",
+      "text": "[PropertyViz3D] RENDER #69 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:17:34.125Z}",
+      "timestamp": 1773541054125,
+      "relativeTime": 4338
+    },
+    {
+      "type": "log",
+      "text": "[PropertyViz3D] RENDER #70 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:17:34.324Z}",
+      "timestamp": 1773541054325,
+      "relativeTime": 4538
+    },
+    {
+      "type": "log",
+      "text": "[PropertyViz3D] RENDER #71 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:17:34.325Z}",
+      "timestamp": 1773541054326,
+      "relativeTime": 4539
+    },
+    {
+      "type": "log",
+      "text": "[PropertyViz3D] RENDER #70 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:17:34.326Z}",
+      "timestamp": 1773541054327,
+      "relativeTime": 4540
+    },
+    {
+      "type": "log",
+      "text": "[PropertyViz3D] RENDER #71 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:17:34.327Z}",
+      "timestamp": 1773541054327,
+      "relativeTime": 4540
+    },
+    {
+      "type": "log",
+      "text": "[PropertyViz3D] RENDER #72 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:17:34.526Z}",
+      "timestamp": 1773541054527,
+      "relativeTime": 4740
+    },
+    {
+      "type": "log",
+      "text": "[PropertyViz3D] RENDER #73 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:17:34.527Z}",
+      "timestamp": 1773541054527,
+      "relativeTime": 4740
+    },
+    {
+      "type": "log",
+      "text": "[PropertyViz3D] RENDER #72 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:17:34.536Z}",
+      "timestamp": 1773541054537,
+      "relativeTime": 4750
+    },
+    {
+      "type": "log",
+      "text": "[PropertyViz3D] RENDER #73 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:17:34.538Z}",
+      "timestamp": 1773541054538,
+      "relativeTime": 4751
+    },
+    {
+      "type": "log",
+      "text": "[PropertyViz3D] RENDER #74 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:17:34.736Z}",
+      "timestamp": 1773541054737,
+      "relativeTime": 4950
+    },
+    {
+      "type": "log",
+      "text": "[PropertyViz3D] RENDER #75 {propertyId: 1773537300000-prop001, propertyName: Red, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:17:34.737Z}",
+      "timestamp": 1773541054738,
+      "relativeTime": 4951
+    },
+    {
+      "type": "log",
+      "text": "[PropertyViz3D] RENDER #74 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:17:34.738Z}",
+      "timestamp": 1773541054739,
+      "relativeTime": 4952
+    },
+    {
+      "type": "log",
+      "text": "[PropertyViz3D] RENDER #75 {propertyId: 1773537300001-prop002, propertyName: Bright, domainId: 1773537259656-e39cnyu, domainName: Color Domain, timestamp: 2026-03-15T02:17:34.739Z}",
+      "timestamp": 1773541054739,
+      "relativeTime": 4952
+    }
+  ]
+}

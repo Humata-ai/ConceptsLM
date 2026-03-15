@@ -1,3 +1,4 @@
+import { memo } from 'react'
 import type { QualityDomain } from './types'
 import Visualization1D from './visualizations/Visualization1D'
 import Visualization2D from './visualizations/Visualization2D'
@@ -7,7 +8,7 @@ interface DomainVisualizationProps {
   domain: QualityDomain | null
 }
 
-export default function DomainVisualization({ domain }: DomainVisualizationProps) {
+function DomainVisualization({ domain }: DomainVisualizationProps) {
   if (!domain) {
     return null
   }
@@ -33,3 +34,5 @@ export default function DomainVisualization({ domain }: DomainVisualizationProps
   // 4D+ is handled by TableView which is rendered outside the Canvas
   return null
 }
+
+export default memo(DomainVisualization)

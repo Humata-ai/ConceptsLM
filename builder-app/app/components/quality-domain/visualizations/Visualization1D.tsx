@@ -1,5 +1,6 @@
 import { Text } from '@react-three/drei'
 import type { QualityDomain } from '../types'
+import PropertyVisualization1D from './PropertyVisualization1D'
 
 interface Visualization1DProps {
   domain: QualityDomain
@@ -62,6 +63,16 @@ export default function Visualization1D({ domain }: Visualization1DProps) {
       >
         {max.toString()}
       </Text>
+
+      {/* Render properties */}
+      {domain.properties.map((property, index) => (
+        <PropertyVisualization1D
+          key={property.id}
+          property={property}
+          domain={domain}
+          index={index}
+        />
+      ))}
     </group>
   )
 }

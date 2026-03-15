@@ -1,78 +1,125 @@
+import { useMemo, memo } from 'react'
 import { Text } from '@react-three/drei'
 import { useQualityDomain } from './context/QualityDomainContext'
 import DomainVisualization from './DomainVisualization'
-import ConnectionLine from './ConnectionLine'
+import type { QualityDomain } from './types'
 
-export default function AllDomainsVisualization() {
+// Custom comparison for domain items - only re-render if domain data actually changed
+const domainItemAreEqual = (
+  prevProps: { domain: QualityDomain; position: readonly [number, number, number]; scale: number },
+  nextProps: { domain: QualityDomain; position: readonly [number, number, number]; scale: number }
+) => {
+  return (
+    prevProps.domain.id === nextProps.domain.id &&
+    prevProps.domain.name === nextProps.domain.name &&
+    prevProps.position === nextProps.position &&
+    prevProps.scale === nextProps.scale &&
+    JSON.stringify(prevProps.domain.dimensions) === JSON.stringify(nextProps.domain.dimensions) &&
+    JSON.stringify(prevProps.domain.properties) === JSON.stringify(nextProps.domain.properties)
+  )
+}
+
+// Memoized individual domain component
+const DomainItem = memo(({
+  domain,
+  position,
+  scale
+}: {
+  domain: QualityDomain
+  position: readonly [number, number, number]
+  scale: number
+}) => {
+  const labelPosition = useMemo(() => [0, -12, 0] as const, [])
+
+  return (
+    <group position={position} scale={scale}>
+      <DomainVisualization domain={domain} />
+      <Text position={labelPosition} fontSize={2} color="black">
+        {domain.name}
+      </Text>
+    </group>
+  )
+}, domainItemAreEqual)
+DomainItem.displayName = 'DomainItem'
+
+const SelectedDomainItem = memo(({
+  domain,
+  position,
+  scale
+}: {
+  domain: QualityDomain
+  position: readonly [number, number, number]
+  scale: number
+}) => {
+  const labelPosition = useMemo(() => [0, -12, 0] as const, [])
+
+  return (
+    <group position={position} scale={scale}>
+      <DomainVisualization domain={domain} />
+      <Text position={labelPosition} fontSize={2} color="orange">
+        {domain.name}
+      </Text>
+    </group>
+  )
+}, domainItemAreEqual)
+SelectedDomainItem.displayName = 'SelectedDomainItem'
+
+function AllDomainsVisualization() {
   const { state } = useQualityDomain()
   const domains = state.domains
 
-  const getPosition = (index: number, total: number): [number, number, number] => {
+  // Memoize positions for all domains
+  const domainPositions = useMemo(() => {
     const radius = 15
+    const total = domains.length
     const angleStep = (2 * Math.PI) / total
-    const angle = index * angleStep
-    const x = radius * Math.cos(angle)
-    const z = radius * Math.sin(angle) - 15
-    return [x, 0, z]
-  }
+
+    return domains.map((_, index) => {
+      const angle = index * angleStep
+      const x = radius * Math.cos(angle)
+      const z = radius * Math.sin(angle) - 15
+      return [x, 0, z] as const
+    })
+  }, [domains.length])
+
+  const emptyPosition = useMemo(() => [0, 0, 0] as const, [])
 
   // Handle empty state
   if (domains.length === 0) {
     return (
-      <Text position={[0, 0, 0]} fontSize={1.5} color="gray">
+      <Text position={emptyPosition} fontSize={1.5} color="gray">
         No domains yet. Click &quot;+ Add Domain&quot; to create one.
       </Text>
     )
   }
 
-  // Determine center label
-  const centerLabel = state.selectedDomainId
-    ? domains.find((d) => d.id === state.selectedDomainId)?.name || 'Quality Domains'
-    : 'Quality Domains'
-
   return (
     <group>
-      {/* Central label */}
-      <Text position={[0, 0, 5]} fontSize={2} color="black">
-        {centerLabel}
-      </Text>
-
       {/* Render each domain at its position */}
       {domains.map((domain, index) => {
-        const position = getPosition(index, domains.length)
-        const isSelected = state.selectedDomainId === domain.id
-        const scale = isSelected ? 1.1 : 1.0
-        const lineColor = isSelected ? 'orange' : 'blue'
-        const lineOpacity = isSelected ? 0.6 : 0.3
-
         // Skip 4D+ domains as they're handled by TableView
         if (domain.dimensions.length >= 4) {
           return null
         }
 
+        const position = domainPositions[index]
+        const isSelected = state.selectedDomainId === domain.id
+        const scale = isSelected ? 0.55 : 0.5
+
+        const Component = isSelected ? SelectedDomainItem : DomainItem
+
         return (
-          <group key={domain.id} position={position} scale={scale * 0.5}>
-            <DomainVisualization domain={domain} />
-
-            {/* Connection line from center to this domain */}
-            <ConnectionLine
-              start={[0, 0, 5]}
-              end={position}
-              color={lineColor}
-              opacity={lineOpacity}
-            />
-
-            {/* Domain name label */}
-            <Text
-              position={[0, -12, 0]}
-              fontSize={2}
-              color={isSelected ? 'orange' : 'black'}
-            >
-              {domain.name}
-            </Text>
-          </group>
+          <Component
+            key={domain.id}
+            domain={domain}
+            position={position}
+            scale={scale}
+          />
         )
       })}
     </group>
   )
 }
+
+// Memoize the entire component to prevent re-renders when camera moves
+export default memo(AllDomainsVisualization)

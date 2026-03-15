@@ -1,13 +1,14 @@
-import { useMemo, type ReactElement } from 'react'
+import { useMemo, memo, type ReactElement } from 'react'
 import { Text } from '@react-three/drei'
 import * as THREE from 'three'
 import type { QualityDomain } from '../types'
+import PropertyVisualization3D from './PropertyVisualization3D'
 
 interface Visualization3DProps {
   domain: QualityDomain
 }
 
-export default function Visualization3D({ domain }: Visualization3DProps) {
+function Visualization3D({ domain }: Visualization3DProps) {
   const dimX = domain.dimensions[0]
   const dimY = domain.dimensions[1]
   const dimZ = domain.dimensions[2]
@@ -207,6 +208,18 @@ export default function Visualization3D({ domain }: Visualization3DProps) {
       >
         {maxZ.toString()}
       </Text>
+
+      {/* Render properties */}
+      {domain.properties.map((property, index) => (
+        <PropertyVisualization3D
+          key={property.id}
+          property={property}
+          domain={domain}
+          index={index}
+        />
+      ))}
     </group>
   )
 }
+
+export default memo(Visualization3D)
