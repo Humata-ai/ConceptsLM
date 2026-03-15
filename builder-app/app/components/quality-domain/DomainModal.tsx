@@ -6,18 +6,24 @@ import DimensionInput from './DimensionInput'
 import type { QualityDimension, QualityDomain } from './types'
 import { generateId } from './utils'
 
-export default function DomainModal() {
-  const { state, addDomain, updateDomain, closeModal } = useQualityDomain()
+interface DomainModalProps {
+  isOpen: boolean
+  editingDomainId: string | null
+  onClose: () => void
+}
+
+export default function DomainModal({ isOpen, editingDomainId, onClose }: DomainModalProps) {
+  const { state, addDomain, updateDomain } = useQualityDomain()
   const [name, setName] = useState('')
   const [dimensions, setDimensions] = useState<QualityDimension[]>([])
   const [errors, setErrors] = useState<string[]>([])
 
-  const editingDomain = state.editingDomainId
-    ? state.domains.find((d) => d.id === state.editingDomainId)
+  const editingDomain = editingDomainId
+    ? state.domains.find((d) => d.id === editingDomainId)
     : null
 
   useEffect(() => {
-    if (state.isModalOpen) {
+    if (isOpen) {
       if (editingDomain) {
         setName(editingDomain.name)
         setDimensions(editingDomain.dimensions)
@@ -27,7 +33,7 @@ export default function DomainModal() {
       }
       setErrors([])
     }
-  }, [state.isModalOpen, editingDomain])
+  }, [isOpen, editingDomain])
 
   const handleAddDimension = () => {
     const newDimension: QualityDimension = {
@@ -92,26 +98,26 @@ export default function DomainModal() {
       addDomain(domain)
     }
 
-    closeModal()
+    onClose()
   }
 
   const handleCancel = () => {
-    closeModal()
+    onClose()
   }
 
   const handleBackdropClick = (e: React.MouseEvent) => {
     if (e.target === e.currentTarget) {
-      closeModal()
+      onClose()
     }
   }
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Escape') {
-      closeModal()
+      onClose()
     }
   }
 
-  if (!state.isModalOpen) return null
+  if (!isOpen) return null
 
   return (
     <div onKeyDown={handleKeyDown}>

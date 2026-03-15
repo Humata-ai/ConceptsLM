@@ -10,8 +10,6 @@ interface QualityDomainContextType {
   updateDomain: (domain: QualityDomain) => void
   deleteDomain: (id: string) => void
   selectDomain: (id: string | null) => void
-  openModal: (editingId?: string) => void
-  closeModal: () => void
   getSelectedDomain: () => QualityDomain | null
 }
 
@@ -20,8 +18,6 @@ const QualityDomainContext = createContext<QualityDomainContextType | undefined>
 const initialState: QualityDomainState = {
   domains: [],
   selectedDomainId: null,
-  isModalOpen: false,
-  editingDomainId: null,
 }
 
 function qualityDomainReducer(
@@ -54,18 +50,6 @@ function qualityDomainReducer(
         ...state,
         selectedDomainId: action.payload,
       }
-    case 'OPEN_MODAL':
-      return {
-        ...state,
-        isModalOpen: true,
-        editingDomainId: action.payload || null,
-      }
-    case 'CLOSE_MODAL':
-      return {
-        ...state,
-        isModalOpen: false,
-        editingDomainId: null,
-      }
     default:
       return state
   }
@@ -90,14 +74,6 @@ export function QualityDomainProvider({ children }: { children: ReactNode }) {
     dispatch({ type: 'SELECT_DOMAIN', payload: id })
   }
 
-  const openModal = (editingId?: string) => {
-    dispatch({ type: 'OPEN_MODAL', payload: editingId })
-  }
-
-  const closeModal = () => {
-    dispatch({ type: 'CLOSE_MODAL' })
-  }
-
   const getSelectedDomain = () => {
     if (!state.selectedDomainId) return null
     return state.domains.find((d) => d.id === state.selectedDomainId) || null
@@ -110,8 +86,6 @@ export function QualityDomainProvider({ children }: { children: ReactNode }) {
     updateDomain,
     deleteDomain,
     selectDomain,
-    openModal,
-    closeModal,
     getSelectedDomain,
   }
 

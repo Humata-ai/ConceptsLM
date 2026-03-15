@@ -7,10 +7,11 @@ import type { QualityDomain } from './types'
 interface DomainCardProps {
   domain: QualityDomain
   isSelected: boolean
+  onEdit: (domainId: string) => void
 }
 
-export default function DomainCard({ domain, isSelected }: DomainCardProps) {
-  const { selectDomain, openModal, deleteDomain } = useQualityDomain()
+export default function DomainCard({ domain, isSelected, onEdit }: DomainCardProps) {
+  const { selectDomain, deleteDomain } = useQualityDomain()
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
 
   const handleClick = () => {
@@ -19,7 +20,7 @@ export default function DomainCard({ domain, isSelected }: DomainCardProps) {
 
   const handleEdit = (e: React.MouseEvent) => {
     e.stopPropagation()
-    openModal(domain.id)
+    onEdit(domain.id)
   }
 
   const handleDelete = (e: React.MouseEvent) => {

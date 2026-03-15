@@ -14,8 +14,6 @@ export interface QualityDomain {
 export interface QualityDomainState {
   domains: QualityDomain[]
   selectedDomainId: string | null
-  isModalOpen: boolean
-  editingDomainId: string | null
 }
 
 export type QualityDomainAction =
@@ -23,5 +21,3 @@ export type QualityDomainAction =
   | { type: 'UPDATE_DOMAIN'; payload: QualityDomain }
   | { type: 'DELETE_DOMAIN'; payload: string }
   | { type: 'SELECT_DOMAIN'; payload: string | null }
-  | { type: 'OPEN_MODAL'; payload?: string }
-  | { type: 'CLOSE_MODAL' }

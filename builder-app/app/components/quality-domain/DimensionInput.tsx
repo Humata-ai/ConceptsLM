@@ -13,6 +13,9 @@ export default function DimensionInput({
   onChange,
   onRemove,
 }: DimensionInputProps) {
+  const isMinInfinity = dimension.range[0] === -Infinity
+  const isMaxInfinity = dimension.range[1] === Infinity
+
   const handleNameChange = (name: string) => {
     onChange({ ...dimension, name })
   }
@@ -31,6 +34,16 @@ export default function DimensionInput({
     }
   }
 
+  const handleMinInfinityToggle = (checked: boolean) => {
+    const newMin = checked ? -Infinity : 0
+    onChange({ ...dimension, range: [newMin, dimension.range[1]] as const })
+  }
+
+  const handleMaxInfinityToggle = (checked: boolean) => {
+    const newMax = checked ? Infinity : 1
+    onChange({ ...dimension, range: [dimension.range[0], newMax] as const })
+  }
+
   const minError = dimension.range[0] >= dimension.range[1]
 
   return (
@@ -43,30 +56,63 @@ export default function DimensionInput({
         className="flex-1 border border-gray-300 rounded px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
         required
       />
-      <input
-        type="number"
-        value={dimension.range[0]}
-        onChange={(e) => handleMinChange(e.target.value)}
-        placeholder="Min"
-        className={`w-24 border rounded px-3 py-2 focus:ring-2 focus:outline-none ${
-          minError
-            ? 'border-red-500 focus:ring-red-500'
-            : 'border-gray-300 focus:ring-blue-500'
-        }`}
-        required
-      />
-      <input
-        type="number"
-        value={dimension.range[1]}
-        onChange={(e) => handleMaxChange(e.target.value)}
-        placeholder="Max"
-        className={`w-24 border rounded px-3 py-2 focus:ring-2 focus:outline-none ${
-          minError
-            ? 'border-red-500 focus:ring-red-500'
-            : 'border-gray-300 focus:ring-blue-500'
-        }`}
-        required
-      />
+
+      {/* Min value with infinity checkbox */}
+      <div className="flex items-center gap-1">
+        <input
+          type="number"
+          value={isMinInfinity ? '' : dimension.range[0]}
+          onChange={(e) => handleMinChange(e.target.value)}
+          placeholder="Min"
+          disabled={isMinInfinity}
+          className={`w-20 border rounded px-2 py-2 focus:ring-2 focus:outline-none ${
+            isMinInfinity
+              ? 'bg-gray-100 text-gray-500'
+              : minError
+              ? 'border-red-500 focus:ring-red-500'
+              : 'border-gray-300 focus:ring-blue-500'
+          }`}
+          required={!isMinInfinity}
+        />
+        <label className="flex items-center gap-1 text-sm whitespace-nowrap">
+          <input
+            type="checkbox"
+            checked={isMinInfinity}
+            onChange={(e) => handleMinInfinityToggle(e.target.checked)}
+            className="w-4 h-4"
+          />
+          <span className="text-gray-700">-∞</span>
+        </label>
+      </div>
+
+      {/* Max value with infinity checkbox */}
+      <div className="flex items-center gap-1">
+        <input
+          type="number"
+          value={isMaxInfinity ? '' : dimension.range[1]}
+          onChange={(e) => handleMaxChange(e.target.value)}
+          placeholder="Max"
+          disabled={isMaxInfinity}
+          className={`w-20 border rounded px-2 py-2 focus:ring-2 focus:outline-none ${
+            isMaxInfinity
+              ? 'bg-gray-100 text-gray-500'
+              : minError
+              ? 'border-red-500 focus:ring-red-500'
+              : 'border-gray-300 focus:ring-blue-500'
+          }`}
+          required={!isMaxInfinity}
+        />
+        <label className="flex items-center gap-1 text-sm whitespace-nowrap">
+          <input
+            type="checkbox"
+            checked={isMaxInfinity}
+            onChange={(e) => handleMaxInfinityToggle(e.target.checked)}
+            className="w-4 h-4"
+          />
+          <span className="text-gray-700">∞</span>
+        </label>
+      </div>
+
       <button
         type="button"
         onClick={onRemove}

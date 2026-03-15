@@ -1,11 +1,14 @@
 'use client'
 
+import { useState } from 'react'
 import { useQualityDomain } from './context/QualityDomainContext'
 import DomainCard from './DomainCard'
 import DomainModal from './DomainModal'
 
 export default function DomainList() {
-  const { state, openModal } = useQualityDomain()
+  const { state } = useQualityDomain()
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [editingDomainId, setEditingDomainId] = useState<string | null>(null)
 
   return (
     <>
@@ -13,7 +16,10 @@ export default function DomainList() {
         <div className="flex items-center justify-between mb-3">
           <h2 className="text-lg font-bold">Quality Domains</h2>
           <button
-            onClick={() => openModal()}
+            onClick={() => {
+              setEditingDomainId(null)
+              setIsModalOpen(true)
+            }}
             className="px-3 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700 font-medium"
           >
             + Add Domain
@@ -32,13 +38,21 @@ export default function DomainList() {
                 key={domain.id}
                 domain={domain}
                 isSelected={state.selectedDomainId === domain.id}
+                onEdit={(id) => {
+                  setEditingDomainId(id)
+                  setIsModalOpen(true)
+                }}
               />
             ))}
           </div>
         )}
       </div>
 
-      <DomainModal />
+      <DomainModal
+        isOpen={isModalOpen}
+        editingDomainId={editingDomainId}
+        onClose={() => setIsModalOpen(false)}
+      />
     </>
   )
 }
