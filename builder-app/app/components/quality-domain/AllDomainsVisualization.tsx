@@ -2,6 +2,7 @@ import { useMemo, memo } from 'react'
 import { Text } from '@react-three/drei'
 import { useQualityDomain } from './context/QualityDomainContext'
 import DomainVisualization from './DomainVisualization'
+import ConceptVisualization3D from './visualizations/ConceptVisualization3D'
 import type { QualityDomain } from './types'
 
 // Custom comparison for domain items - only re-render if domain data actually changed
@@ -117,6 +118,11 @@ function AllDomainsVisualization() {
           />
         )
       })}
+
+      {/* Render all concepts */}
+      {state.concepts.map((concept) => (
+        <ConceptVisualization3D key={concept.id} concept={concept} />
+      ))}
     </group>
   )
 }

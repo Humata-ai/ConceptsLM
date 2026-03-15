@@ -225,6 +225,41 @@ export default function StateDebugPanel() {
             </div>
           )}
 
+          {/* Summary Section */}
+          <div className="mb-4 p-3 bg-gray-50 rounded border border-gray-200">
+            <div className="grid grid-cols-3 gap-4 text-sm">
+              <div>
+                <span className="font-semibold text-gray-700">Domains:</span>{" "}
+                <span className="text-gray-900">{state.domains.length}</span>
+              </div>
+              <div>
+                <span className="font-semibold text-gray-700">Properties:</span>{" "}
+                <span className="text-gray-900">
+                  {state.domains.reduce((total, d) => total + d.properties.length, 0)}
+                </span>
+              </div>
+              <div>
+                <span className="font-semibold text-purple-700">Concepts:</span>{" "}
+                <span className="text-purple-900">{state.concepts.length}</span>
+              </div>
+            </div>
+            {state.concepts.length > 0 && (
+              <div className="mt-2 pt-2 border-t border-gray-200">
+                <div className="text-xs text-gray-700 font-semibold mb-1">Concepts:</div>
+                <div className="flex flex-wrap gap-2">
+                  {state.concepts.map((concept) => (
+                    <div
+                      key={concept.id}
+                      className="px-2 py-1 bg-purple-100 text-purple-900 rounded text-xs"
+                    >
+                      {concept.name} ({concept.propertyRefs.length} props)
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+
           {/* Two Column Layout */}
           <div className="flex gap-4 overflow-hidden flex-1">
             {/* Left Column: Current State */}

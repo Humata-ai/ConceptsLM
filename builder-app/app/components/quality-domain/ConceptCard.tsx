@@ -1,0 +1,97 @@
+'use client'
+
+import { useState } from 'react'
+import { useQualityDomain } from './context/QualityDomainContext'
+import type { Concept } from './types'
+
+interface ConceptCardProps {
+  concept: Concept
+  onEdit: (conceptId: string) => void
+}
+
+export default function ConceptCard({ concept, onEdit }: ConceptCardProps) {
+  const { deleteConcept, getConceptProperties } = useQualityDomain()
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
+
+  const properties = getConceptProperties(concept.id)
+
+  const handleEdit = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    onEdit(concept.id)
+  }
+
+  const handleDelete = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    setShowDeleteConfirm(true)
+  }
+
+  const confirmDelete = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    deleteConcept(concept.id)
+    setShowDeleteConfirm(false)
+  }
+
+  const cancelDelete = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    setShowDeleteConfirm(false)
+  }
+
+  return (
+    <div className="p-3 rounded-lg bg-purple-100 border-2 border-purple-500 transition-colors hover:bg-purple-50">
+      {showDeleteConfirm ? (
+        <div className="space-y-2">
+          <p className="text-sm font-medium text-red-600">Delete this concept?</p>
+          <div className="flex gap-2">
+            <button
+              onClick={confirmDelete}
+              className="flex-1 px-2 py-1 bg-red-600 text-white text-sm rounded hover:bg-red-700"
+            >
+              Delete
+            </button>
+            <button
+              onClick={cancelDelete}
+              className="flex-1 px-2 py-1 border border-gray-300 text-sm rounded hover:bg-gray-50"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      ) : (
+        <>
+          <div className="flex items-start justify-between mb-2">
+            <div className="flex-1 min-w-0">
+              <h3 className="font-medium truncate text-purple-900">{concept.name}</h3>
+            </div>
+            <span className="ml-2 px-2 py-0.5 bg-purple-200 text-purple-700 text-xs rounded-full font-medium">
+              {properties.length} {properties.length === 1 ? 'prop' : 'props'}
+            </span>
+          </div>
+          {properties.length > 0 && (
+            <div className="mb-2 text-xs text-purple-600">
+              {properties.map((prop, index) => (
+                <span key={prop.id}>
+                  {prop.name}
+                  {index < properties.length - 1 ? ', ' : ''}
+                </span>
+              ))}
+            </div>
+          )}
+          <div className="flex gap-2">
+            <button
+              onClick={handleEdit}
+              className="text-xs text-purple-600 hover:text-purple-800 font-medium"
+            >
+              Edit
+            </button>
+            <button
+              onClick={handleDelete}
+              className="text-xs text-red-600 hover:text-red-800 font-medium"
+            >
+              Delete
+            </button>
+          </div>
+        </>
+      )}
+    </div>
+  )
+}

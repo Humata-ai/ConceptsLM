@@ -25,9 +25,22 @@ export interface QualityDomain {
   createdAt: Date
 }
 
+export interface PropertyReference {
+  domainId: string
+  propertyId: string
+}
+
+export interface Concept {
+  id: string
+  name: string
+  propertyRefs: PropertyReference[]
+  createdAt: Date
+}
+
 export interface QualityDomainState {
   domains: QualityDomain[]
   selectedDomainId: string | null
+  concepts: Concept[]
 }
 
 export type QualityDomainAction =
@@ -38,3 +51,6 @@ export type QualityDomainAction =
   | { type: 'ADD_PROPERTY'; payload: { domainId: string; property: Property } }
   | { type: 'UPDATE_PROPERTY'; payload: { domainId: string; property: Property } }
   | { type: 'DELETE_PROPERTY'; payload: { domainId: string; propertyId: string } }
+  | { type: 'ADD_CONCEPT'; payload: Concept }
+  | { type: 'UPDATE_CONCEPT'; payload: Concept }
+  | { type: 'DELETE_CONCEPT'; payload: string }

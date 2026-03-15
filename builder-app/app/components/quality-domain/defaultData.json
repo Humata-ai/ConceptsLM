@@ -23,7 +23,8 @@
           "type": "continuous"
         }
       ],
-      "properties": []
+      "properties": [],
+      "createdAt": "2025-01-13T00:00:00.000Z"
     },
     {
       "id": "1773537259656-e39cnyu",
@@ -53,6 +54,7 @@
           "id": "1773537300000-prop001",
           "name": "Red",
           "description": "Red color property",
+          "domainId": "1773537259656-e39cnyu",
           "dimensions": [
             {
               "dimensionId": "1773537213940-flo1fpt",
@@ -66,12 +68,14 @@
               "dimensionId": "1773537244427-kklfhux",
               "range": [0.3, 0.8]
             }
-          ]
+          ],
+          "createdAt": "2025-01-13T00:00:00.000Z"
         },
         {
           "id": "1773537300001-prop002",
           "name": "Bright",
           "description": "Bright color property",
+          "domainId": "1773537259656-e39cnyu",
           "dimensions": [
             {
               "dimensionId": "1773537213940-flo1fpt",
@@ -85,10 +89,13 @@
               "dimensionId": "1773537244427-kklfhux",
               "range": [0.8, 1]
             }
-          ]
+          ],
+          "createdAt": "2025-01-13T00:00:00.000Z"
         }
-      ]
+      ],
+      "createdAt": "2025-01-13T00:00:00.000Z"
     }
   ],
-  "selectedDomainId": "1773537259656-e39cnyu"
+  "selectedDomainId": "1773537259656-e39cnyu",
+  "concepts": []
 }
