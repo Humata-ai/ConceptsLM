@@ -4,7 +4,7 @@ import { useState } from "react"
 import { useQualityDomain } from "./context/QualityDomainContext"
 
 export default function StateDebugPanel() {
-  const { state, addDomain, deleteDomain, selectDomain } = useQualityDomain()
+  const { state, addDomain, deleteDomain, selectDomain, addConcept, deleteConcept } = useQualityDomain()
   const [isOpen, setIsOpen] = useState(false)
   const [jsonInput, setJsonInput] = useState("")
   const [error, setError] = useState<string | null>(null)
@@ -148,6 +148,11 @@ export default function StateDebugPanel() {
         deleteDomain(domain.id)
       })
 
+      // Clear existing concepts
+      state.concepts.forEach(concept => {
+        deleteConcept(concept.id)
+      })
+
       // Add new domains with converted dates and Infinity values
       parsed.domains.forEach((domain: any) => {
         addDomain({
@@ -168,6 +173,16 @@ export default function StateDebugPanel() {
           })
         })
       })
+
+      // Add new concepts with converted dates
+      if (parsed.concepts && Array.isArray(parsed.concepts)) {
+        parsed.concepts.forEach((concept: any) => {
+          addConcept({
+            ...concept,
+            createdAt: new Date(concept.createdAt)
+          })
+        })
+      }
 
       // Set the selectedDomainId if it exists and is valid
       if (parsed.selectedDomainId) {
