@@ -37,39 +37,82 @@ function ConceptVisualization3D({ concept }: ConceptVisualization3DProps) {
       if (!domain) return
 
       // Skip 4D+ properties (can't visualize in 3D)
-      if (domain.dimensions.length < 3) return
+      if (domain.dimensions.length >= 4) return
 
       // Get domain position in world space
       const domainPos = domainPositions.get(domain.id)
       if (!domainPos) return
 
-      // Calculate property center within domain (normalized to -4 to +4 space, scaled by 0.5)
-      const ranges = domain.dimensions.slice(0, 3).map((dim) => {
+      // Scale by domain scale (0.5 or 0.55)
+      const scale = state.selectedDomainId === domain.id ? 0.55 : 0.5
+
+      let worldPosition: Vector3
+
+      if (domain.dimensions.length === 1) {
+        // 1D properties: positioned on X-axis at Y=0.3, Z=0
+        // Size is 10, maps to -5 to +5 space
+        const dim = domain.dimensions[0]
         const propDim = property.dimensions.find((d) => d.dimensionId === dim.id)
         const propRange = propDim?.range || dim.range
         const [dimMin, dimMax] = dim.range
 
-        // Normalize to -4 to +4 space (sizeX/Y/Z = 8)
-        const min = -4 + ((propRange[0] - dimMin) / (dimMax - dimMin)) * 8
-        const max = -4 + ((propRange[1] - dimMin) / (dimMax - dimMin)) * 8
+        const minPos = -5 + ((propRange[0] - dimMin) / (dimMax - dimMin)) * 10
+        const maxPos = -5 + ((propRange[1] - dimMin) / (dimMax - dimMin)) * 10
+        const centerPos = (minPos + maxPos) / 2
 
-        return { center: (min + max) / 2 }
-      })
+        worldPosition = new Vector3(
+          domainPos[0] + centerPos * scale,
+          domainPos[1] + 0.3 * scale,
+          domainPos[2]
+        )
+      } else if (domain.dimensions.length === 2) {
+        // 2D properties: positioned on XZ plane at Y=0.1
+        // Size is 10x10, maps to -5 to +5 space
+        const dimX = domain.dimensions[0]
+        const dimZ = domain.dimensions[1]
 
-      // Property local position within domain
-      const localX = ranges[0].center
-      const localY = ranges[1].center
-      const localZ = ranges[2].center
+        const propDimX = property.dimensions.find((d) => d.dimensionId === dimX.id)
+        const propDimZ = property.dimensions.find((d) => d.dimensionId === dimZ.id)
 
-      // Scale by domain scale (0.5 or 0.55)
-      const scale = state.selectedDomainId === domain.id ? 0.55 : 0.5
+        const propRangeX = propDimX?.range || dimX.range
+        const propRangeZ = propDimZ?.range || dimZ.range
 
-      // Transform to world coordinates
-      const worldPosition = new Vector3(
-        domainPos[0] + localX * scale,
-        domainPos[1] + localY * scale,
-        domainPos[2] + localZ * scale
-      )
+        const [dimMinX, dimMaxX] = dimX.range
+        const [dimMinZ, dimMaxZ] = dimZ.range
+
+        const minX = -5 + ((propRangeX[0] - dimMinX) / (dimMaxX - dimMinX)) * 10
+        const maxX = -5 + ((propRangeX[1] - dimMinX) / (dimMaxX - dimMinX)) * 10
+        const minZ = -5 + ((propRangeZ[0] - dimMinZ) / (dimMaxZ - dimMinZ)) * 10
+        const maxZ = -5 + ((propRangeZ[1] - dimMinZ) / (dimMaxZ - dimMinZ)) * 10
+
+        const centerX = (minX + maxX) / 2
+        const centerZ = (minZ + maxZ) / 2
+
+        worldPosition = new Vector3(
+          domainPos[0] + centerX * scale,
+          domainPos[1] + 0.1 * scale,
+          domainPos[2] + centerZ * scale
+        )
+      } else {
+        // 3D properties: positioned in 3D space
+        // Size is 8x8x8, maps to -4 to +4 space
+        const ranges = domain.dimensions.map((dim) => {
+          const propDim = property.dimensions.find((d) => d.dimensionId === dim.id)
+          const propRange = propDim?.range || dim.range
+          const [dimMin, dimMax] = dim.range
+
+          const min = -4 + ((propRange[0] - dimMin) / (dimMax - dimMin)) * 8
+          const max = -4 + ((propRange[1] - dimMin) / (dimMax - dimMin)) * 8
+
+          return { center: (min + max) / 2 }
+        })
+
+        worldPosition = new Vector3(
+          domainPos[0] + ranges[0].center * scale,
+          domainPos[1] + ranges[1].center * scale,
+          domainPos[2] + ranges[2].center * scale
+        )
+      }
 
       positions.push({ propertyId: property.id, position: worldPosition })
     })
