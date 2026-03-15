@@ -1,0 +1,268 @@
+"use client"
+
+import { useState } from "react"
+import { useQualityDomain } from "./context/QualityDomainContext"
+
+export default function StateDebugPanel() {
+  const { state, addDomain, deleteDomain, selectDomain } = useQualityDomain()
+  const [isOpen, setIsOpen] = useState(false)
+  const [jsonInput, setJsonInput] = useState("")
+  const [error, setError] = useState<string | null>(null)
+  const [success, setSuccess] = useState<string | null>(null)
+
+  // Custom replacer to handle Infinity values
+  const formattedState = JSON.stringify(state, (key, value) => {
+    if (value === Infinity) return "Infinity"
+    if (value === -Infinity) return "-Infinity"
+    return value
+  }, 2)
+
+  const handleCopy = async () => {
+    try {
+      // Try modern clipboard API first
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        await navigator.clipboard.writeText(formattedState)
+        setSuccess("Copied to clipboard!")
+        setTimeout(() => setSuccess(null), 2000)
+      } else {
+        // Fallback to older method
+        const textArea = document.createElement("textarea")
+        textArea.value = formattedState
+        textArea.style.position = "fixed"
+        textArea.style.left = "-999999px"
+        textArea.style.top = "-999999px"
+        document.body.appendChild(textArea)
+        textArea.focus()
+        textArea.select()
+
+        try {
+          const successful = document.execCommand('copy')
+          document.body.removeChild(textArea)
+
+          if (successful) {
+            setSuccess("Copied to clipboard!")
+            setTimeout(() => setSuccess(null), 2000)
+          } else {
+            throw new Error("Copy command failed")
+          }
+        } catch (err) {
+          document.body.removeChild(textArea)
+          throw err
+        }
+      }
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : String(err)
+      setError(`Failed to copy: ${errorMessage}`)
+      setTimeout(() => setError(null), 5000)
+    }
+  }
+
+  const validateState = (data: any): boolean => {
+    if (!data || typeof data !== "object") {
+      setError("Invalid JSON: must be an object")
+      return false
+    }
+
+    if (!Array.isArray(data.domains)) {
+      setError("Invalid state: missing 'domains' array")
+      return false
+    }
+
+    for (let i = 0; i < data.domains.length; i++) {
+      const domain = data.domains[i]
+
+      if (!domain.id || typeof domain.id !== "string") {
+        setError(`Invalid domain at index ${i}: missing or invalid 'id'`)
+        return false
+      }
+
+      if (!domain.name || typeof domain.name !== "string") {
+        setError(`Invalid domain at index ${i}: missing or invalid 'name'`)
+        return false
+      }
+
+      if (!Array.isArray(domain.dimensions)) {
+        setError(`Invalid domain at index ${i}: 'dimensions' must be an array`)
+        return false
+      }
+
+      if (!domain.createdAt) {
+        setError(`Invalid domain at index ${i}: missing 'createdAt'`)
+        return false
+      }
+
+      for (let j = 0; j < domain.dimensions.length; j++) {
+        const dim = domain.dimensions[j]
+
+        if (!dim.id || typeof dim.id !== "string") {
+          setError(`Invalid dimension at domain ${i}, dimension ${j}: missing or invalid 'id'`)
+          return false
+        }
+
+        if (!dim.name || typeof dim.name !== "string") {
+          setError(`Invalid dimension at domain ${i}, dimension ${j}: missing or invalid 'name'`)
+          return false
+        }
+
+        if (!Array.isArray(dim.range) || dim.range.length !== 2) {
+          setError(`Invalid dimension at domain ${i}, dimension ${j}: 'range' must be an array of 2 values`)
+          return false
+        }
+
+        // Accept numbers or "Infinity"/"-Infinity" strings
+        const isValidRangeValue = (val: any) =>
+          typeof val === "number" || val === "Infinity" || val === "-Infinity"
+
+        if (!isValidRangeValue(dim.range[0]) || !isValidRangeValue(dim.range[1])) {
+          setError(`Invalid dimension at domain ${i}, dimension ${j}: 'range' values must be numbers or "Infinity"`)
+          return false
+        }
+
+        // Convert to numbers for comparison
+        const min = dim.range[0] === "Infinity" ? Infinity : dim.range[0] === "-Infinity" ? -Infinity : dim.range[0]
+        const max = dim.range[1] === "Infinity" ? Infinity : dim.range[1] === "-Infinity" ? -Infinity : dim.range[1]
+
+        if (min >= max) {
+          setError(`Invalid dimension at domain ${i}, dimension ${j}: range[0] must be less than range[1]`)
+          return false
+        }
+      }
+    }
+
+    return true
+  }
+
+  const handleImport = () => {
+    setError(null)
+    setSuccess(null)
+
+    try {
+      const parsed = JSON.parse(jsonInput)
+
+      if (!validateState(parsed)) {
+        return
+      }
+
+      // Clear existing domains
+      state.domains.forEach(domain => {
+        deleteDomain(domain.id)
+      })
+
+      // Add new domains with converted dates and Infinity values
+      parsed.domains.forEach((domain: any) => {
+        addDomain({
+          ...domain,
+          createdAt: new Date(domain.createdAt),
+          dimensions: domain.dimensions.map((dim: any) => {
+            // Convert "Infinity" strings back to actual Infinity
+            const convertValue = (val: any) => {
+              if (val === "Infinity") return Infinity
+              if (val === "-Infinity") return -Infinity
+              return val
+            }
+
+            return {
+              ...dim,
+              range: [convertValue(dim.range[0]), convertValue(dim.range[1])] as const
+            }
+          })
+        })
+      })
+
+      // Set the selectedDomainId if it exists and is valid
+      if (parsed.selectedDomainId) {
+        const domainExists = parsed.domains.some((d: any) => d.id === parsed.selectedDomainId)
+        if (domainExists) {
+          selectDomain(parsed.selectedDomainId)
+        }
+      } else {
+        selectDomain(null)
+      }
+
+      setSuccess("State imported successfully!")
+      setJsonInput("")
+      setTimeout(() => setSuccess(null), 2000)
+    } catch (err) {
+      if (err instanceof SyntaxError) {
+        setError(`Invalid JSON syntax: ${err.message}`)
+      } else {
+        setError(`Import failed: ${err instanceof Error ? err.message : String(err)}`)
+      }
+    }
+  }
+
+  const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setJsonInput(e.target.value)
+    setError(null)
+  }
+
+  return (
+    <div className="absolute top-4 right-4 z-30">
+      {/* Toggle Button */}
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="px-3 py-1.5 bg-blue-600 text-white rounded shadow hover:bg-blue-700 transition-colors font-mono text-sm"
+      >
+        {isOpen ? "✕" : "{ }"}
+      </button>
+
+      {/* Panel */}
+      {isOpen && (
+        <div className="absolute top-12 right-0 bg-white rounded-lg shadow-xl p-4 w-[800px] max-h-[80vh] overflow-hidden flex flex-col">
+          <h2 className="text-lg font-semibold mb-3">State Debug Panel</h2>
+
+          {/* Success Message */}
+          {success && (
+            <div className="mb-3 bg-green-50 border border-green-200 text-green-800 p-2 rounded text-sm">
+              {success}
+            </div>
+          )}
+
+          {/* Error Message */}
+          {error && (
+            <div className="mb-3 bg-red-50 border border-red-200 text-red-800 p-2 rounded text-sm">
+              {error}
+            </div>
+          )}
+
+          {/* Two Column Layout */}
+          <div className="flex gap-4 overflow-hidden flex-1">
+            {/* Left Column: Current State */}
+            <div className="flex-1 flex flex-col">
+              <div className="flex items-center justify-between mb-2">
+                <h3 className="text-sm font-semibold text-gray-700">Current State</h3>
+                <button
+                  onClick={handleCopy}
+                  className="px-2 py-1 bg-gray-600 text-white rounded text-xs hover:bg-gray-700 transition-colors"
+                >
+                  Copy
+                </button>
+              </div>
+              <pre className="bg-gray-50 p-3 rounded font-mono text-xs overflow-auto flex-1 border border-gray-200 select-text cursor-text">
+                {formattedState}
+              </pre>
+            </div>
+
+            {/* Right Column: Import */}
+            <div className="flex-1 flex flex-col">
+              <h3 className="text-sm font-semibold text-gray-700 mb-2">Import State</h3>
+              <textarea
+                value={jsonInput}
+                onChange={handleTextareaChange}
+                placeholder="Paste JSON here..."
+                className="border border-gray-300 rounded p-3 font-mono text-xs flex-1 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              <button
+                onClick={handleImport}
+                disabled={!jsonInput.trim()}
+                className="mt-2 px-3 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed text-sm"
+              >
+                Import
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
