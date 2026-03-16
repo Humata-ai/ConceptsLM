@@ -2,6 +2,8 @@
 
 import { useState } from "react"
 import { useQualityDomain } from "./context/QualityDomainContext"
+import CloseIcon from '@mui/icons-material/Close'
+import CodeIcon from '@mui/icons-material/Code'
 
 export default function StateDebugPanel() {
   const { state, addDomain, deleteDomain, selectDomain, addConcept, deleteConcept } = useQualityDomain()
@@ -14,9 +16,9 @@ export default function StateDebugPanel() {
   const formattedState = JSON.stringify(state, (key, value) => {
     // Filter out selection state
     if (key === 'selectedDomainId' ||
-        key === 'selectedLabelId' ||
-        key === 'selectedLabelDomainId' ||
-        key === 'selectedConceptId') {
+      key === 'selectedLabelId' ||
+      key === 'selectedLabelDomainId' ||
+      key === 'selectedConceptId') {
       return undefined  // Exclude from export
     }
 
@@ -219,15 +221,15 @@ export default function StateDebugPanel() {
       {/* Toggle Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="px-3 py-1.5 bg-blue-600 text-white rounded shadow hover:bg-blue-700 transition-colors font-mono text-sm"
+        className="px-3 py-1.5 bg-blue-600 text-white rounded shadow hover:bg-blue-700 transition-colors flex items-center justify-center"
       >
-        {isOpen ? "✕" : "{ }"}
+        {isOpen ? <CloseIcon fontSize="small" /> : <CodeIcon fontSize="small" />}
       </button>
 
       {/* Panel */}
       {isOpen && (
         <div className="absolute top-12 right-0 bg-white rounded-lg shadow-xl p-4 w-[800px] max-h-[80vh] overflow-hidden flex flex-col">
-          <h2 className="text-lg font-semibold mb-3">State Debug Panel</h2>
+          <h2 className="text-lg font-semibold mb-3">Data Structure Code</h2>
 
           {/* Success Message */}
           {success && (

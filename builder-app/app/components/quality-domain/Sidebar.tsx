@@ -8,6 +8,8 @@ import LabelCard from './LabelCard'
 import LabelModal from './LabelModal'
 import ConceptCard from './ConceptCard'
 import ConceptModal from './ConceptModal'
+import CloseIcon from '@mui/icons-material/Close'
+import MenuIcon from '@mui/icons-material/Menu'
 
 export default function Sidebar() {
   const { state, getSelectedDomain } = useQualityDomain()
@@ -148,9 +150,9 @@ export default function Sidebar() {
         {/* Toggle Button (always visible) */}
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="px-3 py-1.5 bg-blue-600 text-white rounded-r shadow hover:bg-blue-700 transition-colors font-mono text-sm h-12 self-start mt-4"
+          className="px-2 py-2 bg-blue-600 text-white rounded-r shadow hover:bg-blue-700 transition-colors self-start mt-4 flex items-center justify-center"
         >
-          {isOpen ? '✕' : '☰'}
+          {isOpen ? <CloseIcon fontSize="small" /> : <MenuIcon fontSize="small" />}
         </button>
       </div>
 
