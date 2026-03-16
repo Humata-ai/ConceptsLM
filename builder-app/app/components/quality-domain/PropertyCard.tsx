@@ -67,7 +67,7 @@ export default function PropertyCard({ property, domain, onEdit }: PropertyCardP
   const dimensionInfo = getDimensionInfo()
 
   return (
-    <div className="p-3 rounded-lg bg-white border border-gray-300">
+    <div className="p-2 rounded-lg bg-white border border-gray-300">
       {showDeleteConfirm ? (
         <div className="space-y-2">
           <p className="text-sm font-medium text-red-600">Delete this property?</p>

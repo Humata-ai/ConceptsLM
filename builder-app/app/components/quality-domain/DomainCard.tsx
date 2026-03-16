@@ -12,9 +12,10 @@ interface DomainCardProps {
   domain: QualityDomain
   isSelected: boolean
   onEdit: (domainId: string) => void
+  children?: React.ReactNode
 }
 
-export default function DomainCard({ domain, isSelected, onEdit }: DomainCardProps) {
+export default function DomainCard({ domain, isSelected, onEdit, children }: DomainCardProps) {
   const { selectDomain, deleteDomain } = useQualityDomain()
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
@@ -103,6 +104,9 @@ export default function DomainCard({ domain, isSelected, onEdit }: DomainCardPro
               <span className="px-2 py-0.5 bg-gray-200 text-gray-700 text-xs rounded-full font-medium">
                 {getDimensionLabel()}
               </span>
+              <span className="px-2 py-0.5 bg-green-200 text-green-700 text-xs rounded-full font-medium">
+                {domain.properties.length} {domain.properties.length === 1 ? 'prop' : 'props'}
+              </span>
               <IconButton
                 size="small"
                 onClick={handleMenuOpen}
@@ -121,6 +125,11 @@ export default function DomainCard({ domain, isSelected, onEdit }: DomainCardPro
               </Menu>
             </div>
           </div>
+          {isSelected && children && (
+            <div className="mt-3 pt-3 border-t border-blue-300">
+              {children}
+            </div>
+          )}
         </>
       )}
     </div>
