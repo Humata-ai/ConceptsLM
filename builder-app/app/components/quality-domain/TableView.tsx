@@ -1,6 +1,7 @@
 'use client'
 
 import type { QualityDomain } from './types'
+import { isRegion, isPoint } from './types'
 
 interface TableViewProps {
   domain: QualityDomain
@@ -9,40 +10,116 @@ interface TableViewProps {
 export default function TableView({ domain }: TableViewProps) {
   return (
     <div className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none">
-      <div className="bg-white rounded-lg shadow-xl p-6 max-w-2xl w-full max-h-[80vh] overflow-auto pointer-events-auto">
+      <div className="bg-white rounded-lg shadow-xl p-6 max-w-4xl w-full max-h-[80vh] overflow-auto pointer-events-auto">
         <h2 className="text-2xl font-bold mb-4">{domain.name}</h2>
         <p className="text-sm text-gray-600 mb-4">
           {domain.dimensions.length}-dimensional space (table view)
         </p>
 
-        <div className="overflow-x-auto">
-          <table className="w-full border-collapse">
-            <thead>
-              <tr className="bg-gray-100 border-b-2 border-gray-300">
-                <th className="px-4 py-2 text-left font-semibold">Dimension Name</th>
-                <th className="px-4 py-2 text-left font-semibold">Minimum</th>
-                <th className="px-4 py-2 text-left font-semibold">Maximum</th>
-              </tr>
-            </thead>
-            <tbody>
-              {domain.dimensions.map((dimension, index) => (
-                <tr
-                  key={dimension.id}
-                  className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}
-                >
-                  <td className="px-4 py-3 border-b border-gray-200 font-medium">
-                    {dimension.name}
-                  </td>
-                  <td className="px-4 py-3 border-b border-gray-200">
-                    {dimension.range[0]}
-                  </td>
-                  <td className="px-4 py-3 border-b border-gray-200">
-                    {dimension.range[1]}
-                  </td>
+        {/* Domain dimensions */}
+        <div className="mb-6">
+          <h3 className="text-lg font-semibold mb-2">Dimensions</h3>
+          <div className="overflow-x-auto">
+            <table className="w-full border-collapse">
+              <thead>
+                <tr className="bg-gray-100 border-b-2 border-gray-300">
+                  <th className="px-4 py-2 text-left font-semibold">Name</th>
+                  <th className="px-4 py-2 text-left font-semibold">Range</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {domain.dimensions.map((dimension, index) => (
+                  <tr
+                    key={dimension.id}
+                    className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}
+                  >
+                    <td className="px-4 py-3 border-b border-gray-200 font-medium">
+                      {dimension.name}
+                    </td>
+                    <td className="px-4 py-3 border-b border-gray-200">
+                      [{dimension.range[0]}, {dimension.range[1]}]
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        {/* Labels */}
+        <div>
+          <h3 className="text-lg font-semibold mb-2">
+            Labels ({domain.labels.length})
+          </h3>
+          {domain.labels.length === 0 ? (
+            <p className="text-sm text-gray-500 italic">No labels in this domain</p>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="w-full border-collapse">
+                <thead>
+                  <tr className="bg-gray-100 border-b-2 border-gray-300">
+                    <th className="px-4 py-2 text-left font-semibold">Name</th>
+                    <th className="px-4 py-2 text-left font-semibold">Type</th>
+                    {domain.dimensions.map((dimension) => (
+                      <th key={dimension.id} className="px-4 py-2 text-left font-semibold">
+                        {dimension.name}
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {domain.labels.map((label, index) => (
+                    <tr
+                      key={label.id}
+                      className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}
+                    >
+                      <td className="px-4 py-3 border-b border-gray-200 font-medium">
+                        {label.name}
+                      </td>
+                      <td className="px-4 py-3 border-b border-gray-200">
+                        <span className={`px-2 py-1 text-xs rounded ${
+                          isRegion(label)
+                            ? 'bg-blue-100 text-blue-700'
+                            : 'bg-green-100 text-green-700'
+                        }`}>
+                          {isRegion(label) ? 'Region' : 'Point'}
+                        </span>
+                      </td>
+                      {domain.dimensions.map((dimension) => {
+                        const labelDim = label.dimensions.find(
+                          (d) => d.dimensionId === dimension.id
+                        )
+
+                        if (!labelDim) {
+                          return (
+                            <td key={dimension.id} className="px-4 py-3 border-b border-gray-200 text-gray-400">
+                              -
+                            </td>
+                          )
+                        }
+
+                        if ('range' in labelDim) {
+                          // For regions, show range
+                          return (
+                            <td key={dimension.id} className="px-4 py-3 border-b border-gray-200">
+                              [{labelDim.range[0]}, {labelDim.range[1]}]
+                            </td>
+                          )
+                        } else {
+                          // For points, show single value
+                          return (
+                            <td key={dimension.id} className="px-4 py-3 border-b border-gray-200">
+                              {labelDim.value}
+                            </td>
+                          )
+                        }
+                      })}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
         </div>
       </div>
     </div>

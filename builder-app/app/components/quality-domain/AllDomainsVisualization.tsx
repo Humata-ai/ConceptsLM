@@ -16,7 +16,7 @@ const domainItemAreEqual = (
     prevProps.position === nextProps.position &&
     prevProps.scale === nextProps.scale &&
     JSON.stringify(prevProps.domain.dimensions) === JSON.stringify(nextProps.domain.dimensions) &&
-    JSON.stringify(prevProps.domain.properties) === JSON.stringify(nextProps.domain.properties)
+    JSON.stringify(prevProps.domain.labels) === JSON.stringify(nextProps.domain.labels)
   )
 }
 

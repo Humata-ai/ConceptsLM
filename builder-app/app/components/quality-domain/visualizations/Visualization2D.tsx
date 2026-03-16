@@ -2,7 +2,7 @@ import { useMemo, type ReactElement } from 'react'
 import { Text } from '@react-three/drei'
 import * as THREE from 'three'
 import type { QualityDomain } from '../types'
-import PropertyVisualization2D from './PropertyVisualization2D'
+import LabelVisualization2D from './LabelVisualization2D'
 import { useQualityDomain } from '../context/QualityDomainContext'
 import type { ThreeEvent } from '@react-three/fiber'
 
@@ -146,19 +146,19 @@ export default function Visualization2D({ domain }: Visualization2DProps) {
         {maxY.toString()}
       </Text>
 
-      {/* Render properties */}
-      {domain.properties.map((property, index) => {
-        const isPropertySelected =
-          state.selectedPropertyId === property.id &&
-          state.selectedPropertyDomainId === domain.id
+      {/* Render labels */}
+      {domain.labels.map((label, index) => {
+        const isLabelSelected =
+          state.selectedLabelId === label.id &&
+          state.selectedLabelDomainId === domain.id
 
         return (
-          <PropertyVisualization2D
-            key={property.id}
-            property={property}
+          <LabelVisualization2D
+            key={label.id}
+            label={label}
             domain={domain}
             index={index}
-            isSelected={isPropertySelected}
+            isSelected={isLabelSelected}
           />
         )
       })}

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useQualityDomain } from './context/QualityDomainContext'
-import type { Concept, PropertyReference } from './types'
+import type { Concept, LabelReference } from './types'
 import { generateId } from './utils'
 
 interface ConceptModalProps {
@@ -18,7 +18,7 @@ export default function ConceptModal({
 }: ConceptModalProps) {
   const { state, addConcept, updateConcept } = useQualityDomain()
   const [name, setName] = useState('')
-  const [selectedPropertyRefs, setSelectedPropertyRefs] = useState<PropertyReference[]>([])
+  const [selectedLabelRefs, setSelectedLabelRefs] = useState<LabelReference[]>([])
   const [expandedDomains, setExpandedDomains] = useState<Set<string>>(new Set())
   const [errors, setErrors] = useState<string[]>([])
 
@@ -30,10 +30,10 @@ export default function ConceptModal({
     if (isOpen) {
       if (editingConcept) {
         setName(editingConcept.name)
-        setSelectedPropertyRefs(editingConcept.propertyRefs)
+        setSelectedLabelRefs(editingConcept.labelRefs)
       } else {
         setName('')
-        setSelectedPropertyRefs([])
+        setSelectedLabelRefs([])
       }
       // Expand all domains by default
       setExpandedDomains(new Set(state.domains.map(d => d.id)))
@@ -53,29 +53,29 @@ export default function ConceptModal({
     })
   }
 
-  const isPropertySelected = (domainId: string, propertyId: string): boolean => {
-    return selectedPropertyRefs.some(
-      (ref) => ref.domainId === domainId && ref.propertyId === propertyId
+  const isLabelSelected = (domainId: string, labelId: string): boolean => {
+    return selectedLabelRefs.some(
+      (ref) => ref.domainId === domainId && ref.labelId === labelId
     )
   }
 
-  const toggleProperty = (domainId: string, propertyId: string) => {
-    setSelectedPropertyRefs((prev) => {
+  const toggleLabel = (domainId: string, labelId: string) => {
+    setSelectedLabelRefs((prev) => {
       const exists = prev.some(
-        (ref) => ref.domainId === domainId && ref.propertyId === propertyId
+        (ref) => ref.domainId === domainId && ref.labelId === labelId
       )
       if (exists) {
         return prev.filter(
-          (ref) => !(ref.domainId === domainId && ref.propertyId === propertyId)
+          (ref) => !(ref.domainId === domainId && ref.labelId === labelId)
         )
       } else {
-        return [...prev, { domainId, propertyId }]
+        return [...prev, { domainId, labelId }]
       }
     })
   }
 
   const getSelectedCount = (domainId: string): number => {
-    return selectedPropertyRefs.filter((ref) => ref.domainId === domainId).length
+    return selectedLabelRefs.filter((ref) => ref.domainId === domainId).length
   }
 
   const validate = (): boolean => {
@@ -85,8 +85,8 @@ export default function ConceptModal({
       newErrors.push('Concept name is required')
     }
 
-    if (selectedPropertyRefs.length === 0) {
-      newErrors.push('At least one property must be selected')
+    if (selectedLabelRefs.length === 0) {
+      newErrors.push('At least one label must be selected')
     }
 
     setErrors(newErrors)
@@ -103,7 +103,7 @@ export default function ConceptModal({
     const concept: Concept = {
       id: editingConcept?.id || generateId(),
       name,
-      propertyRefs: selectedPropertyRefs,
+      labelRefs: selectedLabelRefs,
       createdAt: editingConcept?.createdAt || new Date(),
     }
 
@@ -161,13 +161,13 @@ export default function ConceptModal({
 
             <div>
               <label className="block text-sm font-medium mb-2">
-                Select Properties
+                Select Labels
               </label>
               <div className="space-y-2 max-h-80 overflow-y-auto border border-gray-200 rounded p-2">
                 {state.domains.map((domain) => {
                   const isExpanded = expandedDomains.has(domain.id)
                   const selectedCount = getSelectedCount(domain.id)
-                  const totalCount = domain.properties.length
+                  const totalCount = domain.labels.length
 
                   return (
                     <div key={domain.id} className="border border-gray-200 rounded">
@@ -188,21 +188,21 @@ export default function ConceptModal({
                       </button>
                       {isExpanded && (
                         <div className="p-2 space-y-1 border-t border-gray-200">
-                          {domain.properties.length === 0 ? (
-                            <p className="text-xs text-gray-500 italic">No properties in this domain</p>
+                          {domain.labels.length === 0 ? (
+                            <p className="text-xs text-gray-500 italic">No labels in this domain</p>
                           ) : (
-                            domain.properties.map((property) => (
+                            domain.labels.map((label) => (
                               <label
-                                key={property.id}
+                                key={label.id}
                                 className="flex items-center gap-2 p-1 hover:bg-gray-50 rounded cursor-pointer"
                               >
                                 <input
                                   type="checkbox"
-                                  checked={isPropertySelected(domain.id, property.id)}
-                                  onChange={() => toggleProperty(domain.id, property.id)}
+                                  checked={isLabelSelected(domain.id, label.id)}
+                                  onChange={() => toggleLabel(domain.id, label.id)}
                                   className="rounded border-gray-300 text-purple-600 focus:ring-purple-500"
                                 />
-                                <span className="text-sm">{property.name}</span>
+                                <span className="text-sm">{label.name}</span>
                               </label>
                             ))
                           )}

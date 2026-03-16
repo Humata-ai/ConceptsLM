@@ -2,13 +2,13 @@
 
 import { useState } from 'react'
 import { useQualityDomain } from './context/QualityDomainContext'
-import PropertyCard from './PropertyCard'
-import PropertyModal from './PropertyModal'
+import LabelCard from './LabelCard'
+import LabelModal from './LabelModal'
 
-export default function PropertyList() {
+export default function LabelList() {
   const { state, getSelectedDomain } = useQualityDomain()
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [editingPropertyId, setEditingPropertyId] = useState<string | null>(null)
+  const [editingLabelId, setEditingLabelId] = useState<string | null>(null)
 
   const selectedDomain = getSelectedDomain()
 
@@ -20,15 +20,15 @@ export default function PropertyList() {
     <>
       <div className="absolute top-4 right-4 z-30 bg-white/90 backdrop-blur-sm rounded-lg shadow-lg p-4 max-h-[calc(100vh-2rem)] overflow-y-auto max-w-xs">
         <div className="flex items-center justify-between mb-3">
-          <h2 className="text-lg font-bold">Properties</h2>
+          <h2 className="text-lg font-bold">Labels</h2>
           <button
             onClick={() => {
-              setEditingPropertyId(null)
+              setEditingLabelId(null)
               setIsModalOpen(true)
             }}
             className="px-3 py-1 bg-green-600 text-white text-sm rounded hover:bg-green-700 font-medium"
           >
-            + Add Property
+            + Add Label
           </button>
         </div>
 
@@ -36,20 +36,24 @@ export default function PropertyList() {
           Domain: <span className="font-medium">{selectedDomain.name}</span>
         </div>
 
-        {selectedDomain.properties.length === 0 ? (
+        {selectedDomain.labels.length === 0 ? (
           <div className="text-center py-8 text-gray-500">
-            <p className="text-sm">No properties yet.</p>
-            <p className="text-xs mt-1">Click "+ Add Property" to create one.</p>
+            <p className="text-sm">No labels yet.</p>
+            <p className="text-xs mt-1">Click "+ Add Label" to create one.</p>
           </div>
         ) : (
           <div className="space-y-2">
-            {selectedDomain.properties.map((property) => (
-              <PropertyCard
-                key={property.id}
-                property={property}
+            {selectedDomain.labels.map((label) => (
+              <LabelCard
+                key={label.id}
+                label={label}
                 domain={selectedDomain}
+                isSelected={
+                  state.selectedLabelId === label.id &&
+                  state.selectedLabelDomainId === selectedDomain.id
+                }
                 onEdit={(id) => {
-                  setEditingPropertyId(id)
+                  setEditingLabelId(id)
                   setIsModalOpen(true)
                 }}
               />
@@ -58,10 +62,10 @@ export default function PropertyList() {
         )}
       </div>
 
-      <PropertyModal
+      <LabelModal
         isOpen={isModalOpen}
         domainId={selectedDomain.id}
-        editingPropertyId={editingPropertyId}
+        editingLabelId={editingLabelId}
         onClose={() => setIsModalOpen(false)}
       />
     </>

@@ -23,7 +23,7 @@
           "type": "continuous"
         }
       ],
-      "properties": [],
+      "labels": [],
       "createdAt": "2025-01-13T00:00:00.000Z"
     },
     {
@@ -49,11 +49,11 @@
           "type": "continuous"
         }
       ],
-      "properties": [
+      "labels": [
         {
+          "type": "region",
           "id": "1773537300000-prop001",
           "name": "Red",
-          "description": "Red color property",
           "domainId": "1773537259656-e39cnyu",
           "dimensions": [
             {
@@ -72,9 +72,9 @@
           "createdAt": "2025-01-13T00:00:00.000Z"
         },
         {
+          "type": "region",
           "id": "1773537300001-prop002",
           "name": "Bright",
-          "description": "Bright color property",
           "domainId": "1773537259656-e39cnyu",
           "dimensions": [
             {

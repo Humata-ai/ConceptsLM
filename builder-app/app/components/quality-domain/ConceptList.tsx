@@ -37,6 +37,7 @@ export default function ConceptList() {
               <ConceptCard
                 key={concept.id}
                 concept={concept}
+                isSelected={state.selectedConceptId === concept.id}
                 onEdit={(id) => {
                   setEditingConceptId(id)
                   setIsModalOpen(true)

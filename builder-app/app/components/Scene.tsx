@@ -5,10 +5,11 @@ import { Canvas } from '@react-three/fiber'
 import { OrbitControls } from '@react-three/drei'
 import AllDomainsVisualization from './quality-domain/AllDomainsVisualization'
 import { useQualityDomain } from './quality-domain/context/QualityDomainContext'
+import { isRegion, isPoint } from './quality-domain/types'
 import { Vector3 } from 'three'
 
 function CameraControls() {
-  const { state, getConceptProperties } = useQualityDomain()
+  const { state, getConceptLabels } = useQualityDomain()
   const controlsRef = useRef<any>(null)
   const animatingRef = useRef(false)
   const startTargetRef = useRef(new Vector3(0, 0, 0))
@@ -36,23 +37,38 @@ function CameraControls() {
       if (pos) return new Vector3(pos[0], pos[1], pos[2])
     }
 
-    // If property is selected
-    if (state.selectedPropertyId && state.selectedPropertyDomainId) {
-      const domain = state.domains.find(d => d.id === state.selectedPropertyDomainId)
-      const property = domain?.properties.find(p => p.id === state.selectedPropertyId)
-      const domainPos = domainPositions.get(state.selectedPropertyDomainId)
+    // If label is selected
+    if (state.selectedLabelId && state.selectedLabelDomainId) {
+      const domain = state.domains.find(d => d.id === state.selectedLabelDomainId)
+      const label = domain?.labels.find(p => p.id === state.selectedLabelId)
+      const domainPos = domainPositions.get(state.selectedLabelDomainId)
 
-      if (domain && property && domainPos) {
+      if (domain && label && domainPos) {
         const scale = 0.5
 
+        // Helper to get range from label dimension (works for both region and point)
+        const getLabelRange = (dimId: string): readonly [number, number] => {
+          if (isRegion(label)) {
+            const labelDim = label.dimensions.find(d => d.dimensionId === dimId)
+            return labelDim?.range || domain.dimensions.find(d => d.id === dimId)!.range
+          } else {
+            // For points, use the value as both min and max
+            const labelDim = label.dimensions.find(d => d.dimensionId === dimId)
+            if (labelDim) {
+              return [labelDim.value, labelDim.value] as const
+            }
+            // Fallback to domain range
+            return domain.dimensions.find(d => d.id === dimId)!.range
+          }
+        }
+
         if (domain.dimensions.length === 1) {
-          // 1D property
+          // 1D label
           const dim = domain.dimensions[0]
-          const propDim = property.dimensions.find(d => d.dimensionId === dim.id)
-          const propRange = propDim?.range || dim.range
+          const labelRange = getLabelRange(dim.id)
           const [dimMin, dimMax] = dim.range
-          const minPos = -5 + ((propRange[0] - dimMin) / (dimMax - dimMin)) * 10
-          const maxPos = -5 + ((propRange[1] - dimMin) / (dimMax - dimMin)) * 10
+          const minPos = -5 + ((labelRange[0] - dimMin) / (dimMax - dimMin)) * 10
+          const maxPos = -5 + ((labelRange[1] - dimMin) / (dimMax - dimMin)) * 10
           const centerPos = (minPos + maxPos) / 2
 
           return new Vector3(
@@ -61,20 +77,18 @@ function CameraControls() {
             domainPos[2]
           )
         } else if (domain.dimensions.length === 2) {
-          // 2D property
+          // 2D label
           const dimX = domain.dimensions[0]
           const dimY = domain.dimensions[1]
-          const propDimX = property.dimensions.find(d => d.dimensionId === dimX.id)
-          const propDimY = property.dimensions.find(d => d.dimensionId === dimY.id)
-          const propRangeX = propDimX?.range || dimX.range
-          const propRangeY = propDimY?.range || dimY.range
+          const labelRangeX = getLabelRange(dimX.id)
+          const labelRangeY = getLabelRange(dimY.id)
           const [dimMinX, dimMaxX] = dimX.range
           const [dimMinY, dimMaxY] = dimY.range
 
-          const minX = -5 + ((propRangeX[0] - dimMinX) / (dimMaxX - dimMinX)) * 10
-          const maxX = -5 + ((propRangeX[1] - dimMinX) / (dimMaxX - dimMinX)) * 10
-          const minY = -5 + ((propRangeY[0] - dimMinY) / (dimMaxY - dimMinY)) * 10
-          const maxY = -5 + ((propRangeY[1] - dimMinY) / (dimMaxY - dimMinY)) * 10
+          const minX = -5 + ((labelRangeX[0] - dimMinX) / (dimMaxX - dimMinX)) * 10
+          const maxX = -5 + ((labelRangeX[1] - dimMinX) / (dimMaxX - dimMinX)) * 10
+          const minY = -5 + ((labelRangeY[0] - dimMinY) / (dimMaxY - dimMinY)) * 10
+          const maxY = -5 + ((labelRangeY[1] - dimMinY) / (dimMaxY - dimMinY)) * 10
 
           const centerX = (minX + maxX) / 2
           const centerY = (minY + maxY) / 2
@@ -85,13 +99,12 @@ function CameraControls() {
             domainPos[2]
           )
         } else if (domain.dimensions.length === 3) {
-          // 3D property
+          // 3D label
           const ranges = domain.dimensions.map(dim => {
-            const propDim = property.dimensions.find(d => d.dimensionId === dim.id)
-            const propRange = propDim?.range || dim.range
+            const labelRange = getLabelRange(dim.id)
             const [dimMin, dimMax] = dim.range
-            const min = -4 + ((propRange[0] - dimMin) / (dimMax - dimMin)) * 8
-            const max = -4 + ((propRange[1] - dimMin) / (dimMax - dimMin)) * 8
+            const min = -4 + ((labelRange[0] - dimMin) / (dimMax - dimMin)) * 8
+            const max = -4 + ((labelRange[1] - dimMin) / (dimMax - dimMin)) * 8
             return { center: (min + max) / 2 }
           })
 
@@ -108,11 +121,11 @@ function CameraControls() {
     if (state.selectedConceptId) {
       const concept = state.concepts.find(c => c.id === state.selectedConceptId)
       if (concept) {
-        const properties = getConceptProperties(concept.id)
+        const labels = getConceptLabels(concept.id)
         const positions: Vector3[] = []
 
-        properties.forEach(property => {
-          const domain = state.domains.find(d => d.id === property.domainId)
+        labels.forEach(label => {
+          const domain = state.domains.find(d => d.id === label.domainId)
           if (!domain || domain.dimensions.length >= 4) return
 
           const domainPos = domainPositions.get(domain.id)
@@ -120,13 +133,28 @@ function CameraControls() {
 
           const scale = 0.5
 
+          // Helper to get range from label dimension (works for both region and point)
+          const getLabelRange = (dimId: string): readonly [number, number] => {
+            if (isRegion(label)) {
+              const labelDim = label.dimensions.find(d => d.dimensionId === dimId)
+              return labelDim?.range || domain.dimensions.find(d => d.id === dimId)!.range
+            } else {
+              // For points, use the value as both min and max
+              const labelDim = label.dimensions.find(d => d.dimensionId === dimId)
+              if (labelDim) {
+                return [labelDim.value, labelDim.value] as const
+              }
+              // Fallback to domain range
+              return domain.dimensions.find(d => d.id === dimId)!.range
+            }
+          }
+
           if (domain.dimensions.length === 1) {
             const dim = domain.dimensions[0]
-            const propDim = property.dimensions.find(d => d.dimensionId === dim.id)
-            const propRange = propDim?.range || dim.range
+            const labelRange = getLabelRange(dim.id)
             const [dimMin, dimMax] = dim.range
-            const minPos = -5 + ((propRange[0] - dimMin) / (dimMax - dimMin)) * 10
-            const maxPos = -5 + ((propRange[1] - dimMin) / (dimMax - dimMin)) * 10
+            const minPos = -5 + ((labelRange[0] - dimMin) / (dimMax - dimMin)) * 10
+            const maxPos = -5 + ((labelRange[1] - dimMin) / (dimMax - dimMin)) * 10
             const centerPos = (minPos + maxPos) / 2
 
             positions.push(new Vector3(
@@ -137,17 +165,15 @@ function CameraControls() {
           } else if (domain.dimensions.length === 2) {
             const dimX = domain.dimensions[0]
             const dimY = domain.dimensions[1]
-            const propDimX = property.dimensions.find(d => d.dimensionId === dimX.id)
-            const propDimY = property.dimensions.find(d => d.dimensionId === dimY.id)
-            const propRangeX = propDimX?.range || dimX.range
-            const propRangeY = propDimY?.range || dimY.range
+            const labelRangeX = getLabelRange(dimX.id)
+            const labelRangeY = getLabelRange(dimY.id)
             const [dimMinX, dimMaxX] = dimX.range
             const [dimMinY, dimMaxY] = dimY.range
 
-            const minX = -5 + ((propRangeX[0] - dimMinX) / (dimMaxX - dimMinX)) * 10
-            const maxX = -5 + ((propRangeX[1] - dimMinX) / (dimMaxX - dimMinX)) * 10
-            const minY = -5 + ((propRangeY[0] - dimMinY) / (dimMaxY - dimMinY)) * 10
-            const maxY = -5 + ((propRangeY[1] - dimMinY) / (dimMaxY - dimMinY)) * 10
+            const minX = -5 + ((labelRangeX[0] - dimMinX) / (dimMaxX - dimMinX)) * 10
+            const maxX = -5 + ((labelRangeX[1] - dimMinX) / (dimMaxX - dimMinX)) * 10
+            const minY = -5 + ((labelRangeY[0] - dimMinY) / (dimMaxY - dimMinY)) * 10
+            const maxY = -5 + ((labelRangeY[1] - dimMinY) / (dimMaxY - dimMinY)) * 10
 
             const centerX = (minX + maxX) / 2
             const centerY = (minY + maxY) / 2
@@ -159,11 +185,10 @@ function CameraControls() {
             ))
           } else if (domain.dimensions.length === 3) {
             const ranges = domain.dimensions.map(dim => {
-              const propDim = property.dimensions.find(d => d.dimensionId === dim.id)
-              const propRange = propDim?.range || dim.range
+              const labelRange = getLabelRange(dim.id)
               const [dimMin, dimMax] = dim.range
-              const min = -4 + ((propRange[0] - dimMin) / (dimMax - dimMin)) * 8
-              const max = -4 + ((propRange[1] - dimMin) / (dimMax - dimMin)) * 8
+              const min = -4 + ((labelRange[0] - dimMin) / (dimMax - dimMin)) * 8
+              const max = -4 + ((labelRange[1] - dimMin) / (dimMax - dimMin)) * 8
               return { center: (min + max) / 2 }
             })
 
@@ -188,7 +213,7 @@ function CameraControls() {
 
     // Default position
     return new Vector3(0, 0, 0)
-  }, [state.selectedDomainId, state.selectedPropertyId, state.selectedPropertyDomainId, state.selectedConceptId, state.domains, state.concepts, getConceptProperties])
+  }, [state.selectedDomainId, state.selectedLabelId, state.selectedLabelDomainId, state.selectedConceptId, state.domains, state.concepts, getConceptLabels])
 
   // Update controls target when selection changes with smooth animation
   useEffect(() => {

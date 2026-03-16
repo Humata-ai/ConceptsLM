@@ -14,8 +14,8 @@ export default function StateDebugPanel() {
   const formattedState = JSON.stringify(state, (key, value) => {
     // Filter out selection state
     if (key === 'selectedDomainId' ||
-        key === 'selectedPropertyId' ||
-        key === 'selectedPropertyDomainId' ||
+        key === 'selectedLabelId' ||
+        key === 'selectedLabelDomainId' ||
         key === 'selectedConceptId') {
       return undefined  // Exclude from export
     }
@@ -251,9 +251,9 @@ export default function StateDebugPanel() {
                 <span className="text-gray-900">{state.domains.length}</span>
               </div>
               <div>
-                <span className="font-semibold text-gray-700">Properties:</span>{" "}
+                <span className="font-semibold text-gray-700">Labels:</span>{" "}
                 <span className="text-gray-900">
-                  {state.domains.reduce((total, d) => total + d.properties.length, 0)}
+                  {state.domains.reduce((total, d) => total + d.labels.length, 0)}
                 </span>
               </div>
               <div>
@@ -270,7 +270,7 @@ export default function StateDebugPanel() {
                       key={concept.id}
                       className="px-2 py-1 bg-purple-100 text-purple-900 rounded text-xs"
                     >
-                      {concept.name} ({concept.propertyRefs.length} props)
+                      {concept.name} ({concept.labelRefs.length} labels)
                     </div>
                   ))}
                 </div>

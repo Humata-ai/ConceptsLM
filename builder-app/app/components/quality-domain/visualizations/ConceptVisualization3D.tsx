@@ -11,8 +11,8 @@ interface ConceptVisualization3DProps {
 }
 
 function ConceptVisualization3D({ concept, isSelected = false }: ConceptVisualization3DProps) {
-  const { state, getConceptProperties, selectConcept } = useQualityDomain()
-  const properties = getConceptProperties(concept.id)
+  const { state, getConceptLabels, selectConcept } = useQualityDomain()
+  const labels = getConceptLabels(concept.id)
 
   const handleClick = (e: ThreeEvent<MouseEvent>) => {
     e.stopPropagation()
@@ -35,15 +35,29 @@ function ConceptVisualization3D({ concept, isSelected = false }: ConceptVisualiz
     return positions
   }, [state.domains])
 
-  // Calculate property world positions and centroid
-  const { propertyPositions, conceptPosition } = useMemo(() => {
-    const positions: Array<{ propertyId: string; position: Vector3 }> = []
+  // Calculate label world positions and centroid
+  const { labelPositions, conceptPosition } = useMemo(() => {
+    const positions: Array<{ labelId: string; position: Vector3 }> = []
 
-    properties.forEach((property) => {
-      const domain = state.domains.find((d) => d.id === property.domainId)
+    // Helper to get range from label dimension (works for both region and point)
+    const getLabelRange = (
+      labelDim: typeof labels[0]['dimensions'][0] | undefined,
+      dimRange: readonly [number, number]
+    ): readonly [number, number] => {
+      if (!labelDim) return dimRange
+      if ('range' in labelDim) {
+        return labelDim.range
+      } else {
+        // For points, use the value as both min and max
+        return [labelDim.value, labelDim.value] as const
+      }
+    }
+
+    labels.forEach((label) => {
+      const domain = state.domains.find((d) => d.id === label.domainId)
       if (!domain) return
 
-      // Skip 4D+ properties (can't visualize in 3D)
+      // Skip 4D+ labels (can't visualize in 3D)
       if (domain.dimensions.length >= 4) return
 
       // Get domain position in world space
@@ -56,15 +70,15 @@ function ConceptVisualization3D({ concept, isSelected = false }: ConceptVisualiz
       let worldPosition: Vector3
 
       if (domain.dimensions.length === 1) {
-        // 1D properties: positioned on X-axis at Y=0.3, Z=0
+        // 1D labels: positioned on X-axis at Y=0.3, Z=0
         // Size is 10, maps to -5 to +5 space
         const dim = domain.dimensions[0]
-        const propDim = property.dimensions.find((d) => d.dimensionId === dim.id)
-        const propRange = propDim?.range || dim.range
+        const labelDim = label.dimensions.find((d) => d.dimensionId === dim.id)
+        const labelRange = getLabelRange(labelDim, dim.range)
         const [dimMin, dimMax] = dim.range
 
-        const minPos = -5 + ((propRange[0] - dimMin) / (dimMax - dimMin)) * 10
-        const maxPos = -5 + ((propRange[1] - dimMin) / (dimMax - dimMin)) * 10
+        const minPos = -5 + ((labelRange[0] - dimMin) / (dimMax - dimMin)) * 10
+        const maxPos = -5 + ((labelRange[1] - dimMin) / (dimMax - dimMin)) * 10
         const centerPos = (minPos + maxPos) / 2
 
         worldPosition = new Vector3(
@@ -73,24 +87,24 @@ function ConceptVisualization3D({ concept, isSelected = false }: ConceptVisualiz
           domainPos[2]
         )
       } else if (domain.dimensions.length === 2) {
-        // 2D properties: positioned on XY plane (vertical)
+        // 2D labels: positioned on XY plane (vertical)
         // Size is 10x10, maps to -5 to +5 space
         const dimX = domain.dimensions[0]
         const dimY = domain.dimensions[1]
 
-        const propDimX = property.dimensions.find((d) => d.dimensionId === dimX.id)
-        const propDimY = property.dimensions.find((d) => d.dimensionId === dimY.id)
+        const labelDimX = label.dimensions.find((d) => d.dimensionId === dimX.id)
+        const labelDimY = label.dimensions.find((d) => d.dimensionId === dimY.id)
 
-        const propRangeX = propDimX?.range || dimX.range
-        const propRangeY = propDimY?.range || dimY.range
+        const labelRangeX = getLabelRange(labelDimX, dimX.range)
+        const labelRangeY = getLabelRange(labelDimY, dimY.range)
 
         const [dimMinX, dimMaxX] = dimX.range
         const [dimMinY, dimMaxY] = dimY.range
 
-        const minX = -5 + ((propRangeX[0] - dimMinX) / (dimMaxX - dimMinX)) * 10
-        const maxX = -5 + ((propRangeX[1] - dimMinX) / (dimMaxX - dimMinX)) * 10
-        const minY = -5 + ((propRangeY[0] - dimMinY) / (dimMaxY - dimMinY)) * 10
-        const maxY = -5 + ((propRangeY[1] - dimMinY) / (dimMaxY - dimMinY)) * 10
+        const minX = -5 + ((labelRangeX[0] - dimMinX) / (dimMaxX - dimMinX)) * 10
+        const maxX = -5 + ((labelRangeX[1] - dimMinX) / (dimMaxX - dimMinX)) * 10
+        const minY = -5 + ((labelRangeY[0] - dimMinY) / (dimMaxY - dimMinY)) * 10
+        const maxY = -5 + ((labelRangeY[1] - dimMinY) / (dimMaxY - dimMinY)) * 10
 
         const centerX = (minX + maxX) / 2
         const centerY = (minY + maxY) / 2
@@ -101,15 +115,15 @@ function ConceptVisualization3D({ concept, isSelected = false }: ConceptVisualiz
           domainPos[2]
         )
       } else {
-        // 3D properties: positioned in 3D space
+        // 3D labels: positioned in 3D space
         // Size is 8x8x8, maps to -4 to +4 space
         const ranges = domain.dimensions.map((dim) => {
-          const propDim = property.dimensions.find((d) => d.dimensionId === dim.id)
-          const propRange = propDim?.range || dim.range
+          const labelDim = label.dimensions.find((d) => d.dimensionId === dim.id)
+          const labelRange = getLabelRange(labelDim, dim.range)
           const [dimMin, dimMax] = dim.range
 
-          const min = -4 + ((propRange[0] - dimMin) / (dimMax - dimMin)) * 8
-          const max = -4 + ((propRange[1] - dimMin) / (dimMax - dimMin)) * 8
+          const min = -4 + ((labelRange[0] - dimMin) / (dimMax - dimMin)) * 8
+          const max = -4 + ((labelRange[1] - dimMin) / (dimMax - dimMin)) * 8
 
           return { center: (min + max) / 2 }
         })
@@ -121,7 +135,7 @@ function ConceptVisualization3D({ concept, isSelected = false }: ConceptVisualiz
         )
       }
 
-      positions.push({ propertyId: property.id, position: worldPosition })
+      positions.push({ labelId: label.id, position: worldPosition })
     })
 
     // Calculate centroid
@@ -134,18 +148,18 @@ function ConceptVisualization3D({ concept, isSelected = false }: ConceptVisualiz
       // Place concept label 8 units above centroid
       centroid.y += 8
     } else {
-      // Default position if no properties (shouldn't happen with validation)
+      // Default position if no labels (shouldn't happen with validation)
       centroid = new Vector3(0, 10, 0)
     }
 
     return {
-      propertyPositions: positions,
+      labelPositions: positions,
       conceptPosition: centroid,
     }
-  }, [properties, state.domains, state.selectedDomainId, domainPositions])
+  }, [labels, state.domains, state.selectedDomainId, domainPositions])
 
-  // If no valid properties to visualize, don't render
-  if (propertyPositions.length === 0) {
+  // If no valid labels to visualize, don't render
+  if (labelPositions.length === 0) {
     return null
   }
 
@@ -180,10 +194,10 @@ function ConceptVisualization3D({ concept, isSelected = false }: ConceptVisualiz
         </Text>
       </Billboard>
 
-      {/* Connection lines from concept to each property */}
-      {propertyPositions.map(({ propertyId, position }) => (
+      {/* Connection lines from concept to each label */}
+      {labelPositions.map(({ labelId, position }) => (
         <Line
-          key={propertyId}
+          key={labelId}
           points={[
             [conceptPosition.x, conceptPosition.y, conceptPosition.z],
             [position.x, position.y, position.z],
@@ -203,7 +217,7 @@ const areEqual = (prevProps: ConceptVisualization3DProps, nextProps: ConceptVisu
   return (
     prevProps.concept.id === nextProps.concept.id &&
     prevProps.concept.name === nextProps.concept.name &&
-    JSON.stringify(prevProps.concept.propertyRefs) === JSON.stringify(nextProps.concept.propertyRefs)
+    JSON.stringify(prevProps.concept.labelRefs) === JSON.stringify(nextProps.concept.labelRefs)
   )
 }
 

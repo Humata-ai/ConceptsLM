@@ -1,15 +1,15 @@
 import { useMemo, memo, useEffect, useState, useRef } from 'react'
 import { Text } from '@react-three/drei'
 import * as THREE from 'three'
-import type { Property, QualityDomain } from '../types'
+import type { QualityDomainRegion, QualityDomain } from '../types'
 
-interface PropertyVisualization3DProps {
-  property: Property
+interface LabelVisualization3DProps {
+  label: QualityDomainRegion
   domain: QualityDomain
   index: number
 }
 
-const PROPERTY_COLORS = [
+const LABEL_COLORS = [
   '#10b981', // Emerald green
   '#a855f7', // Purple
   '#3b82f6', // Blue
@@ -18,20 +18,20 @@ const PROPERTY_COLORS = [
   '#06b6d4', // Cyan
 ]
 
-function PropertyVisualization3DDebug({
-  property,
+function LabelVisualization3DDebug({
+  label,
   domain,
   index,
-}: PropertyVisualization3DProps) {
+}: LabelVisualization3DProps) {
   const renderCount = useRef(0)
   const [flash, setFlash] = useState(false)
 
   // Count renders and flash on re-render
   useEffect(() => {
     renderCount.current += 1
-    console.log(`[PropertyViz3D] RENDER #${renderCount.current}`, {
-      propertyId: property.id,
-      propertyName: property.name,
+    console.log(`[LabelViz3D] RENDER #${renderCount.current}`, {
+      labelId: label.id,
+      labelName: label.name,
       domainId: domain.id,
       domainName: domain.name,
       timestamp: new Date().toISOString(),
@@ -43,33 +43,33 @@ function PropertyVisualization3DDebug({
     return () => clearTimeout(timer)
   })
 
-  // Map each domain dimension to property range (or full range if not specified)
+  // Map each domain dimension to label range (or full range if not specified)
   const ranges = useMemo(() => {
-    console.log(`[PropertyViz3D] Computing ranges for ${property.name}`)
+    console.log(`[LabelViz3D] Computing ranges for ${label.name}`)
     return domain.dimensions.map((dim) => {
-      const propDim = property.dimensions.find((d) => d.dimensionId === dim.id)
-      const propRange = propDim?.range || dim.range
+      const labelDim = label.dimensions.find((d) => d.dimensionId === dim.id)
+      const labelRange = labelDim?.range || dim.range
       const [dimMin, dimMax] = dim.range
 
       // Normalize to -4 to +4 space (sizeX/Y/Z = 8)
-      const min = -4 + ((propRange[0] - dimMin) / (dimMax - dimMin)) * 8
-      const max = -4 + ((propRange[1] - dimMin) / (dimMax - dimMin)) * 8
+      const min = -4 + ((labelRange[0] - dimMin) / (dimMax - dimMin)) * 8
+      const max = -4 + ((labelRange[1] - dimMin) / (dimMax - dimMin)) * 8
 
       return { min, max, center: (min + max) / 2, size: max - min }
     })
-  }, [property.dimensions, domain.dimensions, property.name])
+  }, [label.dimensions, domain.dimensions, label.name])
 
-  // Get color for this property
-  const color = PROPERTY_COLORS[index % PROPERTY_COLORS.length]
+  // Get color for this label
+  const color = LABEL_COLORS[index % LABEL_COLORS.length]
   const flashColor = flash ? '#ff0000' : color
 
   // Memoize geometry for edges
   const edgesGeometry = useMemo(() => {
-    console.log(`[PropertyViz3D] Creating edges geometry for ${property.name}`)
+    console.log(`[LabelViz3D] Creating edges geometry for ${label.name}`)
     return new THREE.EdgesGeometry(
       new THREE.BoxGeometry(ranges[0].size, ranges[1].size, ranges[2].size)
     )
-  }, [ranges[0].size, ranges[1].size, ranges[2].size, property.name])
+  }, [ranges[0].size, ranges[1].size, ranges[2].size, label.name])
 
   // Memoize position arrays to prevent re-renders
   const position = useMemo(
@@ -95,7 +95,7 @@ function PropertyVisualization3DDebug({
         <lineBasicMaterial color={flashColor} linewidth={flash ? 4 : 1} />
       </lineSegments>
 
-      {/* Property label with render count */}
+      {/* Label name with render count */}
       <Text
         position={position}
         fontSize={0.6}
@@ -103,27 +103,27 @@ function PropertyVisualization3DDebug({
         anchorX="center"
         anchorY="middle"
       >
-        {property.name} (#{renderCount.current})
+        {label.name} (#{renderCount.current})
       </Text>
     </group>
   )
 }
 
-// Custom comparison function - only re-render if property ID or dimensions actually changed
-const areEqual = (prevProps: PropertyVisualization3DProps, nextProps: PropertyVisualization3DProps) => {
+// Custom comparison function - only re-render if label ID or dimensions actually changed
+const areEqual = (prevProps: LabelVisualization3DProps, nextProps: LabelVisualization3DProps) => {
   const equal =
-    prevProps.property.id === nextProps.property.id &&
+    prevProps.label.id === nextProps.label.id &&
     prevProps.index === nextProps.index &&
     prevProps.domain.id === nextProps.domain.id &&
-    JSON.stringify(prevProps.property.dimensions) === JSON.stringify(nextProps.property.dimensions) &&
+    JSON.stringify(prevProps.label.dimensions) === JSON.stringify(nextProps.label.dimensions) &&
     JSON.stringify(prevProps.domain.dimensions) === JSON.stringify(nextProps.domain.dimensions)
 
   if (!equal) {
-    console.log('[PropertyViz3D] areEqual = FALSE', {
-      propertyIdChanged: prevProps.property.id !== nextProps.property.id,
+    console.log('[LabelViz3D] areEqual = FALSE', {
+      labelIdChanged: prevProps.label.id !== nextProps.label.id,
       indexChanged: prevProps.index !== nextProps.index,
       domainIdChanged: prevProps.domain.id !== nextProps.domain.id,
-      propertyDimensionsChanged: JSON.stringify(prevProps.property.dimensions) !== JSON.stringify(nextProps.property.dimensions),
+      labelDimensionsChanged: JSON.stringify(prevProps.label.dimensions) !== JSON.stringify(nextProps.label.dimensions),
       domainDimensionsChanged: JSON.stringify(prevProps.domain.dimensions) !== JSON.stringify(nextProps.domain.dimensions),
     })
   }
@@ -131,4 +131,4 @@ const areEqual = (prevProps: PropertyVisualization3DProps, nextProps: PropertyVi
   return equal
 }
 
-export default memo(PropertyVisualization3DDebug, areEqual)
+export default memo(LabelVisualization3DDebug, areEqual)

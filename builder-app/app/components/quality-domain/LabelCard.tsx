@@ -2,28 +2,29 @@
 
 import { useState } from 'react'
 import { useQualityDomain } from './context/QualityDomainContext'
-import type { Property, QualityDomain } from './types'
+import type { QualityDomainLabel, QualityDomain } from './types'
+import { isRegion, isPoint } from './types'
 import IconButton from '@mui/material/IconButton'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import MoreVertIcon from '@mui/icons-material/MoreVert'
 
-interface PropertyCardProps {
-  property: Property
+interface LabelCardProps {
+  label: QualityDomainLabel
   domain: QualityDomain
-  onEdit: (propertyId: string) => void
+  onEdit: (labelId: string) => void
   isSelected: boolean
 }
 
-export default function PropertyCard({ property, domain, onEdit, isSelected }: PropertyCardProps) {
-  const { deleteProperty, selectProperty } = useQualityDomain()
+export default function LabelCard({ label, domain, onEdit, isSelected }: LabelCardProps) {
+  const { deleteLabel, selectLabel } = useQualityDomain()
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
 
   const handleClick = (e: React.MouseEvent) => {
     e.stopPropagation()
-    selectProperty(domain.id, property.id)
+    selectLabel(domain.id, label.id)
   }
 
   const handleMenuOpen = (e: React.MouseEvent<HTMLElement>) => {
@@ -31,15 +32,14 @@ export default function PropertyCard({ property, domain, onEdit, isSelected }: P
     setAnchorEl(e.currentTarget)
   }
 
-  const handleMenuClose = (e?: React.MouseEvent) => {
-    e?.stopPropagation()
+  const handleMenuClose = () => {
     setAnchorEl(null)
   }
 
   const handleEdit = (e: React.MouseEvent) => {
     e.stopPropagation()
     handleMenuClose()
-    onEdit(property.id)
+    onEdit(label.id)
   }
 
   const handleDelete = (e: React.MouseEvent) => {
@@ -50,7 +50,7 @@ export default function PropertyCard({ property, domain, onEdit, isSelected }: P
 
   const confirmDelete = (e: React.MouseEvent) => {
     e.stopPropagation()
-    deleteProperty(domain.id, property.id)
+    deleteLabel(domain.id, label.id)
     setShowDeleteConfirm(false)
   }
 
@@ -60,12 +60,22 @@ export default function PropertyCard({ property, domain, onEdit, isSelected }: P
   }
 
   const getDimensionInfo = () => {
-    return property.dimensions.map((dr) => {
-      const dimension = domain.dimensions.find((d) => d.id === dr.dimensionId)
+    return label.dimensions.map((d) => {
+      const dimension = domain.dimensions.find((dim) => dim.id === d.dimensionId)
       if (!dimension) return null
-      return {
-        name: dimension.name,
-        range: dr.range,
+
+      if ('range' in d) {
+        return {
+          name: dimension.name,
+          type: 'range' as const,
+          range: d.range,
+        }
+      } else {
+        return {
+          name: dimension.name,
+          type: 'value' as const,
+          value: d.value,
+        }
       }
     }).filter(Boolean)
   }
@@ -83,7 +93,7 @@ export default function PropertyCard({ property, domain, onEdit, isSelected }: P
     >
       {showDeleteConfirm ? (
         <div className="space-y-2">
-          <p className="text-sm font-medium text-red-600">Delete this property?</p>
+          <p className="text-sm font-medium text-red-600">Delete this label?</p>
           <div className="flex gap-2">
             <button
               onClick={confirmDelete}
@@ -102,7 +112,12 @@ export default function PropertyCard({ property, domain, onEdit, isSelected }: P
       ) : (
         <>
           <div className="flex items-start justify-between mb-2">
-            <h3 className="font-medium text-sm flex-1">{property.name}</h3>
+            <div className="flex-1">
+              <h3 className="font-medium text-sm">{label.name}</h3>
+              <span className="inline-block mt-1 px-2 py-0.5 text-xs font-medium rounded bg-gray-100 text-gray-700">
+                {isRegion(label) ? 'Region' : 'Point'}
+              </span>
+            </div>
             <IconButton
               size="small"
               onClick={handleMenuOpen}
@@ -125,7 +140,10 @@ export default function PropertyCard({ property, domain, onEdit, isSelected }: P
               <div key={index} className="text-xs text-gray-600">
                 <span className="font-medium">{info?.name}:</span>{' '}
                 <span className="font-mono">
-                  [{info?.range[0]}, {info?.range[1]}]
+                  {info?.type === 'range'
+                    ? `[${info.range[0]}, ${info.range[1]}]`
+                    : info?.value
+                  }
                 </span>
               </div>
             ))}

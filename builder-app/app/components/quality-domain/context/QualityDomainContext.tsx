@@ -1,7 +1,7 @@
 'use client'
 
 import { createContext, useContext, useReducer, useMemo, useCallback, useEffect, type ReactNode } from 'react'
-import type { QualityDomain, QualityDomainState, QualityDomainAction, Property, Concept } from '../types'
+import type { QualityDomain, QualityDomainState, QualityDomainAction, QualityDomainLabel, Concept, RegionDimensionRange, PointDimensionValue } from '../types'
 import defaultDataJson from '../defaultData.json'
 import { saveToLocalStorage } from '../localStorage'
 
@@ -12,17 +12,17 @@ interface QualityDomainContextType {
   updateDomain: (domain: QualityDomain) => void
   deleteDomain: (id: string) => void
   selectDomain: (id: string | null) => void
-  selectProperty: (domainId: string, propertyId: string) => void
+  selectLabel: (domainId: string, labelId: string) => void
   selectConcept: (conceptId: string | null) => void
   clearSelection: () => void
   getSelectedDomain: () => QualityDomain | null
-  addProperty: (domainId: string, property: Property) => void
-  updateProperty: (domainId: string, property: Property) => void
-  deleteProperty: (domainId: string, propertyId: string) => void
+  addLabel: (domainId: string, label: QualityDomainLabel) => void
+  updateLabel: (domainId: string, label: QualityDomainLabel) => void
+  deleteLabel: (domainId: string, labelId: string) => void
   addConcept: (concept: Concept) => void
   updateConcept: (concept: Concept) => void
   deleteConcept: (id: string) => void
-  getConceptProperties: (conceptId: string) => Property[]
+  getConceptLabels: (conceptId: string) => QualityDomainLabel[]
 }
 
 const QualityDomainContext = createContext<QualityDomainContextType | undefined>(undefined)
@@ -31,21 +31,26 @@ const QualityDomainContext = createContext<QualityDomainContextType | undefined>
 interface JsonDimension {
   id: string
   name: string
-  range: number[]  // JSON arrays don't have tuple types
+  range: number[]
   type?: string
 }
 
-interface JsonPropertyDimensionRange {
+interface JsonRegionDimensionRange {
   dimensionId: string
-  range: number[]  // JSON arrays don't have tuple types
+  range: number[]
 }
 
-interface JsonProperty {
+interface JsonPointDimensionValue {
+  dimensionId: string
+  value: number
+}
+
+interface JsonLabel {
+  type: 'region' | 'point'
   id: string
   name: string
-  description?: string
   domainId: string
-  dimensions: JsonPropertyDimensionRange[]
+  dimensions: (JsonRegionDimensionRange | JsonPointDimensionValue)[]
   createdAt: string
 }
 
@@ -53,14 +58,14 @@ interface JsonDomain {
   id: string
   name: string
   dimensions: JsonDimension[]
-  properties: JsonProperty[]
+  labels: JsonLabel[]
   createdAt: string
 }
 
 interface JsonConcept {
   id: string
   name: string
-  propertyRefs: { domainId: string; propertyId: string }[]
+  labelRefs: { domainId: string; labelId: string }[]
   createdAt: string
 }
 
@@ -78,7 +83,7 @@ function toRangeTuple(arr: number[]): readonly [number, number] {
   return [arr[0], arr[1]] as const
 }
 
-// Load default data from JSON file (can be easily updated by pasting new JSON)
+// Load default data from JSON file
 const jsonData: JsonState = defaultDataJson as JsonState
 
 const initialState: QualityDomainState = {
@@ -88,23 +93,44 @@ const initialState: QualityDomainState = {
       ...dim,
       range: toRangeTuple(dim.range),
     })),
-    properties: domain.properties.map(prop => ({
-      ...prop,
-      dimensions: prop.dimensions.map(d => ({
-        ...d,
-        range: toRangeTuple(d.range),
-      })),
-      createdAt: new Date(prop.createdAt),
-    })),
+    labels: domain.labels.map(label => {
+      if (label.type === 'region') {
+        return {
+          type: 'region' as const,
+          id: label.id,
+          name: label.name,
+          domainId: label.domainId,
+          dimensions: label.dimensions.map(d => {
+            if ('range' in d) {
+              return {
+                dimensionId: d.dimensionId,
+                range: toRangeTuple(d.range),
+              }
+            }
+            return d as unknown as RegionDimensionRange
+          }),
+          createdAt: new Date(label.createdAt),
+        }
+      } else {
+        return {
+          type: 'point' as const,
+          id: label.id,
+          name: label.name,
+          domainId: label.domainId,
+          dimensions: label.dimensions as PointDimensionValue[],
+          createdAt: new Date(label.createdAt),
+        }
+      }
+    }),
     createdAt: new Date(domain.createdAt),
   })),
   selectedDomainId: null,
-  selectedPropertyId: null,
-  selectedPropertyDomainId: null,
+  selectedLabelId: null,
+  selectedLabelDomainId: null,
   selectedConceptId: null,
   concepts: jsonData.concepts.map(concept => ({
     ...concept,
-    propertyRefs: concept.propertyRefs,
+    labelRefs: concept.labelRefs,
     createdAt: new Date(concept.createdAt),
   })),
 }
@@ -137,73 +163,73 @@ function qualityDomainReducer(
       return {
         ...state,
         selectedDomainId: action.payload,
-        selectedPropertyId: null,
-        selectedPropertyDomainId: null,
+        selectedLabelId: null,
+        selectedLabelDomainId: null,
         selectedConceptId: null,
       }
-    case 'SELECT_PROPERTY':
+    case 'SELECT_LABEL':
       if (!action.payload) {
         return {
           ...state,
-          selectedPropertyId: null,
-          selectedPropertyDomainId: null,
+          selectedLabelId: null,
+          selectedLabelDomainId: null,
         }
       }
       return {
         ...state,
         selectedDomainId: null,
-        selectedPropertyId: action.payload.propertyId,
-        selectedPropertyDomainId: action.payload.domainId,
+        selectedLabelId: action.payload.labelId,
+        selectedLabelDomainId: action.payload.domainId,
         selectedConceptId: null,
       }
     case 'SELECT_CONCEPT':
       return {
         ...state,
         selectedDomainId: null,
-        selectedPropertyId: null,
-        selectedPropertyDomainId: null,
+        selectedLabelId: null,
+        selectedLabelDomainId: null,
         selectedConceptId: action.payload,
       }
     case 'CLEAR_SELECTION':
       return {
         ...state,
         selectedDomainId: null,
-        selectedPropertyId: null,
-        selectedPropertyDomainId: null,
+        selectedLabelId: null,
+        selectedLabelDomainId: null,
         selectedConceptId: null,
       }
-    case 'ADD_PROPERTY':
+    case 'ADD_LABEL':
       return {
         ...state,
         domains: state.domains.map((domain) =>
           domain.id === action.payload.domainId
-            ? { ...domain, properties: [...domain.properties, action.payload.property] }
+            ? { ...domain, labels: [...domain.labels, action.payload.label] }
             : domain
         ),
       }
-    case 'UPDATE_PROPERTY':
+    case 'UPDATE_LABEL':
       return {
         ...state,
         domains: state.domains.map((domain) =>
           domain.id === action.payload.domainId
             ? {
                 ...domain,
-                properties: domain.properties.map((prop) =>
-                  prop.id === action.payload.property.id ? action.payload.property : prop
+                labels: domain.labels.map((label) =>
+                  label.id === action.payload.label.id ? action.payload.label : label
                 ),
               }
             : domain
         ),
       }
-    case 'DELETE_PROPERTY':
+    case 'DELETE_LABEL':
       return {
         ...state,
         domains: state.domains.map((domain) =>
           domain.id === action.payload.domainId
             ? {
                 ...domain,
-                properties: domain.properties.filter(
-                  (prop) => prop.id !== action.payload.propertyId
+                labels: domain.labels.filter(
+                  (label) => label.id !== action.payload.labelId
                 ),
               }
             : domain
@@ -231,10 +257,9 @@ function qualityDomainReducer(
         ...state,
         domains: action.payload.domains,
         concepts: action.payload.concepts,
-        // Keep selection state cleared
         selectedDomainId: null,
-        selectedPropertyId: null,
-        selectedPropertyDomainId: null,
+        selectedLabelId: null,
+        selectedLabelDomainId: null,
         selectedConceptId: null,
       }
     default:
@@ -267,8 +292,8 @@ export function QualityDomainProvider({ children }: { children: ReactNode }) {
     dispatch({ type: 'SELECT_DOMAIN', payload: id })
   }, [])
 
-  const selectProperty = useCallback((domainId: string, propertyId: string) => {
-    dispatch({ type: 'SELECT_PROPERTY', payload: { domainId, propertyId } })
+  const selectLabel = useCallback((domainId: string, labelId: string) => {
+    dispatch({ type: 'SELECT_LABEL', payload: { domainId, labelId } })
   }, [])
 
   const selectConcept = useCallback((conceptId: string | null) => {
@@ -284,16 +309,16 @@ export function QualityDomainProvider({ children }: { children: ReactNode }) {
     return state.domains.find((d) => d.id === state.selectedDomainId) || null
   }, [state.selectedDomainId, state.domains])
 
-  const addProperty = useCallback((domainId: string, property: Property) => {
-    dispatch({ type: 'ADD_PROPERTY', payload: { domainId, property } })
+  const addLabel = useCallback((domainId: string, label: QualityDomainLabel) => {
+    dispatch({ type: 'ADD_LABEL', payload: { domainId, label } })
   }, [])
 
-  const updateProperty = useCallback((domainId: string, property: Property) => {
-    dispatch({ type: 'UPDATE_PROPERTY', payload: { domainId, property } })
+  const updateLabel = useCallback((domainId: string, label: QualityDomainLabel) => {
+    dispatch({ type: 'UPDATE_LABEL', payload: { domainId, label } })
   }, [])
 
-  const deleteProperty = useCallback((domainId: string, propertyId: string) => {
-    dispatch({ type: 'DELETE_PROPERTY', payload: { domainId, propertyId } })
+  const deleteLabel = useCallback((domainId: string, labelId: string) => {
+    dispatch({ type: 'DELETE_LABEL', payload: { domainId, labelId } })
   }, [])
 
   const addConcept = useCallback((concept: Concept) => {
@@ -308,21 +333,21 @@ export function QualityDomainProvider({ children }: { children: ReactNode }) {
     dispatch({ type: 'DELETE_CONCEPT', payload: id })
   }, [])
 
-  const getConceptProperties = useCallback((conceptId: string): Property[] => {
+  const getConceptLabels = useCallback((conceptId: string): QualityDomainLabel[] => {
     const concept = state.concepts.find((c) => c.id === conceptId)
     if (!concept) return []
 
-    const properties: Property[] = []
-    for (const ref of concept.propertyRefs) {
+    const labels: QualityDomainLabel[] = []
+    for (const ref of concept.labelRefs) {
       const domain = state.domains.find((d) => d.id === ref.domainId)
       if (domain) {
-        const property = domain.properties.find((p) => p.id === ref.propertyId)
-        if (property) {
-          properties.push(property)
+        const label = domain.labels.find((l) => l.id === ref.labelId)
+        if (label) {
+          labels.push(label)
         }
       }
     }
-    return properties
+    return labels
   }, [state.concepts, state.domains])
 
   // Memoize context value to only recreate when state changes
@@ -333,18 +358,18 @@ export function QualityDomainProvider({ children }: { children: ReactNode }) {
     updateDomain,
     deleteDomain,
     selectDomain,
-    selectProperty,
+    selectLabel,
     selectConcept,
     clearSelection,
     getSelectedDomain,
-    addProperty,
-    updateProperty,
-    deleteProperty,
+    addLabel,
+    updateLabel,
+    deleteLabel,
     addConcept,
     updateConcept,
     deleteConcept,
-    getConceptProperties,
-  }), [state, addDomain, updateDomain, deleteDomain, selectDomain, selectProperty, selectConcept, clearSelection, getSelectedDomain, addProperty, updateProperty, deleteProperty, addConcept, updateConcept, deleteConcept, getConceptProperties])
+    getConceptLabels,
+  }), [state, addDomain, updateDomain, deleteDomain, selectDomain, selectLabel, selectConcept, clearSelection, getSelectedDomain, addLabel, updateLabel, deleteLabel, addConcept, updateConcept, deleteConcept, getConceptLabels])
 
   return (
     <QualityDomainContext.Provider value={value}>

@@ -4,8 +4,8 @@ import { useState } from 'react'
 import { useQualityDomain } from './context/QualityDomainContext'
 import DomainCard from './DomainCard'
 import DomainModal from './DomainModal'
-import PropertyCard from './PropertyCard'
-import PropertyModal from './PropertyModal'
+import LabelCard from './LabelCard'
+import LabelModal from './LabelModal'
 import ConceptCard from './ConceptCard'
 import ConceptModal from './ConceptModal'
 
@@ -14,8 +14,8 @@ export default function DomainList() {
   const [isOpen, setIsOpen] = useState(true)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [editingDomainId, setEditingDomainId] = useState<string | null>(null)
-  const [isPropertyModalOpen, setIsPropertyModalOpen] = useState(false)
-  const [editingPropertyId, setEditingPropertyId] = useState<string | null>(null)
+  const [isLabelModalOpen, setIsLabelModalOpen] = useState(false)
+  const [editingLabelId, setEditingLabelId] = useState<string | null>(null)
   const [isConceptModalOpen, setIsConceptModalOpen] = useState(false)
   const [editingConceptId, setEditingConceptId] = useState<string | null>(null)
 
@@ -76,42 +76,42 @@ export default function DomainList() {
                       setIsModalOpen(true)
                     }}
                   >
-                    {(state.selectedDomainId === domain.id || state.selectedPropertyDomainId === domain.id) && (
+                    {(state.selectedDomainId === domain.id || state.selectedLabelDomainId === domain.id) && (
                       <div className="pl-2">
-                        {/* Property list or empty state */}
-                        {domain.properties.length === 0 ? (
+                        {/* Label list or empty state */}
+                        {domain.labels.length === 0 ? (
                           <div className="text-center py-4 text-gray-500">
-                            <p className="text-xs">No properties yet.</p>
+                            <p className="text-xs">No labels yet.</p>
                           </div>
                         ) : (
                           <div className="space-y-2 mb-2">
-                            {domain.properties.map((property) => (
-                              <PropertyCard
-                                key={property.id}
-                                property={property}
+                            {domain.labels.map((label) => (
+                              <LabelCard
+                                key={label.id}
+                                label={label}
                                 domain={domain}
                                 isSelected={
-                                  state.selectedPropertyId === property.id &&
-                                  state.selectedPropertyDomainId === domain.id
+                                  state.selectedLabelId === label.id &&
+                                  state.selectedLabelDomainId === domain.id
                                 }
                                 onEdit={(id) => {
-                                  setEditingPropertyId(id)
-                                  setIsPropertyModalOpen(true)
+                                  setEditingLabelId(id)
+                                  setIsLabelModalOpen(true)
                                 }}
                               />
                             ))}
                           </div>
                         )}
 
-                        {/* Add Property button */}
+                        {/* Add Label button */}
                         <button
                           onClick={() => {
-                            setEditingPropertyId(null)
-                            setIsPropertyModalOpen(true)
+                            setEditingLabelId(null)
+                            setIsLabelModalOpen(true)
                           }}
                           className="w-full px-3 py-1.5 bg-green-600 text-white text-sm rounded hover:bg-green-700 font-medium"
                         >
-                          Add Region Label
+                          Add Label
                         </button>
                       </div>
                     )}
@@ -166,12 +166,12 @@ export default function DomainList() {
         onClose={() => setIsModalOpen(false)}
       />
 
-      {(state.selectedDomainId || state.selectedPropertyDomainId) && (
-        <PropertyModal
-          isOpen={isPropertyModalOpen}
-          domainId={state.selectedDomainId || state.selectedPropertyDomainId}
-          editingPropertyId={editingPropertyId}
-          onClose={() => setIsPropertyModalOpen(false)}
+      {(state.selectedDomainId || state.selectedLabelDomainId) && (
+        <LabelModal
+          isOpen={isLabelModalOpen}
+          domainId={state.selectedDomainId || state.selectedLabelDomainId}
+          editingLabelId={editingLabelId}
+          onClose={() => setIsLabelModalOpen(false)}
         />
       )}
 

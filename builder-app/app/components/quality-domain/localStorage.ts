@@ -1,14 +1,40 @@
-import type { QualityDomainState, QualityDomain, Concept } from './types'
+import type { QualityDomainState, QualityDomain, Concept, QualityDomainLabel, Property, PropertyReference, LabelReference } from './types'
 
 const STORAGE_KEY = 'quality-domain-state'
+const STATE_VERSION = 2 // Version 2 uses labels instead of properties
+
+// Migration: Convert old Property to QualityDomainLabel (Region)
+function migratePropertyToLabel(oldProperty: Property): QualityDomainLabel {
+  return {
+    type: 'region',
+    id: oldProperty.id,
+    name: oldProperty.name,
+    domainId: oldProperty.domainId,
+    dimensions: oldProperty.dimensions,
+    createdAt: oldProperty.createdAt
+  }
+}
+
+// Migration: Convert old PropertyReference to LabelReference
+function migratePropertyRefToLabelRef(oldRef: PropertyReference): LabelReference {
+  return {
+    domainId: oldRef.domainId,
+    labelId: oldRef.propertyId
+  }
+}
 
 // Same logic as StateDebugPanel export
 export function serializeState(state: QualityDomainState): string {
-  const persistableState = JSON.stringify(state, (key, value) => {
+  const stateWithVersion = {
+    ...state,
+    version: STATE_VERSION
+  }
+
+  const persistableState = JSON.stringify(stateWithVersion, (key, value) => {
     // Filter out selection state
     if (key === 'selectedDomainId' ||
-        key === 'selectedPropertyId' ||
-        key === 'selectedPropertyDomainId' ||
+        key === 'selectedLabelId' ||
+        key === 'selectedLabelDomainId' ||
         key === 'selectedConceptId') {
       return undefined
     }
@@ -23,38 +49,89 @@ export function serializeState(state: QualityDomainState): string {
   return persistableState
 }
 
-// Same logic as StateDebugPanel import
+// Same logic as StateDebugPanel import (with migration support)
 export function deserializeState(jsonString: string): { domains: QualityDomain[], concepts: Concept[] } {
   const parsed = JSON.parse(jsonString)
+  const version = parsed.version || 1 // Default to version 1 if not specified
 
   // Convert date strings back to Date objects and Infinity strings to Infinity
-  const domains = parsed.domains.map((domain: any) => ({
-    ...domain,
-    createdAt: new Date(domain.createdAt),
-    dimensions: domain.dimensions.map((dim: any) => ({
-      ...dim,
-      range: [
-        dim.range[0] === "Infinity" ? Infinity : dim.range[0] === "-Infinity" ? -Infinity : dim.range[0],
-        dim.range[1] === "Infinity" ? Infinity : dim.range[1] === "-Infinity" ? -Infinity : dim.range[1]
-      ] as const
-    })),
-    properties: domain.properties.map((prop: any) => ({
-      ...prop,
-      createdAt: new Date(prop.createdAt),
-      dimensions: prop.dimensions.map((d: any) => ({
-        ...d,
+  const domains = parsed.domains.map((domain: any) => {
+    const baseDomain = {
+      ...domain,
+      createdAt: new Date(domain.createdAt),
+      dimensions: domain.dimensions.map((dim: any) => ({
+        ...dim,
         range: [
-          d.range[0] === "Infinity" ? Infinity : d.range[0] === "-Infinity" ? -Infinity : d.range[0],
-          d.range[1] === "Infinity" ? Infinity : d.range[1] === "-Infinity" ? -Infinity : d.range[1]
+          dim.range[0] === "Infinity" ? Infinity : dim.range[0] === "-Infinity" ? -Infinity : dim.range[0],
+          dim.range[1] === "Infinity" ? Infinity : dim.range[1] === "-Infinity" ? -Infinity : dim.range[1]
         ] as const
       }))
-    }))
-  }))
+    }
 
-  const concepts = (parsed.concepts || []).map((concept: any) => ({
-    ...concept,
-    createdAt: new Date(concept.createdAt)
-  }))
+    // Handle old format (version 1) with properties field
+    if (version === 1 || domain.properties) {
+      const oldProperties = (domain.properties || []).map((prop: any) => ({
+        ...prop,
+        createdAt: new Date(prop.createdAt),
+        dimensions: prop.dimensions.map((d: any) => ({
+          ...d,
+          range: [
+            d.range[0] === "Infinity" ? Infinity : d.range[0] === "-Infinity" ? -Infinity : d.range[0],
+            d.range[1] === "Infinity" ? Infinity : d.range[1] === "-Infinity" ? -Infinity : d.range[1]
+          ] as const
+        }))
+      }))
+
+      // Migrate old properties to labels
+      return {
+        ...baseDomain,
+        labels: oldProperties.map(migratePropertyToLabel)
+      }
+    }
+
+    // Handle new format (version 2) with labels field
+    const labels = (domain.labels || []).map((label: any) => ({
+      ...label,
+      createdAt: new Date(label.createdAt),
+      dimensions: label.dimensions.map((d: any) => {
+        // Handle region dimensions (with range)
+        if ('range' in d) {
+          return {
+            ...d,
+            range: [
+              d.range[0] === "Infinity" ? Infinity : d.range[0] === "-Infinity" ? -Infinity : d.range[0],
+              d.range[1] === "Infinity" ? Infinity : d.range[1] === "-Infinity" ? -Infinity : d.range[1]
+            ] as const
+          }
+        }
+        // Handle point dimensions (with value)
+        return d
+      })
+    }))
+
+    return {
+      ...baseDomain,
+      labels
+    }
+  })
+
+  const concepts = (parsed.concepts || []).map((concept: any) => {
+    const baseConcept = {
+      ...concept,
+      createdAt: new Date(concept.createdAt)
+    }
+
+    // Handle old format with propertyRefs
+    if (version === 1 || concept.propertyRefs) {
+      return {
+        ...baseConcept,
+        labelRefs: (concept.propertyRefs || []).map(migratePropertyRefToLabelRef)
+      }
+    }
+
+    // New format already has labelRefs
+    return baseConcept
+  })
 
   return { domains, concepts }
 }

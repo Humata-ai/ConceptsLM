@@ -15,12 +15,12 @@ interface ConceptCardProps {
 }
 
 export default function ConceptCard({ concept, onEdit, isSelected }: ConceptCardProps) {
-  const { deleteConcept, getConceptProperties, selectConcept } = useQualityDomain()
+  const { deleteConcept, getConceptLabels, selectConcept } = useQualityDomain()
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
 
-  const properties = getConceptProperties(concept.id)
+  const labels = getConceptLabels(concept.id)
 
   const handleClick = (e: React.MouseEvent) => {
     e.stopPropagation()
@@ -32,8 +32,7 @@ export default function ConceptCard({ concept, onEdit, isSelected }: ConceptCard
     setAnchorEl(e.currentTarget)
   }
 
-  const handleMenuClose = (e?: React.MouseEvent) => {
-    e?.stopPropagation()
+  const handleMenuClose = () => {
     setAnchorEl(null)
   }
 
@@ -99,7 +98,7 @@ export default function ConceptCard({ concept, onEdit, isSelected }: ConceptCard
                   ? 'bg-blue-200 text-blue-700'
                   : 'bg-gray-200 text-gray-700'
               }`}>
-                {properties.length} {properties.length === 1 ? 'prop' : 'props'}
+                {labels.length} {labels.length === 1 ? 'label' : 'labels'}
               </span>
               <IconButton
                 size="small"
@@ -119,12 +118,12 @@ export default function ConceptCard({ concept, onEdit, isSelected }: ConceptCard
               </Menu>
             </div>
           </div>
-          {properties.length > 0 && (
+          {labels.length > 0 && (
             <div className={`mt-2 text-xs ${isSelected ? 'text-blue-600' : 'text-gray-600'}`}>
-              {properties.map((prop, index) => (
-                <span key={prop.id}>
-                  {prop.name}
-                  {index < properties.length - 1 ? ', ' : ''}
+              {labels.map((label, index) => (
+                <span key={label.id}>
+                  {label.name}
+                  {index < labels.length - 1 ? ', ' : ''}
                 </span>
               ))}
             </div>
