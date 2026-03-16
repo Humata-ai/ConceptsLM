@@ -6,6 +6,8 @@ import DomainCard from './DomainCard'
 import DomainModal from './DomainModal'
 import PropertyCard from './PropertyCard'
 import PropertyModal from './PropertyModal'
+import ConceptCard from './ConceptCard'
+import ConceptModal from './ConceptModal'
 
 export default function DomainList() {
   const { state, getSelectedDomain } = useQualityDomain()
@@ -13,6 +15,8 @@ export default function DomainList() {
   const [editingDomainId, setEditingDomainId] = useState<string | null>(null)
   const [isPropertyModalOpen, setIsPropertyModalOpen] = useState(false)
   const [editingPropertyId, setEditingPropertyId] = useState<string | null>(null)
+  const [isConceptModalOpen, setIsConceptModalOpen] = useState(false)
+  const [editingConceptId, setEditingConceptId] = useState<string | null>(null)
 
   const selectedDomain = getSelectedDomain()
 
@@ -96,6 +100,42 @@ export default function DomainList() {
             </div>
           </>
         )}
+
+        {/* Concepts Section */}
+        <div className="border-t border-gray-300 mt-4 pt-4">
+          <div className="flex items-center justify-between mb-3">
+            <h2 className="text-lg font-bold text-purple-900">Concepts</h2>
+            <button
+              onClick={() => {
+                setEditingConceptId(null)
+                setIsConceptModalOpen(true)
+              }}
+              className="px-3 py-1 bg-purple-600 text-white text-sm rounded hover:bg-purple-700 font-medium"
+            >
+              + Add Concept
+            </button>
+          </div>
+
+          {state.concepts.length === 0 ? (
+            <div className="text-center py-8 text-gray-500">
+              <p className="text-sm">No concepts yet.</p>
+              <p className="text-xs mt-1">Click "+ Add Concept" to create one.</p>
+            </div>
+          ) : (
+            <div className="space-y-2">
+              {state.concepts.map((concept) => (
+                <ConceptCard
+                  key={concept.id}
+                  concept={concept}
+                  onEdit={(id) => {
+                    setEditingConceptId(id)
+                    setIsConceptModalOpen(true)
+                  }}
+                />
+              ))}
+            </div>
+          )}
+        </div>
       </div>
 
       <DomainModal
@@ -112,6 +152,12 @@ export default function DomainList() {
           onClose={() => setIsPropertyModalOpen(false)}
         />
       )}
+
+      <ConceptModal
+        isOpen={isConceptModalOpen}
+        editingConceptId={editingConceptId}
+        onClose={() => setIsConceptModalOpen(false)}
+      />
     </>
   )
 }
