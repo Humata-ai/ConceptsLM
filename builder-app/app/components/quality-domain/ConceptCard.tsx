@@ -11,15 +11,21 @@ import MoreVertIcon from '@mui/icons-material/MoreVert'
 interface ConceptCardProps {
   concept: Concept
   onEdit: (conceptId: string) => void
+  isSelected: boolean
 }
 
-export default function ConceptCard({ concept, onEdit }: ConceptCardProps) {
-  const { deleteConcept, getConceptProperties } = useQualityDomain()
+export default function ConceptCard({ concept, onEdit, isSelected }: ConceptCardProps) {
+  const { deleteConcept, getConceptProperties, selectConcept } = useQualityDomain()
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
 
   const properties = getConceptProperties(concept.id)
+
+  const handleClick = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    selectConcept(concept.id)
+  }
 
   const handleMenuOpen = (e: React.MouseEvent<HTMLElement>) => {
     e.stopPropagation()
@@ -55,7 +61,14 @@ export default function ConceptCard({ concept, onEdit }: ConceptCardProps) {
   }
 
   return (
-    <div className="p-3 rounded-lg bg-purple-100 border-2 border-purple-500 transition-colors hover:bg-purple-50">
+    <div
+      onClick={handleClick}
+      className={`p-3 rounded-lg cursor-pointer transition-colors ${
+        isSelected
+          ? 'bg-blue-100 border-2 border-blue-500'
+          : 'bg-white border border-gray-300 hover:bg-gray-50'
+      }`}
+    >
       {showDeleteConfirm ? (
         <div className="space-y-2">
           <p className="text-sm font-medium text-red-600">Delete this concept?</p>
@@ -78,10 +91,14 @@ export default function ConceptCard({ concept, onEdit }: ConceptCardProps) {
         <>
           <div className="flex items-start justify-between">
             <div className="flex-1 min-w-0">
-              <h3 className="font-medium truncate text-purple-900">{concept.name}</h3>
+              <h3 className={`font-medium truncate ${isSelected ? 'text-blue-900' : 'text-gray-900'}`}>{concept.name}</h3>
             </div>
             <div className="flex items-center gap-1">
-              <span className="px-2 py-0.5 bg-purple-200 text-purple-700 text-xs rounded-full font-medium">
+              <span className={`px-2 py-0.5 text-xs rounded-full font-medium ${
+                isSelected
+                  ? 'bg-blue-200 text-blue-700'
+                  : 'bg-gray-200 text-gray-700'
+              }`}>
                 {properties.length} {properties.length === 1 ? 'prop' : 'props'}
               </span>
               <IconButton
@@ -103,7 +120,7 @@ export default function ConceptCard({ concept, onEdit }: ConceptCardProps) {
             </div>
           </div>
           {properties.length > 0 && (
-            <div className="mt-2 text-xs text-purple-600">
+            <div className={`mt-2 text-xs ${isSelected ? 'text-blue-600' : 'text-gray-600'}`}>
               {properties.map((prop, index) => (
                 <span key={prop.id}>
                   {prop.name}

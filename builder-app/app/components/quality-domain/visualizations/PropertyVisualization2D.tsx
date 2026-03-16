@@ -1,11 +1,14 @@
 import { useMemo, memo } from 'react'
 import { Text } from '@react-three/drei'
 import type { Property, QualityDomain } from '../types'
+import { useQualityDomain } from '../context/QualityDomainContext'
+import type { ThreeEvent } from '@react-three/fiber'
 
 interface PropertyVisualization2DProps {
   property: Property
   domain: QualityDomain
   index: number
+  isSelected?: boolean
 }
 
 const PROPERTY_COLORS = [
@@ -21,7 +24,15 @@ function PropertyVisualization2D({
   property,
   domain,
   index,
+  isSelected = false,
 }: PropertyVisualization2DProps) {
+  const { selectProperty } = useQualityDomain()
+
+  const handleClick = (e: ThreeEvent<MouseEvent>) => {
+    e.stopPropagation()
+    selectProperty(domain.id, property.id)
+  }
+
   const dimX = domain.dimensions[0]
   const dimZ = domain.dimensions[1]
   const [dimMinX, dimMaxX] = dimX.range
@@ -47,8 +58,8 @@ function PropertyVisualization2D({
     const sizeX = maxX - minX
     const sizeZ = maxZ - minZ
 
-    // Get color for this property
-    const color = PROPERTY_COLORS[index % PROPERTY_COLORS.length]
+    // Get color for this property - use blue if selected
+    const color = isSelected ? '#3b82f6' : PROPERTY_COLORS[index % PROPERTY_COLORS.length]
 
     return { centerX, centerZ, sizeX, sizeZ, color }
   }, [
@@ -61,6 +72,7 @@ function PropertyVisualization2D({
     dimMinZ,
     dimMaxZ,
     index,
+    isSelected,
   ])
 
   // Memoize position arrays to prevent re-renders
@@ -70,7 +82,12 @@ function PropertyVisualization2D({
   const rotation = useMemo(() => [-Math.PI / 2, 0, 0] as const, [])
 
   return (
-    <group rotation={rotation}>
+    <group
+      rotation={rotation}
+      onClick={handleClick}
+      onPointerOver={() => { if (document.body.style) document.body.style.cursor = 'pointer' }}
+      onPointerOut={() => { if (document.body.style) document.body.style.cursor = 'default' }}
+    >
       {/* Property rectangle */}
       <mesh position={meshPosition}>
         <boxGeometry args={boxSize} />

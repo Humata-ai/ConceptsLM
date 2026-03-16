@@ -2,11 +2,14 @@ import { useMemo, memo, useRef, useLayoutEffect } from 'react'
 import { Text, Billboard } from '@react-three/drei'
 import * as THREE from 'three'
 import type { Property, QualityDomain } from '../types'
+import { useQualityDomain } from '../context/QualityDomainContext'
+import type { ThreeEvent } from '@react-three/fiber'
 
 interface PropertyVisualization3DProps {
   property: Property
   domain: QualityDomain
   index: number
+  isSelected?: boolean
 }
 
 const PROPERTY_COLORS = [
@@ -22,8 +25,15 @@ function PropertyVisualization3D({
   property,
   domain,
   index,
+  isSelected = false,
 }: PropertyVisualization3DProps) {
   const groupRef = useRef<THREE.Group>(null)
+  const { selectProperty } = useQualityDomain()
+
+  const handleClick = (e: ThreeEvent<MouseEvent>) => {
+    e.stopPropagation()
+    selectProperty(domain.id, property.id)
+  }
 
   // Map each domain dimension to property range (or full range if not specified)
   const ranges = useMemo(() => {
@@ -40,8 +50,8 @@ function PropertyVisualization3D({
     })
   }, [property.dimensions, domain.dimensions])
 
-  // Get color for this property
-  const color = PROPERTY_COLORS[index % PROPERTY_COLORS.length]
+  // Get color for this property - use blue if selected
+  const color = isSelected ? '#3b82f6' : PROPERTY_COLORS[index % PROPERTY_COLORS.length]
 
   // Memoize position
   const position = useMemo(
@@ -100,7 +110,12 @@ function PropertyVisualization3D({
   return (
     <>
       {/* Group for imperative edge creation */}
-      <group ref={groupRef} />
+      <group
+        ref={groupRef}
+        onClick={handleClick}
+        onPointerOver={() => { if (document.body.style) document.body.style.cursor = 'pointer' }}
+        onPointerOut={() => { if (document.body.style) document.body.style.cursor = 'default' }}
+      />
 
       {/* Billboard group that always faces the camera - positioned above the box */}
       <Billboard position={labelPosition}>

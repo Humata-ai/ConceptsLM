@@ -3,12 +3,21 @@ import { Text } from '@react-three/drei'
 import * as THREE from 'three'
 import type { QualityDomain } from '../types'
 import PropertyVisualization2D from './PropertyVisualization2D'
+import { useQualityDomain } from '../context/QualityDomainContext'
+import type { ThreeEvent } from '@react-three/fiber'
 
 interface Visualization2DProps {
   domain: QualityDomain
 }
 
 export default function Visualization2D({ domain }: Visualization2DProps) {
+  const { selectDomain, state } = useQualityDomain()
+
+  const handleClick = (e: ThreeEvent<MouseEvent>) => {
+    e.stopPropagation()
+    selectDomain(domain.id)
+  }
+
   const dimX = domain.dimensions[0]
   const dimY = domain.dimensions[1]
   const [minX, maxX] = dimX.range
@@ -50,7 +59,11 @@ export default function Visualization2D({ domain }: Visualization2DProps) {
   }, [sizeX, sizeY, gridDivisions])
 
   return (
-    <group>
+    <group
+      onClick={handleClick}
+      onPointerOver={() => { if (document.body.style) document.body.style.cursor = 'pointer' }}
+      onPointerOut={() => { if (document.body.style) document.body.style.cursor = 'default' }}
+    >
       {/* Grid plane (transparent) */}
       <mesh rotation={[-Math.PI / 2, 0, 0]}>
         <planeGeometry args={[sizeX, sizeY]} />
@@ -134,14 +147,21 @@ export default function Visualization2D({ domain }: Visualization2DProps) {
       </Text>
 
       {/* Render properties */}
-      {domain.properties.map((property, index) => (
-        <PropertyVisualization2D
-          key={property.id}
-          property={property}
-          domain={domain}
-          index={index}
-        />
-      ))}
+      {domain.properties.map((property, index) => {
+        const isPropertySelected =
+          state.selectedPropertyId === property.id &&
+          state.selectedPropertyDomainId === domain.id
+
+        return (
+          <PropertyVisualization2D
+            key={property.id}
+            property={property}
+            domain={domain}
+            index={index}
+            isSelected={isPropertySelected}
+          />
+        )
+      })}
     </group>
   )
 }

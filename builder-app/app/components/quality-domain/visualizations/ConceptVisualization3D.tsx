@@ -3,14 +3,21 @@ import { Text, Billboard, Line } from '@react-three/drei'
 import { Vector3 } from 'three'
 import type { Concept } from '../types'
 import { useQualityDomain } from '../context/QualityDomainContext'
+import type { ThreeEvent } from '@react-three/fiber'
 
 interface ConceptVisualization3DProps {
   concept: Concept
+  isSelected?: boolean
 }
 
-function ConceptVisualization3D({ concept }: ConceptVisualization3DProps) {
-  const { state, getConceptProperties } = useQualityDomain()
+function ConceptVisualization3D({ concept, isSelected = false }: ConceptVisualization3DProps) {
+  const { state, getConceptProperties, selectConcept } = useQualityDomain()
   const properties = getConceptProperties(concept.id)
+
+  const handleClick = (e: ThreeEvent<MouseEvent>) => {
+    e.stopPropagation()
+    selectConcept(concept.id)
+  }
 
   // Calculate domain positions (same as AllDomainsVisualization)
   const domainPositions = useMemo(() => {
@@ -145,18 +152,23 @@ function ConceptVisualization3D({ concept }: ConceptVisualization3DProps) {
   return (
     <group>
       {/* Concept label billboard */}
-      <Billboard position={conceptPosition}>
+      <Billboard
+        position={conceptPosition}
+        onClick={handleClick}
+        onPointerOver={() => { if (document.body.style) document.body.style.cursor = 'pointer' }}
+        onPointerOut={() => { if (document.body.style) document.body.style.cursor = 'default' }}
+      >
         {/* Background rectangle */}
         <mesh position={[0, 0, -0.01]}>
           <planeGeometry args={[concept.name.length * 1.2, 2.2]} />
-          <meshBasicMaterial color="#f3e8ff" opacity={0.95} transparent />
+          <meshBasicMaterial color={isSelected ? '#dbeafe' : '#f3e8ff'} opacity={0.95} transparent />
         </mesh>
 
         {/* Concept name */}
         <Text
           position={[0, 0, 0]}
           fontSize={1.8}
-          color="#7c3aed"
+          color={isSelected ? '#3b82f6' : '#7c3aed'}
           anchorX="center"
           anchorY="middle"
           outlineWidth={0.1}
@@ -176,9 +188,9 @@ function ConceptVisualization3D({ concept }: ConceptVisualization3DProps) {
             [conceptPosition.x, conceptPosition.y, conceptPosition.z],
             [position.x, position.y, position.z],
           ]}
-          color="#a78bfa"
-          lineWidth={2}
-          opacity={0.4}
+          color={isSelected ? '#60a5fa' : '#a78bfa'}
+          lineWidth={isSelected ? 3 : 2}
+          opacity={isSelected ? 0.6 : 0.4}
           transparent
         />
       ))}

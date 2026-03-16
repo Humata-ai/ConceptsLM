@@ -11,6 +11,9 @@ interface QualityDomainContextType {
   updateDomain: (domain: QualityDomain) => void
   deleteDomain: (id: string) => void
   selectDomain: (id: string | null) => void
+  selectProperty: (domainId: string, propertyId: string) => void
+  selectConcept: (conceptId: string | null) => void
+  clearSelection: () => void
   getSelectedDomain: () => QualityDomain | null
   addProperty: (domainId: string, property: Property) => void
   updateProperty: (domainId: string, property: Property) => void
@@ -94,7 +97,10 @@ const initialState: QualityDomainState = {
     })),
     createdAt: new Date(domain.createdAt),
   })),
-  selectedDomainId: jsonData.selectedDomainId,
+  selectedDomainId: null,
+  selectedPropertyId: null,
+  selectedPropertyDomainId: null,
+  selectedConceptId: null,
   concepts: jsonData.concepts.map(concept => ({
     ...concept,
     propertyRefs: concept.propertyRefs,
@@ -111,7 +117,6 @@ function qualityDomainReducer(
       return {
         ...state,
         domains: [...state.domains, action.payload],
-        selectedDomainId: action.payload.id,
       }
     case 'UPDATE_DOMAIN':
       return {
@@ -131,6 +136,40 @@ function qualityDomainReducer(
       return {
         ...state,
         selectedDomainId: action.payload,
+        selectedPropertyId: null,
+        selectedPropertyDomainId: null,
+        selectedConceptId: null,
+      }
+    case 'SELECT_PROPERTY':
+      if (!action.payload) {
+        return {
+          ...state,
+          selectedPropertyId: null,
+          selectedPropertyDomainId: null,
+        }
+      }
+      return {
+        ...state,
+        selectedDomainId: null,
+        selectedPropertyId: action.payload.propertyId,
+        selectedPropertyDomainId: action.payload.domainId,
+        selectedConceptId: null,
+      }
+    case 'SELECT_CONCEPT':
+      return {
+        ...state,
+        selectedDomainId: null,
+        selectedPropertyId: null,
+        selectedPropertyDomainId: null,
+        selectedConceptId: action.payload,
+      }
+    case 'CLEAR_SELECTION':
+      return {
+        ...state,
+        selectedDomainId: null,
+        selectedPropertyId: null,
+        selectedPropertyDomainId: null,
+        selectedConceptId: null,
       }
     case 'ADD_PROPERTY':
       return {
@@ -211,6 +250,18 @@ export function QualityDomainProvider({ children }: { children: ReactNode }) {
     dispatch({ type: 'SELECT_DOMAIN', payload: id })
   }, [])
 
+  const selectProperty = useCallback((domainId: string, propertyId: string) => {
+    dispatch({ type: 'SELECT_PROPERTY', payload: { domainId, propertyId } })
+  }, [])
+
+  const selectConcept = useCallback((conceptId: string | null) => {
+    dispatch({ type: 'SELECT_CONCEPT', payload: conceptId })
+  }, [])
+
+  const clearSelection = useCallback(() => {
+    dispatch({ type: 'CLEAR_SELECTION' })
+  }, [])
+
   const getSelectedDomain = useCallback(() => {
     if (!state.selectedDomainId) return null
     return state.domains.find((d) => d.id === state.selectedDomainId) || null
@@ -265,6 +316,9 @@ export function QualityDomainProvider({ children }: { children: ReactNode }) {
     updateDomain,
     deleteDomain,
     selectDomain,
+    selectProperty,
+    selectConcept,
+    clearSelection,
     getSelectedDomain,
     addProperty,
     updateProperty,
@@ -273,7 +327,7 @@ export function QualityDomainProvider({ children }: { children: ReactNode }) {
     updateConcept,
     deleteConcept,
     getConceptProperties,
-  }), [state, addDomain, updateDomain, deleteDomain, selectDomain, getSelectedDomain, addProperty, updateProperty, deleteProperty, addConcept, updateConcept, deleteConcept, getConceptProperties])
+  }), [state, addDomain, updateDomain, deleteDomain, selectDomain, selectProperty, selectConcept, clearSelection, getSelectedDomain, addProperty, updateProperty, deleteProperty, addConcept, updateConcept, deleteConcept, getConceptProperties])
 
   return (
     <QualityDomainContext.Provider value={value}>

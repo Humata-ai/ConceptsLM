@@ -53,7 +53,7 @@ export default function DomainList() {
                   setIsModalOpen(true)
                 }}
               >
-                {state.selectedDomainId === domain.id && (
+                {(state.selectedDomainId === domain.id || state.selectedPropertyDomainId === domain.id) && (
                   <div className="pl-2">
                     {/* Property list or empty state */}
                     {domain.properties.length === 0 ? (
@@ -67,6 +67,10 @@ export default function DomainList() {
                             key={property.id}
                             property={property}
                             domain={domain}
+                            isSelected={
+                              state.selectedPropertyId === property.id &&
+                              state.selectedPropertyDomainId === domain.id
+                            }
                             onEdit={(id) => {
                               setEditingPropertyId(id)
                               setIsPropertyModalOpen(true)
@@ -119,6 +123,7 @@ export default function DomainList() {
                 <ConceptCard
                   key={concept.id}
                   concept={concept}
+                  isSelected={state.selectedConceptId === concept.id}
                   onEdit={(id) => {
                     setEditingConceptId(id)
                     setIsConceptModalOpen(true)
@@ -136,10 +141,10 @@ export default function DomainList() {
         onClose={() => setIsModalOpen(false)}
       />
 
-      {state.selectedDomainId && (
+      {(state.selectedDomainId || state.selectedPropertyDomainId) && (
         <PropertyModal
           isOpen={isPropertyModalOpen}
-          domainId={state.selectedDomainId}
+          domainId={state.selectedDomainId || state.selectedPropertyDomainId}
           editingPropertyId={editingPropertyId}
           onClose={() => setIsPropertyModalOpen(false)}
         />

@@ -10,10 +10,20 @@ export default function StateDebugPanel() {
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState<string | null>(null)
 
-  // Custom replacer to handle Infinity values
+  // Custom replacer to handle Infinity values and filter out selection state
   const formattedState = JSON.stringify(state, (key, value) => {
+    // Filter out selection state
+    if (key === 'selectedDomainId' ||
+        key === 'selectedPropertyId' ||
+        key === 'selectedPropertyDomainId' ||
+        key === 'selectedConceptId') {
+      return undefined  // Exclude from export
+    }
+
+    // Handle Infinity values
     if (value === Infinity) return "Infinity"
     if (value === -Infinity) return "-Infinity"
+
     return value
   }, 2)
 
@@ -184,15 +194,8 @@ export default function StateDebugPanel() {
         })
       }
 
-      // Set the selectedDomainId if it exists and is valid
-      if (parsed.selectedDomainId) {
-        const domainExists = parsed.domains.some((d: any) => d.id === parsed.selectedDomainId)
-        if (domainExists) {
-          selectDomain(parsed.selectedDomainId)
-        }
-      } else {
-        selectDomain(null)
-      }
+      // Clear selection state after import (no items selected by default)
+      selectDomain(null)
 
       setSuccess("State imported successfully!")
       setJsonInput("")

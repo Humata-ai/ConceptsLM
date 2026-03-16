@@ -125,7 +125,7 @@ export default function DomainCard({ domain, isSelected, onEdit, children }: Dom
               </Menu>
             </div>
           </div>
-          {isSelected && children && (
+          {children && (
             <div className="mt-3 pt-3 border-t border-blue-300">
               {children}
             </div>

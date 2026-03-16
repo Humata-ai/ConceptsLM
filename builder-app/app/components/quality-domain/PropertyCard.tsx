@@ -12,13 +12,19 @@ interface PropertyCardProps {
   property: Property
   domain: QualityDomain
   onEdit: (propertyId: string) => void
+  isSelected: boolean
 }
 
-export default function PropertyCard({ property, domain, onEdit }: PropertyCardProps) {
-  const { deleteProperty } = useQualityDomain()
+export default function PropertyCard({ property, domain, onEdit, isSelected }: PropertyCardProps) {
+  const { deleteProperty, selectProperty } = useQualityDomain()
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
+
+  const handleClick = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    selectProperty(domain.id, property.id)
+  }
 
   const handleMenuOpen = (e: React.MouseEvent<HTMLElement>) => {
     e.stopPropagation()
@@ -67,7 +73,14 @@ export default function PropertyCard({ property, domain, onEdit }: PropertyCardP
   const dimensionInfo = getDimensionInfo()
 
   return (
-    <div className="p-2 rounded-lg bg-white border border-gray-300">
+    <div
+      onClick={handleClick}
+      className={`p-2 rounded-lg cursor-pointer transition-colors ${
+        isSelected
+          ? 'bg-blue-100 border-2 border-blue-500'
+          : 'bg-white border border-gray-300 hover:bg-gray-50'
+      }`}
+    >
       {showDeleteConfirm ? (
         <div className="space-y-2">
           <p className="text-sm font-medium text-red-600">Delete this property?</p>

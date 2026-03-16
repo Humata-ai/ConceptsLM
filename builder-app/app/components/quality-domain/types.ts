@@ -40,6 +40,9 @@ export interface Concept {
 export interface QualityDomainState {
   domains: QualityDomain[]
   selectedDomainId: string | null
+  selectedPropertyId: string | null
+  selectedPropertyDomainId: string | null
+  selectedConceptId: string | null
   concepts: Concept[]
 }
 
@@ -48,6 +51,9 @@ export type QualityDomainAction =
   | { type: 'UPDATE_DOMAIN'; payload: QualityDomain }
   | { type: 'DELETE_DOMAIN'; payload: string }
   | { type: 'SELECT_DOMAIN'; payload: string | null }
+  | { type: 'SELECT_PROPERTY'; payload: { domainId: string; propertyId: string } | null }
+  | { type: 'SELECT_CONCEPT'; payload: string | null }
+  | { type: 'CLEAR_SELECTION' }
   | { type: 'ADD_PROPERTY'; payload: { domainId: string; property: Property } }
   | { type: 'UPDATE_PROPERTY'; payload: { domainId: string; property: Property } }
   | { type: 'DELETE_PROPERTY'; payload: { domainId: string; propertyId: string } }

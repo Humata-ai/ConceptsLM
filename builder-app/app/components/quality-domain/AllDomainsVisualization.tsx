@@ -121,7 +121,11 @@ function AllDomainsVisualization() {
 
       {/* Render all concepts */}
       {state.concepts.map((concept) => (
-        <ConceptVisualization3D key={concept.id} concept={concept} />
+        <ConceptVisualization3D
+          key={concept.id}
+          concept={concept}
+          isSelected={state.selectedConceptId === concept.id}
+        />
       ))}
     </group>
   )

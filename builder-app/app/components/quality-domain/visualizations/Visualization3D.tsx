@@ -3,12 +3,21 @@ import { Text } from '@react-three/drei'
 import * as THREE from 'three'
 import type { QualityDomain } from '../types'
 import PropertyVisualization3D from './PropertyVisualization3D'
+import { useQualityDomain } from '../context/QualityDomainContext'
+import type { ThreeEvent } from '@react-three/fiber'
 
 interface Visualization3DProps {
   domain: QualityDomain
 }
 
 function Visualization3D({ domain }: Visualization3DProps) {
+  const { selectDomain, state } = useQualityDomain()
+
+  const handleClick = (e: ThreeEvent<MouseEvent>) => {
+    e.stopPropagation()
+    selectDomain(domain.id)
+  }
+
   const dimX = domain.dimensions[0]
   const dimY = domain.dimensions[1]
   const dimZ = domain.dimensions[2]
@@ -87,7 +96,11 @@ function Visualization3D({ domain }: Visualization3DProps) {
   }, [sizeX, sizeY, sizeZ, gridDivisions])
 
   return (
-    <group>
+    <group
+      onClick={handleClick}
+      onPointerOver={() => { if (document.body.style) document.body.style.cursor = 'pointer' }}
+      onPointerOut={() => { if (document.body.style) document.body.style.cursor = 'default' }}
+    >
       {/* Transparent box */}
       <mesh>
         <boxGeometry args={[sizeX, sizeY, sizeZ]} />
@@ -210,14 +223,21 @@ function Visualization3D({ domain }: Visualization3DProps) {
       </Text>
 
       {/* Render properties */}
-      {domain.properties.map((property, index) => (
-        <PropertyVisualization3D
-          key={property.id}
-          property={property}
-          domain={domain}
-          index={index}
-        />
-      ))}
+      {domain.properties.map((property, index) => {
+        const isPropertySelected =
+          state.selectedPropertyId === property.id &&
+          state.selectedPropertyDomainId === domain.id
+
+        return (
+          <PropertyVisualization3D
+            key={property.id}
+            property={property}
+            domain={domain}
+            index={index}
+            isSelected={isPropertySelected}
+          />
+        )
+      })}
     </group>
   )
 }
