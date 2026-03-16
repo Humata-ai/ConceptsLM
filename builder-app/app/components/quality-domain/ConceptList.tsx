@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useQualityDomain } from './context/QualityDomainContext'
 import ConceptCard from './ConceptCard'
 import ConceptModal from './ConceptModal'
+import Button from '@mui/material/Button'
 
 export default function ConceptList() {
   const { state } = useQualityDomain()
@@ -14,16 +15,7 @@ export default function ConceptList() {
     <>
       <div className="absolute bottom-4 left-4 z-30 bg-white/90 backdrop-blur-sm rounded-lg shadow-lg p-4 max-h-[calc(50vh-2rem)] overflow-y-auto max-w-xs">
         <div className="flex items-center justify-between mb-3">
-          <h2 className="text-lg font-bold text-purple-900">Concepts</h2>
-          <button
-            onClick={() => {
-              setEditingConceptId(null)
-              setIsModalOpen(true)
-            }}
-            className="px-3 py-1 bg-purple-600 text-white text-sm rounded hover:bg-purple-700 font-medium"
-          >
-            Add Concept
-          </button>
+          <h2 className="text-lg font-bold">Concepts</h2>
         </div>
 
         {state.concepts.length === 0 ? (
@@ -46,6 +38,20 @@ export default function ConceptList() {
             ))}
           </div>
         )}
+
+        {/* Add Concept button */}
+        <Button
+          onClick={() => {
+            setEditingConceptId(null)
+            setIsModalOpen(true)
+          }}
+          variant="outlined"
+          color="primary"
+          fullWidth
+          sx={{ mt: 1, textTransform: 'none' }}
+        >
+          New Concept
+        </Button>
       </div>
 
       <ConceptModal

@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useQualityDomain } from './context/QualityDomainContext'
 import LabelCard from './LabelCard'
 import LabelModal from './LabelModal'
+import Button from '@mui/material/Button'
 
 export default function LabelList() {
   const { state, getSelectedDomain } = useQualityDomain()
@@ -21,15 +22,6 @@ export default function LabelList() {
       <div className="absolute top-4 right-4 z-30 bg-white/90 backdrop-blur-sm rounded-lg shadow-lg p-4 max-h-[calc(100vh-2rem)] overflow-y-auto max-w-xs">
         <div className="flex items-center justify-between mb-3">
           <h2 className="text-lg font-bold">Labels</h2>
-          <button
-            onClick={() => {
-              setEditingLabelId(null)
-              setIsModalOpen(true)
-            }}
-            className="px-3 py-1 bg-green-600 text-white text-sm rounded hover:bg-green-700 font-medium"
-          >
-            + Add Label
-          </button>
         </div>
 
         <div className="text-xs text-gray-600 mb-3 px-1">
@@ -60,6 +52,20 @@ export default function LabelList() {
             ))}
           </div>
         )}
+
+        {/* Add Label button */}
+        <Button
+          onClick={() => {
+            setEditingLabelId(null)
+            setIsModalOpen(true)
+          }}
+          variant="outlined"
+          color="primary"
+          fullWidth
+          sx={{ mt: 1, textTransform: 'none' }}
+        >
+          Add Label
+        </Button>
       </div>
 
       <LabelModal

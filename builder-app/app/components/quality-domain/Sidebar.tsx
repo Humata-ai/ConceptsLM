@@ -10,6 +10,7 @@ import ConceptCard from './ConceptCard'
 import ConceptModal from './ConceptModal'
 import CloseIcon from '@mui/icons-material/Close'
 import MenuIcon from '@mui/icons-material/Menu'
+import Button from '@mui/material/Button'
 
 export default function Sidebar() {
   const { state, getSelectedDomain } = useQualityDomain()
@@ -32,15 +33,6 @@ export default function Sidebar() {
             <div className="p-4 border-b border-gray-200">
               <div className="flex items-center justify-between mb-3">
                 <h2 className="text-lg font-bold">Quality Domains</h2>
-                <button
-                  onClick={() => {
-                    setEditingDomainId(null)
-                    setIsModalOpen(true)
-                  }}
-                  className="px-3 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700 font-medium"
-                >
-                  Add Domain
-                </button>
               </div>
             </div>
 
@@ -91,15 +83,18 @@ export default function Sidebar() {
                         )}
 
                         {/* Add Label button */}
-                        <button
+                        <Button
                           onClick={() => {
                             setEditingLabelId(null)
                             setIsLabelModalOpen(true)
                           }}
-                          className="w-full px-3 py-1.5 bg-green-600 text-white text-sm rounded hover:bg-green-700 font-medium"
+                          variant="outlined"
+                          color="primary"
+                          fullWidth
+                          sx={{ textTransform: 'none' }}
                         >
                           Add Label
-                        </button>
+                        </Button>
                       </div>
                     )}
                   </DomainCard>
@@ -107,19 +102,24 @@ export default function Sidebar() {
               </div>
             )}
 
+            {/* Add Domain button */}
+            <Button
+              onClick={() => {
+                setEditingDomainId(null)
+                setIsModalOpen(true)
+              }}
+              variant="outlined"
+              color="primary"
+              fullWidth
+              sx={{ mt: 1, textTransform: 'none' }}
+            >
+              New Domain
+            </Button>
+
               {/* Concepts Section */}
               <div className="border-t border-gray-300 mt-4 pt-4">
                 <div className="flex items-center justify-between mb-3">
-                  <h2 className="text-lg font-bold text-purple-900">Concepts</h2>
-                  <button
-                    onClick={() => {
-                      setEditingConceptId(null)
-                      setIsConceptModalOpen(true)
-                    }}
-                    className="px-3 py-1 bg-purple-600 text-white text-sm rounded hover:bg-purple-700 font-medium"
-                  >
-                    Add Concept
-                  </button>
+                  <h2 className="text-lg font-bold">Concepts</h2>
                 </div>
 
                 {state.concepts.length === 0 ? (
@@ -142,6 +142,20 @@ export default function Sidebar() {
                     ))}
                   </div>
                 )}
+
+                {/* Add Concept button */}
+                <Button
+                  onClick={() => {
+                    setEditingConceptId(null)
+                    setIsConceptModalOpen(true)
+                  }}
+                  variant="outlined"
+                  color="primary"
+                  fullWidth
+                  sx={{ mt: 1, textTransform: 'none' }}
+                >
+                  New Concept
+                </Button>
               </div>
             </div>
           </div>
