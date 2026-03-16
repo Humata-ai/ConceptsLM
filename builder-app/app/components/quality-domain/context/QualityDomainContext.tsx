@@ -1,8 +1,9 @@
 'use client'
 
-import { createContext, useContext, useReducer, useMemo, useCallback, type ReactNode } from 'react'
+import { createContext, useContext, useReducer, useMemo, useCallback, useEffect, type ReactNode } from 'react'
 import type { QualityDomain, QualityDomainState, QualityDomainAction, Property, Concept } from '../types'
 import defaultDataJson from '../defaultData.json'
+import { saveToLocalStorage } from '../localStorage'
 
 interface QualityDomainContextType {
   state: QualityDomainState
@@ -225,6 +226,17 @@ function qualityDomainReducer(
         ...state,
         concepts: state.concepts.filter((concept) => concept.id !== action.payload),
       }
+    case 'RESTORE_STATE':
+      return {
+        ...state,
+        domains: action.payload.domains,
+        concepts: action.payload.concepts,
+        // Keep selection state cleared
+        selectedDomainId: null,
+        selectedPropertyId: null,
+        selectedPropertyDomainId: null,
+        selectedConceptId: null,
+      }
     default:
       return state
   }
@@ -232,6 +244,11 @@ function qualityDomainReducer(
 
 export function QualityDomainProvider({ children }: { children: ReactNode }) {
   const [state, dispatch] = useReducer(qualityDomainReducer, initialState)
+
+  // Auto-save to localStorage on every state change
+  useEffect(() => {
+    saveToLocalStorage(state)
+  }, [state])
 
   // Memoize helper functions to prevent recreation on every render
   const addDomain = useCallback((domain: QualityDomain) => {

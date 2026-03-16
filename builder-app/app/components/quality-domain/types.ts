@@ -60,3 +60,4 @@ export type QualityDomainAction =
   | { type: 'ADD_CONCEPT'; payload: Concept }
   | { type: 'UPDATE_CONCEPT'; payload: Concept }
   | { type: 'DELETE_CONCEPT'; payload: string }
+  | { type: 'RESTORE_STATE'; payload: { domains: QualityDomain[]; concepts: Concept[] } }

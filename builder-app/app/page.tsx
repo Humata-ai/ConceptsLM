@@ -6,6 +6,8 @@ import DomainList from './components/quality-domain/DomainList'
 import TableView from './components/quality-domain/TableView'
 import StateDebugPanel from './components/quality-domain/StateDebugPanel'
 import { useQualityDomain } from './components/quality-domain/context/QualityDomainContext'
+import { ToastProvider } from './components/ToastProvider'
+import { StateRestoration } from './components/quality-domain/StateRestoration'
 
 function HomeContent() {
   const { getSelectedDomain } = useQualityDomain()
@@ -14,6 +16,7 @@ function HomeContent() {
 
   return (
     <div className="relative w-full h-screen">
+      <StateRestoration />
       <DomainList />
       <Scene />
       {show4DTable && selectedDomain && <TableView domain={selectedDomain} />}
@@ -25,7 +28,9 @@ function HomeContent() {
 export default function Home() {
   return (
     <QualityDomainProvider>
-      <HomeContent />
+      <ToastProvider>
+        <HomeContent />
+      </ToastProvider>
     </QualityDomainProvider>
   )
 }
