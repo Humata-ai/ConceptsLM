@@ -33,22 +33,22 @@ export default function Visualization2D({ domain }: Visualization2DProps) {
     const stepX = sizeX / gridDivisions
     const stepY = sizeY / gridDivisions
 
-    // Vertical lines
+    // Vertical lines (along Y axis)
     for (let i = 0; i <= gridDivisions; i++) {
       const x = -sizeX / 2 + i * stepX
       lines.push(
         <mesh key={`v-${i}`} position={[x, 0, 0]}>
-          <boxGeometry args={[0.02, 0.02, sizeY]} />
+          <boxGeometry args={[0.02, sizeY, 0.02]} />
           <meshStandardMaterial color="#d1d5db" />
         </mesh>
       )
     }
 
-    // Horizontal lines
+    // Horizontal lines (along X axis)
     for (let i = 0; i <= gridDivisions; i++) {
-      const z = -sizeY / 2 + i * stepY
+      const y = -sizeY / 2 + i * stepY
       lines.push(
-        <mesh key={`h-${i}`} position={[0, 0, z]}>
+        <mesh key={`h-${i}`} position={[0, y, 0]}>
           <boxGeometry args={[sizeX, 0.02, 0.02]} />
           <meshStandardMaterial color="#d1d5db" />
         </mesh>
@@ -65,16 +65,16 @@ export default function Visualization2D({ domain }: Visualization2DProps) {
       onPointerOut={() => { if (document.body.style) document.body.style.cursor = 'default' }}
     >
       {/* Grid plane (transparent) */}
-      <mesh rotation={[-Math.PI / 2, 0, 0]}>
+      <mesh>
         <planeGeometry args={[sizeX, sizeY]} />
         <meshStandardMaterial color="#f3f4f6" transparent opacity={0.3} side={THREE.DoubleSide} />
       </mesh>
 
       {/* Grid lines */}
-      <group rotation={[-Math.PI / 2, 0, 0]}>{gridLines}</group>
+      <group>{gridLines}</group>
 
       {/* Boundary rectangle */}
-      <group rotation={[-Math.PI / 2, 0, 0]}>
+      <group>
         <lineSegments>
           <edgesGeometry
             args={[new THREE.PlaneGeometry(sizeX, sizeY)]}
@@ -85,7 +85,7 @@ export default function Visualization2D({ domain }: Visualization2DProps) {
 
       {/* X-axis label */}
       <Text
-        position={[0, -1, -sizeY / 2 - 1]}
+        position={[0, -sizeY / 2 - 1, 0]}
         fontSize={0.4}
         color="#000000"
         anchorX="center"
@@ -96,7 +96,7 @@ export default function Visualization2D({ domain }: Visualization2DProps) {
 
       {/* X-axis min/max labels */}
       <Text
-        position={[-sizeX / 2, -0.5, -sizeY / 2 - 0.5]}
+        position={[-sizeX / 2, -sizeY / 2 - 0.5, 0]}
         fontSize={0.3}
         color="#374151"
         anchorX="center"
@@ -105,7 +105,7 @@ export default function Visualization2D({ domain }: Visualization2DProps) {
         {minX.toString()}
       </Text>
       <Text
-        position={[sizeX / 2, -0.5, -sizeY / 2 - 0.5]}
+        position={[sizeX / 2, -sizeY / 2 - 0.5, 0]}
         fontSize={0.3}
         color="#374151"
         anchorX="center"
@@ -116,19 +116,19 @@ export default function Visualization2D({ domain }: Visualization2DProps) {
 
       {/* Y-axis label */}
       <Text
-        position={[-sizeX / 2 - 1, -1, 0]}
+        position={[-sizeX / 2 - 1, 0, 0]}
         fontSize={0.4}
         color="#000000"
         anchorX="center"
         anchorY="middle"
-        rotation={[0, Math.PI / 2, 0]}
+        rotation={[0, 0, Math.PI / 2]}
       >
         {dimY.name}
       </Text>
 
       {/* Y-axis min/max labels */}
       <Text
-        position={[-sizeX / 2 - 0.5, -0.5, -sizeY / 2]}
+        position={[-sizeX / 2 - 0.5, -sizeY / 2, 0]}
         fontSize={0.3}
         color="#374151"
         anchorX="center"
@@ -137,7 +137,7 @@ export default function Visualization2D({ domain }: Visualization2DProps) {
         {minY.toString()}
       </Text>
       <Text
-        position={[-sizeX / 2 - 0.5, -0.5, sizeY / 2]}
+        position={[-sizeX / 2 - 0.5, sizeY / 2, 0]}
         fontSize={0.3}
         color="#374151"
         anchorX="center"

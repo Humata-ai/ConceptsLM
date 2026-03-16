@@ -73,32 +73,32 @@ function ConceptVisualization3D({ concept, isSelected = false }: ConceptVisualiz
           domainPos[2]
         )
       } else if (domain.dimensions.length === 2) {
-        // 2D properties: positioned on XZ plane at Y=0.1
+        // 2D properties: positioned on XY plane (vertical)
         // Size is 10x10, maps to -5 to +5 space
         const dimX = domain.dimensions[0]
-        const dimZ = domain.dimensions[1]
+        const dimY = domain.dimensions[1]
 
         const propDimX = property.dimensions.find((d) => d.dimensionId === dimX.id)
-        const propDimZ = property.dimensions.find((d) => d.dimensionId === dimZ.id)
+        const propDimY = property.dimensions.find((d) => d.dimensionId === dimY.id)
 
         const propRangeX = propDimX?.range || dimX.range
-        const propRangeZ = propDimZ?.range || dimZ.range
+        const propRangeY = propDimY?.range || dimY.range
 
         const [dimMinX, dimMaxX] = dimX.range
-        const [dimMinZ, dimMaxZ] = dimZ.range
+        const [dimMinY, dimMaxY] = dimY.range
 
         const minX = -5 + ((propRangeX[0] - dimMinX) / (dimMaxX - dimMinX)) * 10
         const maxX = -5 + ((propRangeX[1] - dimMinX) / (dimMaxX - dimMinX)) * 10
-        const minZ = -5 + ((propRangeZ[0] - dimMinZ) / (dimMaxZ - dimMinZ)) * 10
-        const maxZ = -5 + ((propRangeZ[1] - dimMinZ) / (dimMaxZ - dimMinZ)) * 10
+        const minY = -5 + ((propRangeY[0] - dimMinY) / (dimMaxY - dimMinY)) * 10
+        const maxY = -5 + ((propRangeY[1] - dimMinY) / (dimMaxY - dimMinY)) * 10
 
         const centerX = (minX + maxX) / 2
-        const centerZ = (minZ + maxZ) / 2
+        const centerY = (minY + maxY) / 2
 
         worldPosition = new Vector3(
           domainPos[0] + centerX * scale,
-          domainPos[1] + 0.1 * scale,
-          domainPos[2] + centerZ * scale
+          domainPos[1] + centerY * scale,
+          domainPos[2]
         )
       } else {
         // 3D properties: positioned in 3D space

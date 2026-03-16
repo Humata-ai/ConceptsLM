@@ -34,52 +34,52 @@ function PropertyVisualization2D({
   }
 
   const dimX = domain.dimensions[0]
-  const dimZ = domain.dimensions[1]
+  const dimY = domain.dimensions[1]
   const [dimMinX, dimMaxX] = dimX.range
-  const [dimMinZ, dimMaxZ] = dimZ.range
+  const [dimMinY, dimMaxY] = dimY.range
 
   // Find property ranges for each dimension (or use full range if not specified)
   const propertyDimX = property.dimensions.find((d) => d.dimensionId === dimX.id)
-  const propertyDimZ = property.dimensions.find((d) => d.dimensionId === dimZ.id)
+  const propertyDimY = property.dimensions.find((d) => d.dimensionId === dimY.id)
 
   // Memoize position and size calculations
-  const { centerX, centerZ, sizeX, sizeZ, color } = useMemo(() => {
+  const { centerX, centerY, sizeX, sizeY, color } = useMemo(() => {
     const propRangeX = propertyDimX?.range || dimX.range
-    const propRangeZ = propertyDimZ?.range || dimZ.range
+    const propRangeY = propertyDimY?.range || dimY.range
 
     // Normalize to -5 to +5 space (sizeX = 10, sizeY = 10)
     const minX = -5 + ((propRangeX[0] - dimMinX) / (dimMaxX - dimMinX)) * 10
     const maxX = -5 + ((propRangeX[1] - dimMinX) / (dimMaxX - dimMinX)) * 10
-    const minZ = -5 + ((propRangeZ[0] - dimMinZ) / (dimMaxZ - dimMinZ)) * 10
-    const maxZ = -5 + ((propRangeZ[1] - dimMinZ) / (dimMaxZ - dimMinZ)) * 10
+    const minY = -5 + ((propRangeY[0] - dimMinY) / (dimMaxY - dimMinY)) * 10
+    const maxY = -5 + ((propRangeY[1] - dimMinY) / (dimMaxY - dimMinY)) * 10
 
     const centerX = (minX + maxX) / 2
-    const centerZ = (minZ + maxZ) / 2
+    const centerY = (minY + maxY) / 2
     const sizeX = maxX - minX
-    const sizeZ = maxZ - minZ
+    const sizeY = maxY - minY
 
     // Get color for this property - use blue if selected
     const color = isSelected ? '#3b82f6' : PROPERTY_COLORS[index % PROPERTY_COLORS.length]
 
-    return { centerX, centerZ, sizeX, sizeZ, color }
+    return { centerX, centerY, sizeX, sizeY, color }
   }, [
     propertyDimX,
-    propertyDimZ,
+    propertyDimY,
     dimX.range,
-    dimZ.range,
+    dimY.range,
     dimMinX,
     dimMaxX,
-    dimMinZ,
-    dimMaxZ,
+    dimMinY,
+    dimMaxY,
     index,
     isSelected,
   ])
 
   // Memoize position arrays to prevent re-renders
-  const meshPosition = useMemo(() => [centerX, centerZ, 0.1] as const, [centerX, centerZ])
-  const labelPosition = useMemo(() => [centerX, centerZ, 0.3] as const, [centerX, centerZ])
-  const boxSize = useMemo(() => [sizeX, sizeZ, 0.1] as const, [sizeX, sizeZ])
-  const rotation = useMemo(() => [-Math.PI / 2, 0, 0] as const, [])
+  const meshPosition = useMemo(() => [centerX, centerY, 0.1] as const, [centerX, centerY])
+  const labelPosition = useMemo(() => [centerX, centerY, 0.3] as const, [centerX, centerY])
+  const boxSize = useMemo(() => [sizeX, sizeY, 0.1] as const, [sizeX, sizeY])
+  const rotation = useMemo(() => [0, 0, 0] as const, [])
 
   return (
     <group
