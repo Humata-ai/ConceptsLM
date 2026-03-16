@@ -30,8 +30,8 @@ export default function Sidebar() {
         {/* Sidebar Panel (shown when expanded) */}
         {isOpen && (
           <div className="bg-white/95 backdrop-blur-sm shadow-xl h-full overflow-y-auto w-80 flex flex-col">
-            <div className="p-4 border-b border-gray-200">
-              <div className="flex items-center justify-between mb-3">
+            <div className="px-4 py-2 border-b border-gray-200">
+              <div className="flex items-center justify-between">
                 <h2 className="text-lg font-bold">Quality Domains</h2>
               </div>
             </div>
@@ -117,10 +117,14 @@ export default function Sidebar() {
             </Button>
 
               {/* Concepts Section */}
-              <div className="border-t border-gray-300 mt-4 pt-4">
-                <div className="flex items-center justify-between mb-3">
-                  <h2 className="text-lg font-bold">Concepts</h2>
+              <div className="mt-4 -mx-4">
+                <div className="px-4 py-2 border-b border-gray-200">
+                  <div className="flex items-center justify-between">
+                    <h2 className="text-lg font-bold">Concepts</h2>
+                  </div>
                 </div>
+
+                <div className="px-4 pt-4">
 
                 {state.concepts.length === 0 ? (
                   <div className="text-center py-8 text-gray-500">
@@ -156,6 +160,7 @@ export default function Sidebar() {
                 >
                   New Concept
                 </Button>
+                </div>
               </div>
             </div>
           </div>
