@@ -22,7 +22,7 @@ export default function ConceptList() {
             }}
             className="px-3 py-1 bg-purple-600 text-white text-sm rounded hover:bg-purple-700 font-medium"
           >
-            + Add Concept
+            Add Concept
           </button>
         </div>
 

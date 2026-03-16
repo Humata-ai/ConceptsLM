@@ -47,7 +47,7 @@ export default function DomainList() {
                   }}
                   className="px-3 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700 font-medium"
                 >
-                  + Add Domain
+                  Add Domain
                 </button>
                 <button
                   onClick={() => setIsOpen(false)}
@@ -59,103 +59,103 @@ export default function DomainList() {
               </div>
             </div>
 
-        {state.domains.length === 0 ? (
-          <div className="text-center py-8 text-gray-500">
-            <p className="text-sm">No domains yet.</p>
-            <p className="text-xs mt-1">Click "+ Add Domain" to create one.</p>
-          </div>
-        ) : (
-          <div className="space-y-2">
-            {state.domains.map((domain) => (
-              <DomainCard
-                key={domain.id}
-                domain={domain}
-                isSelected={state.selectedDomainId === domain.id}
-                onEdit={(id) => {
-                  setEditingDomainId(id)
-                  setIsModalOpen(true)
-                }}
-              >
-                {(state.selectedDomainId === domain.id || state.selectedPropertyDomainId === domain.id) && (
-                  <div className="pl-2">
-                    {/* Property list or empty state */}
-                    {domain.properties.length === 0 ? (
-                      <div className="text-center py-4 text-gray-500">
-                        <p className="text-xs">No properties yet.</p>
-                      </div>
-                    ) : (
-                      <div className="space-y-2 mb-2">
-                        {domain.properties.map((property) => (
-                          <PropertyCard
-                            key={property.id}
-                            property={property}
-                            domain={domain}
-                            isSelected={
-                              state.selectedPropertyId === property.id &&
-                              state.selectedPropertyDomainId === domain.id
-                            }
-                            onEdit={(id) => {
-                              setEditingPropertyId(id)
-                              setIsPropertyModalOpen(true)
-                            }}
-                          />
-                        ))}
+            {state.domains.length === 0 ? (
+              <div className="text-center py-8 text-gray-500">
+                <p className="text-sm">No domains yet.</p>
+                <p className="text-xs mt-1">Click "+ Add Domain" to create one.</p>
+              </div>
+            ) : (
+              <div className="space-y-2">
+                {state.domains.map((domain) => (
+                  <DomainCard
+                    key={domain.id}
+                    domain={domain}
+                    isSelected={state.selectedDomainId === domain.id}
+                    onEdit={(id) => {
+                      setEditingDomainId(id)
+                      setIsModalOpen(true)
+                    }}
+                  >
+                    {(state.selectedDomainId === domain.id || state.selectedPropertyDomainId === domain.id) && (
+                      <div className="pl-2">
+                        {/* Property list or empty state */}
+                        {domain.properties.length === 0 ? (
+                          <div className="text-center py-4 text-gray-500">
+                            <p className="text-xs">No properties yet.</p>
+                          </div>
+                        ) : (
+                          <div className="space-y-2 mb-2">
+                            {domain.properties.map((property) => (
+                              <PropertyCard
+                                key={property.id}
+                                property={property}
+                                domain={domain}
+                                isSelected={
+                                  state.selectedPropertyId === property.id &&
+                                  state.selectedPropertyDomainId === domain.id
+                                }
+                                onEdit={(id) => {
+                                  setEditingPropertyId(id)
+                                  setIsPropertyModalOpen(true)
+                                }}
+                              />
+                            ))}
+                          </div>
+                        )}
+
+                        {/* Add Property button */}
+                        <button
+                          onClick={() => {
+                            setEditingPropertyId(null)
+                            setIsPropertyModalOpen(true)
+                          }}
+                          className="w-full px-3 py-1.5 bg-green-600 text-white text-sm rounded hover:bg-green-700 font-medium"
+                        >
+                          Add Region Label
+                        </button>
                       </div>
                     )}
+                  </DomainCard>
+                ))}
+              </div>
+            )}
 
-                    {/* Add Property button */}
-                    <button
-                      onClick={() => {
-                        setEditingPropertyId(null)
-                        setIsPropertyModalOpen(true)
-                      }}
-                      className="w-full px-3 py-1.5 bg-green-600 text-white text-sm rounded hover:bg-green-700 font-medium"
-                    >
-                      + Add Property
-                    </button>
-                  </div>
-                )}
-              </DomainCard>
-            ))}
-          </div>
-        )}
-
-        {/* Concepts Section */}
-        <div className="border-t border-gray-300 mt-4 pt-4">
-          <div className="flex items-center justify-between mb-3">
-            <h2 className="text-lg font-bold text-purple-900">Concepts</h2>
-            <button
-              onClick={() => {
-                setEditingConceptId(null)
-                setIsConceptModalOpen(true)
-              }}
-              className="px-3 py-1 bg-purple-600 text-white text-sm rounded hover:bg-purple-700 font-medium"
-            >
-              + Add Concept
-            </button>
-          </div>
-
-          {state.concepts.length === 0 ? (
-            <div className="text-center py-8 text-gray-500">
-              <p className="text-sm">No concepts yet.</p>
-              <p className="text-xs mt-1">Click "+ Add Concept" to create one.</p>
-            </div>
-          ) : (
-            <div className="space-y-2">
-              {state.concepts.map((concept) => (
-                <ConceptCard
-                  key={concept.id}
-                  concept={concept}
-                  isSelected={state.selectedConceptId === concept.id}
-                  onEdit={(id) => {
-                    setEditingConceptId(id)
+            {/* Concepts Section */}
+            <div className="border-t border-gray-300 mt-4 pt-4">
+              <div className="flex items-center justify-between mb-3">
+                <h2 className="text-lg font-bold text-purple-900">Concepts</h2>
+                <button
+                  onClick={() => {
+                    setEditingConceptId(null)
                     setIsConceptModalOpen(true)
                   }}
-                />
-              ))}
+                  className="px-3 py-1 bg-purple-600 text-white text-sm rounded hover:bg-purple-700 font-medium"
+                >
+                  Add Concept
+                </button>
+              </div>
+
+              {state.concepts.length === 0 ? (
+                <div className="text-center py-8 text-gray-500">
+                  <p className="text-sm">No concepts yet.</p>
+                  <p className="text-xs mt-1">Click "+ Add Concept" to create one.</p>
+                </div>
+              ) : (
+                <div className="space-y-2">
+                  {state.concepts.map((concept) => (
+                    <ConceptCard
+                      key={concept.id}
+                      concept={concept}
+                      isSelected={state.selectedConceptId === concept.id}
+                      onEdit={(id) => {
+                        setEditingConceptId(id)
+                        setIsConceptModalOpen(true)
+                      }}
+                    />
+                  ))}
+                </div>
+              )}
             </div>
-          )}
-        </div>
           </div>
         )}
       </div>
