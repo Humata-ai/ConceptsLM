@@ -38,83 +38,83 @@ export default function Sidebar() {
 
             <div className="flex-1 overflow-y-auto p-4">
 
-            {state.domains.length === 0 ? (
-              <div className="text-center py-8 text-gray-500">
-                <p className="text-sm">No domains yet.</p>
-                <p className="text-xs mt-1">Click "+ Add Domain" to create one.</p>
-              </div>
-            ) : (
-              <div className="space-y-2">
-                {state.domains.map((domain) => (
-                  <DomainCard
-                    key={domain.id}
-                    domain={domain}
-                    isSelected={state.selectedDomainId === domain.id}
-                    onEdit={(id) => {
-                      setEditingDomainId(id)
-                      setIsModalOpen(true)
-                    }}
-                  >
-                    {(state.selectedDomainId === domain.id || state.selectedLabelDomainId === domain.id) && (
-                      <div className="pl-2">
-                        {/* Label list or empty state */}
-                        {domain.labels.length === 0 ? (
-                          <div className="text-center py-4 text-gray-500">
-                            <p className="text-xs">No labels yet.</p>
-                          </div>
-                        ) : (
-                          <div className="space-y-2 mb-2">
-                            {domain.labels.map((label) => (
-                              <LabelCard
-                                key={label.id}
-                                label={label}
-                                domain={domain}
-                                isSelected={
-                                  state.selectedLabelId === label.id &&
-                                  state.selectedLabelDomainId === domain.id
-                                }
-                                onEdit={(id) => {
-                                  setEditingLabelId(id)
-                                  setIsLabelModalOpen(true)
-                                }}
-                              />
-                            ))}
-                          </div>
-                        )}
+              {state.domains.length === 0 ? (
+                <div className="text-center py-8 text-gray-500">
+                  <p className="text-sm">No domains yet.</p>
+                  <p className="text-xs mt-1">Click "+ Add Domain" to create one.</p>
+                </div>
+              ) : (
+                <div className="space-y-2">
+                  {state.domains.map((domain) => (
+                    <DomainCard
+                      key={domain.id}
+                      domain={domain}
+                      isSelected={state.selectedDomainId === domain.id}
+                      onEdit={(id) => {
+                        setEditingDomainId(id)
+                        setIsModalOpen(true)
+                      }}
+                    >
+                      {(state.selectedDomainId === domain.id || state.selectedLabelDomainId === domain.id) && (
+                        <div className="pl-2">
+                          {/* Label list or empty state */}
+                          {domain.labels.length === 0 ? (
+                            <div className="text-center py-4 text-gray-500">
+                              <p className="text-xs">No labels yet.</p>
+                            </div>
+                          ) : (
+                            <div className="space-y-2 mb-2">
+                              {domain.labels.map((label) => (
+                                <LabelCard
+                                  key={label.id}
+                                  label={label}
+                                  domain={domain}
+                                  isSelected={
+                                    state.selectedLabelId === label.id &&
+                                    state.selectedLabelDomainId === domain.id
+                                  }
+                                  onEdit={(id) => {
+                                    setEditingLabelId(id)
+                                    setIsLabelModalOpen(true)
+                                  }}
+                                />
+                              ))}
+                            </div>
+                          )}
 
-                        {/* Add Label button */}
-                        <Button
-                          onClick={() => {
-                            setEditingLabelId(null)
-                            setIsLabelModalOpen(true)
-                          }}
-                          variant="outlined"
-                          color="primary"
-                          fullWidth
-                          sx={{ textTransform: 'none' }}
-                        >
-                          Add Label
-                        </Button>
-                      </div>
-                    )}
-                  </DomainCard>
-                ))}
-              </div>
-            )}
+                          {/* Add Label button */}
+                          <Button
+                            onClick={() => {
+                              setEditingLabelId(null)
+                              setIsLabelModalOpen(true)
+                            }}
+                            variant="outlined"
+                            color="primary"
+                            fullWidth
+                            sx={{ textTransform: 'none' }}
+                          >
+                            Add label
+                          </Button>
+                        </div>
+                      )}
+                    </DomainCard>
+                  ))}
+                </div>
+              )}
 
-            {/* Add Domain button */}
-            <Button
-              onClick={() => {
-                setEditingDomainId(null)
-                setIsModalOpen(true)
-              }}
-              variant="outlined"
-              color="primary"
-              fullWidth
-              sx={{ mt: 1, textTransform: 'none' }}
-            >
-              New Domain
-            </Button>
+              {/* Add Domain button */}
+              <Button
+                onClick={() => {
+                  setEditingDomainId(null)
+                  setIsModalOpen(true)
+                }}
+                variant="outlined"
+                color="primary"
+                fullWidth
+                sx={{ mt: 1, textTransform: 'none' }}
+              >
+                New domain
+              </Button>
 
               {/* Concepts Section */}
               <div className="mt-4 -mx-4">
@@ -126,40 +126,40 @@ export default function Sidebar() {
 
                 <div className="px-4 pt-4">
 
-                {state.concepts.length === 0 ? (
-                  <div className="text-center py-8 text-gray-500">
-                    <p className="text-sm">No concepts yet.</p>
-                    <p className="text-xs mt-1">Click "+ Add Concept" to create one.</p>
-                  </div>
-                ) : (
-                  <div className="space-y-2">
-                    {state.concepts.map((concept) => (
-                      <ConceptCard
-                        key={concept.id}
-                        concept={concept}
-                        isSelected={state.selectedConceptId === concept.id}
-                        onEdit={(id) => {
-                          setEditingConceptId(id)
-                          setIsConceptModalOpen(true)
-                        }}
-                      />
-                    ))}
-                  </div>
-                )}
+                  {state.concepts.length === 0 ? (
+                    <div className="text-center py-8 text-gray-500">
+                      <p className="text-sm">No concepts yet.</p>
+                      <p className="text-xs mt-1">Click "+ Add Concept" to create one.</p>
+                    </div>
+                  ) : (
+                    <div className="space-y-2">
+                      {state.concepts.map((concept) => (
+                        <ConceptCard
+                          key={concept.id}
+                          concept={concept}
+                          isSelected={state.selectedConceptId === concept.id}
+                          onEdit={(id) => {
+                            setEditingConceptId(id)
+                            setIsConceptModalOpen(true)
+                          }}
+                        />
+                      ))}
+                    </div>
+                  )}
 
-                {/* Add Concept button */}
-                <Button
-                  onClick={() => {
-                    setEditingConceptId(null)
-                    setIsConceptModalOpen(true)
-                  }}
-                  variant="outlined"
-                  color="primary"
-                  fullWidth
-                  sx={{ mt: 1, textTransform: 'none' }}
-                >
-                  New Concept
-                </Button>
+                  {/* Add Concept button */}
+                  <Button
+                    onClick={() => {
+                      setEditingConceptId(null)
+                      setIsConceptModalOpen(true)
+                    }}
+                    variant="outlined"
+                    color="primary"
+                    fullWidth
+                    sx={{ mt: 1, textTransform: 'none' }}
+                  >
+                    New concept
+                  </Button>
                 </div>
               </div>
             </div>
