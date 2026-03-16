@@ -3,6 +3,10 @@
 import { useState } from 'react'
 import { useQualityDomain } from './context/QualityDomainContext'
 import type { Concept } from './types'
+import IconButton from '@mui/material/IconButton'
+import Menu from '@mui/material/Menu'
+import MenuItem from '@mui/material/MenuItem'
+import MoreVertIcon from '@mui/icons-material/MoreVert'
 
 interface ConceptCardProps {
   concept: Concept
@@ -12,16 +16,30 @@ interface ConceptCardProps {
 export default function ConceptCard({ concept, onEdit }: ConceptCardProps) {
   const { deleteConcept, getConceptProperties } = useQualityDomain()
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
+  const open = Boolean(anchorEl)
 
   const properties = getConceptProperties(concept.id)
 
+  const handleMenuOpen = (e: React.MouseEvent<HTMLElement>) => {
+    e.stopPropagation()
+    setAnchorEl(e.currentTarget)
+  }
+
+  const handleMenuClose = (e?: React.MouseEvent) => {
+    e?.stopPropagation()
+    setAnchorEl(null)
+  }
+
   const handleEdit = (e: React.MouseEvent) => {
     e.stopPropagation()
+    handleMenuClose()
     onEdit(concept.id)
   }
 
   const handleDelete = (e: React.MouseEvent) => {
     e.stopPropagation()
+    handleMenuClose()
     setShowDeleteConfirm(true)
   }
 
@@ -58,16 +76,34 @@ export default function ConceptCard({ concept, onEdit }: ConceptCardProps) {
         </div>
       ) : (
         <>
-          <div className="flex items-start justify-between mb-2">
+          <div className="flex items-start justify-between">
             <div className="flex-1 min-w-0">
               <h3 className="font-medium truncate text-purple-900">{concept.name}</h3>
             </div>
-            <span className="ml-2 px-2 py-0.5 bg-purple-200 text-purple-700 text-xs rounded-full font-medium">
-              {properties.length} {properties.length === 1 ? 'prop' : 'props'}
-            </span>
+            <div className="flex items-center gap-1">
+              <span className="px-2 py-0.5 bg-purple-200 text-purple-700 text-xs rounded-full font-medium">
+                {properties.length} {properties.length === 1 ? 'prop' : 'props'}
+              </span>
+              <IconButton
+                size="small"
+                onClick={handleMenuOpen}
+                aria-label="more options"
+              >
+                <MoreVertIcon fontSize="small" />
+              </IconButton>
+              <Menu
+                anchorEl={anchorEl}
+                open={open}
+                onClose={handleMenuClose}
+                onClick={(e) => e.stopPropagation()}
+              >
+                <MenuItem onClick={handleEdit}>Edit</MenuItem>
+                <MenuItem onClick={handleDelete} sx={{ color: 'error.main' }}>Delete</MenuItem>
+              </Menu>
+            </div>
           </div>
           {properties.length > 0 && (
-            <div className="mb-2 text-xs text-purple-600">
+            <div className="mt-2 text-xs text-purple-600">
               {properties.map((prop, index) => (
                 <span key={prop.id}>
                   {prop.name}
@@ -76,20 +112,6 @@ export default function ConceptCard({ concept, onEdit }: ConceptCardProps) {
               ))}
             </div>
           )}
-          <div className="flex gap-2">
-            <button
-              onClick={handleEdit}
-              className="text-xs text-purple-600 hover:text-purple-800 font-medium"
-            >
-              Edit
-            </button>
-            <button
-              onClick={handleDelete}
-              className="text-xs text-red-600 hover:text-red-800 font-medium"
-            >
-              Delete
-            </button>
-          </div>
         </>
       )}
     </div>

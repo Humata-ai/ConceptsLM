@@ -3,6 +3,10 @@
 import { useState } from 'react'
 import { useQualityDomain } from './context/QualityDomainContext'
 import type { Property, QualityDomain } from './types'
+import IconButton from '@mui/material/IconButton'
+import Menu from '@mui/material/Menu'
+import MenuItem from '@mui/material/MenuItem'
+import MoreVertIcon from '@mui/icons-material/MoreVert'
 
 interface PropertyCardProps {
   property: Property
@@ -13,14 +17,28 @@ interface PropertyCardProps {
 export default function PropertyCard({ property, domain, onEdit }: PropertyCardProps) {
   const { deleteProperty } = useQualityDomain()
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
+  const open = Boolean(anchorEl)
+
+  const handleMenuOpen = (e: React.MouseEvent<HTMLElement>) => {
+    e.stopPropagation()
+    setAnchorEl(e.currentTarget)
+  }
+
+  const handleMenuClose = (e?: React.MouseEvent) => {
+    e?.stopPropagation()
+    setAnchorEl(null)
+  }
 
   const handleEdit = (e: React.MouseEvent) => {
     e.stopPropagation()
+    handleMenuClose()
     onEdit(property.id)
   }
 
   const handleDelete = (e: React.MouseEvent) => {
     e.stopPropagation()
+    handleMenuClose()
     setShowDeleteConfirm(true)
   }
 
@@ -70,10 +88,26 @@ export default function PropertyCard({ property, domain, onEdit }: PropertyCardP
         </div>
       ) : (
         <>
-          <div className="mb-2">
-            <h3 className="font-medium text-sm">{property.name}</h3>
+          <div className="flex items-start justify-between mb-2">
+            <h3 className="font-medium text-sm flex-1">{property.name}</h3>
+            <IconButton
+              size="small"
+              onClick={handleMenuOpen}
+              aria-label="more options"
+            >
+              <MoreVertIcon fontSize="small" />
+            </IconButton>
+            <Menu
+              anchorEl={anchorEl}
+              open={open}
+              onClose={handleMenuClose}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <MenuItem onClick={handleEdit}>Edit</MenuItem>
+              <MenuItem onClick={handleDelete} sx={{ color: 'error.main' }}>Delete</MenuItem>
+            </Menu>
           </div>
-          <div className="space-y-1 mb-2">
+          <div className="space-y-1">
             {dimensionInfo.map((info, index) => (
               <div key={index} className="text-xs text-gray-600">
                 <span className="font-medium">{info?.name}:</span>{' '}
@@ -82,20 +116,6 @@ export default function PropertyCard({ property, domain, onEdit }: PropertyCardP
                 </span>
               </div>
             ))}
-          </div>
-          <div className="flex gap-2">
-            <button
-              onClick={handleEdit}
-              className="text-xs text-blue-600 hover:text-blue-800 font-medium"
-            >
-              Edit
-            </button>
-            <button
-              onClick={handleDelete}
-              className="text-xs text-red-600 hover:text-red-800 font-medium"
-            >
-              Delete
-            </button>
           </div>
         </>
       )}

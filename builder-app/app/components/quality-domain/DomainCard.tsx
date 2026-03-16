@@ -3,6 +3,10 @@
 import { useState } from 'react'
 import { useQualityDomain } from './context/QualityDomainContext'
 import type { QualityDomain } from './types'
+import IconButton from '@mui/material/IconButton'
+import Menu from '@mui/material/Menu'
+import MenuItem from '@mui/material/MenuItem'
+import MoreVertIcon from '@mui/icons-material/MoreVert'
 
 interface DomainCardProps {
   domain: QualityDomain
@@ -13,18 +17,32 @@ interface DomainCardProps {
 export default function DomainCard({ domain, isSelected, onEdit }: DomainCardProps) {
   const { selectDomain, deleteDomain } = useQualityDomain()
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
+  const open = Boolean(anchorEl)
 
   const handleClick = () => {
     selectDomain(domain.id)
   }
 
+  const handleMenuOpen = (e: React.MouseEvent<HTMLElement>) => {
+    e.stopPropagation()
+    setAnchorEl(e.currentTarget)
+  }
+
+  const handleMenuClose = (e?: React.MouseEvent) => {
+    e?.stopPropagation()
+    setAnchorEl(null)
+  }
+
   const handleEdit = (e: React.MouseEvent) => {
     e.stopPropagation()
+    handleMenuClose()
     onEdit(domain.id)
   }
 
   const handleDelete = (e: React.MouseEvent) => {
     e.stopPropagation()
+    handleMenuClose()
     setShowDeleteConfirm(true)
   }
 
@@ -77,27 +95,31 @@ export default function DomainCard({ domain, isSelected, onEdit }: DomainCardPro
         </div>
       ) : (
         <>
-          <div className="flex items-start justify-between mb-2">
+          <div className="flex items-start justify-between">
             <div className="flex-1 min-w-0">
               <h3 className="font-medium truncate">{domain.name}</h3>
             </div>
-            <span className="ml-2 px-2 py-0.5 bg-gray-200 text-gray-700 text-xs rounded-full font-medium">
-              {getDimensionLabel()}
-            </span>
-          </div>
-          <div className="flex gap-2">
-            <button
-              onClick={handleEdit}
-              className="text-xs text-blue-600 hover:text-blue-800 font-medium"
-            >
-              Edit
-            </button>
-            <button
-              onClick={handleDelete}
-              className="text-xs text-red-600 hover:text-red-800 font-medium"
-            >
-              Delete
-            </button>
+            <div className="flex items-center gap-1">
+              <span className="px-2 py-0.5 bg-gray-200 text-gray-700 text-xs rounded-full font-medium">
+                {getDimensionLabel()}
+              </span>
+              <IconButton
+                size="small"
+                onClick={handleMenuOpen}
+                aria-label="more options"
+              >
+                <MoreVertIcon fontSize="small" />
+              </IconButton>
+              <Menu
+                anchorEl={anchorEl}
+                open={open}
+                onClose={handleMenuClose}
+                onClick={(e) => e.stopPropagation()}
+              >
+                <MenuItem onClick={handleEdit}>Edit</MenuItem>
+                <MenuItem onClick={handleDelete} sx={{ color: 'error.main' }}>Delete</MenuItem>
+              </Menu>
+            </div>
           </div>
         </>
       )}
