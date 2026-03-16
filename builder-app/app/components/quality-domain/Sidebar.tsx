@@ -9,7 +9,7 @@ import LabelModal from './LabelModal'
 import ConceptCard from './ConceptCard'
 import ConceptModal from './ConceptModal'
 
-export default function DomainList() {
+export default function Sidebar() {
   const { state, getSelectedDomain } = useQualityDomain()
   const [isOpen, setIsOpen] = useState(true)
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -23,23 +23,13 @@ export default function DomainList() {
 
   return (
     <>
-      <div className="absolute top-4 left-4 z-30">
-        {/* Toggle Button (shown when collapsed) */}
-        {!isOpen && (
-          <button
-            onClick={() => setIsOpen(true)}
-            className="px-3 py-1.5 bg-blue-600 text-white rounded shadow hover:bg-blue-700 transition-colors font-mono text-sm"
-          >
-            ☰
-          </button>
-        )}
-
-        {/* Panel (shown when expanded) */}
+      <div className="fixed top-0 left-0 h-full z-30 flex">
+        {/* Sidebar Panel (shown when expanded) */}
         {isOpen && (
-          <div className="bg-white/90 backdrop-blur-sm rounded-lg shadow-lg p-4 max-h-[calc(100vh-2rem)] overflow-y-auto max-w-xs">
-            <div className="flex items-center justify-between mb-3">
-              <h2 className="text-lg font-bold">Quality Domains</h2>
-              <div className="flex items-center gap-2">
+          <div className="bg-white/95 backdrop-blur-sm shadow-xl h-full overflow-y-auto w-80 flex flex-col">
+            <div className="p-4 border-b border-gray-200">
+              <div className="flex items-center justify-between mb-3">
+                <h2 className="text-lg font-bold">Quality Domains</h2>
                 <button
                   onClick={() => {
                     setEditingDomainId(null)
@@ -49,15 +39,10 @@ export default function DomainList() {
                 >
                   Add Domain
                 </button>
-                <button
-                  onClick={() => setIsOpen(false)}
-                  className="px-2 py-1 bg-gray-600 text-white text-sm rounded hover:bg-gray-700 transition-colors"
-                  title="Collapse panel"
-                >
-                  ✕
-                </button>
               </div>
             </div>
+
+            <div className="flex-1 overflow-y-auto p-4">
 
             {state.domains.length === 0 ? (
               <div className="text-center py-8 text-gray-500">
@@ -120,44 +105,53 @@ export default function DomainList() {
               </div>
             )}
 
-            {/* Concepts Section */}
-            <div className="border-t border-gray-300 mt-4 pt-4">
-              <div className="flex items-center justify-between mb-3">
-                <h2 className="text-lg font-bold text-purple-900">Concepts</h2>
-                <button
-                  onClick={() => {
-                    setEditingConceptId(null)
-                    setIsConceptModalOpen(true)
-                  }}
-                  className="px-3 py-1 bg-purple-600 text-white text-sm rounded hover:bg-purple-700 font-medium"
-                >
-                  Add Concept
-                </button>
-              </div>
+              {/* Concepts Section */}
+              <div className="border-t border-gray-300 mt-4 pt-4">
+                <div className="flex items-center justify-between mb-3">
+                  <h2 className="text-lg font-bold text-purple-900">Concepts</h2>
+                  <button
+                    onClick={() => {
+                      setEditingConceptId(null)
+                      setIsConceptModalOpen(true)
+                    }}
+                    className="px-3 py-1 bg-purple-600 text-white text-sm rounded hover:bg-purple-700 font-medium"
+                  >
+                    Add Concept
+                  </button>
+                </div>
 
-              {state.concepts.length === 0 ? (
-                <div className="text-center py-8 text-gray-500">
-                  <p className="text-sm">No concepts yet.</p>
-                  <p className="text-xs mt-1">Click "+ Add Concept" to create one.</p>
-                </div>
-              ) : (
-                <div className="space-y-2">
-                  {state.concepts.map((concept) => (
-                    <ConceptCard
-                      key={concept.id}
-                      concept={concept}
-                      isSelected={state.selectedConceptId === concept.id}
-                      onEdit={(id) => {
-                        setEditingConceptId(id)
-                        setIsConceptModalOpen(true)
-                      }}
-                    />
-                  ))}
-                </div>
-              )}
+                {state.concepts.length === 0 ? (
+                  <div className="text-center py-8 text-gray-500">
+                    <p className="text-sm">No concepts yet.</p>
+                    <p className="text-xs mt-1">Click "+ Add Concept" to create one.</p>
+                  </div>
+                ) : (
+                  <div className="space-y-2">
+                    {state.concepts.map((concept) => (
+                      <ConceptCard
+                        key={concept.id}
+                        concept={concept}
+                        isSelected={state.selectedConceptId === concept.id}
+                        onEdit={(id) => {
+                          setEditingConceptId(id)
+                          setIsConceptModalOpen(true)
+                        }}
+                      />
+                    ))}
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         )}
+
+        {/* Toggle Button (always visible) */}
+        <button
+          onClick={() => setIsOpen(!isOpen)}
+          className="px-3 py-1.5 bg-blue-600 text-white rounded-r shadow hover:bg-blue-700 transition-colors font-mono text-sm h-12 self-start mt-4"
+        >
+          {isOpen ? '✕' : '☰'}
+        </button>
       </div>
 
       <DomainModal

@@ -2,7 +2,7 @@
 
 import Scene from './components/Scene'
 import { QualityDomainProvider } from './components/quality-domain/context/QualityDomainContext'
-import DomainList from './components/quality-domain/DomainList'
+import Sidebar from './components/quality-domain/Sidebar'
 import TableView from './components/quality-domain/TableView'
 import StateDebugPanel from './components/quality-domain/StateDebugPanel'
 import { useQualityDomain } from './components/quality-domain/context/QualityDomainContext'
@@ -17,7 +17,7 @@ function HomeContent() {
   return (
     <div className="relative w-full h-screen">
       <StateRestoration />
-      <DomainList />
+      <Sidebar />
       <Scene />
       {show4DTable && selectedDomain && <TableView domain={selectedDomain} />}
       <StateDebugPanel />
