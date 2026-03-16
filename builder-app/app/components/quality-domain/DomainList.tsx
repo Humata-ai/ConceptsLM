@@ -11,6 +11,7 @@ import ConceptModal from './ConceptModal'
 
 export default function DomainList() {
   const { state, getSelectedDomain } = useQualityDomain()
+  const [isOpen, setIsOpen] = useState(true)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [editingDomainId, setEditingDomainId] = useState<string | null>(null)
   const [isPropertyModalOpen, setIsPropertyModalOpen] = useState(false)
@@ -22,19 +23,41 @@ export default function DomainList() {
 
   return (
     <>
-      <div className="absolute top-4 left-4 z-30 bg-white/90 backdrop-blur-sm rounded-lg shadow-lg p-4 max-h-[calc(100vh-2rem)] overflow-y-auto max-w-xs">
-        <div className="flex items-center justify-between mb-3">
-          <h2 className="text-lg font-bold">Quality Domains</h2>
+      <div className="absolute top-4 left-4 z-30">
+        {/* Toggle Button (shown when collapsed) */}
+        {!isOpen && (
           <button
-            onClick={() => {
-              setEditingDomainId(null)
-              setIsModalOpen(true)
-            }}
-            className="px-3 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700 font-medium"
+            onClick={() => setIsOpen(true)}
+            className="px-3 py-1.5 bg-blue-600 text-white rounded shadow hover:bg-blue-700 transition-colors font-mono text-sm"
           >
-            + Add Domain
+            ☰
           </button>
-        </div>
+        )}
+
+        {/* Panel (shown when expanded) */}
+        {isOpen && (
+          <div className="bg-white/90 backdrop-blur-sm rounded-lg shadow-lg p-4 max-h-[calc(100vh-2rem)] overflow-y-auto max-w-xs">
+            <div className="flex items-center justify-between mb-3">
+              <h2 className="text-lg font-bold">Quality Domains</h2>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => {
+                    setEditingDomainId(null)
+                    setIsModalOpen(true)
+                  }}
+                  className="px-3 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700 font-medium"
+                >
+                  + Add Domain
+                </button>
+                <button
+                  onClick={() => setIsOpen(false)}
+                  className="px-2 py-1 bg-gray-600 text-white text-sm rounded hover:bg-gray-700 transition-colors"
+                  title="Collapse panel"
+                >
+                  ✕
+                </button>
+              </div>
+            </div>
 
         {state.domains.length === 0 ? (
           <div className="text-center py-8 text-gray-500">
@@ -133,6 +156,8 @@ export default function DomainList() {
             </div>
           )}
         </div>
+          </div>
+        )}
       </div>
 
       <DomainModal
