@@ -228,8 +228,8 @@ export default function StateDebugPanel() {
 
       {/* Panel */}
       {isOpen && (
-        <div className="absolute top-12 right-0 bg-white rounded-lg shadow-xl p-4 w-[800px] max-h-[80vh] overflow-hidden flex flex-col">
-          <h2 className="text-lg font-semibold mb-3">Data Structure Code</h2>
+        <div className="fixed sm:absolute top-16 sm:top-12 left-2 right-2 sm:left-auto sm:right-0 bg-white rounded-lg shadow-xl p-3 sm:p-4 sm:w-[600px] lg:w-[800px] max-w-[calc(100vw-1rem)] sm:max-w-[95vw] max-h-[calc(100vh-5rem)] sm:max-h-[80vh] overflow-hidden flex flex-col">
+          <h2 className="text-base sm:text-lg font-semibold mb-3">Data Structure Code</h2>
 
           {/* Success Message */}
           {success && (
@@ -246,8 +246,8 @@ export default function StateDebugPanel() {
           )}
 
           {/* Summary Section */}
-          <div className="mb-4 p-3 bg-gray-50 rounded border border-gray-200">
-            <div className="grid grid-cols-3 gap-4 text-sm">
+          <div className="mb-4 p-2 sm:p-3 bg-gray-50 rounded border border-gray-200">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-4 text-xs sm:text-sm">
               <div>
                 <span className="font-semibold text-gray-700">Domains:</span>{" "}
                 <span className="text-gray-900">{state.domains.length}</span>
@@ -281,11 +281,11 @@ export default function StateDebugPanel() {
           </div>
 
           {/* Two Column Layout */}
-          <div className="flex gap-4 overflow-hidden flex-1">
+          <div className="flex flex-col lg:flex-row gap-3 sm:gap-4 overflow-hidden flex-1">
             {/* Left Column: Current State */}
-            <div className="flex-1 flex flex-col">
+            <div className="flex-1 flex flex-col min-h-[200px]">
               <div className="flex items-center justify-between mb-2">
-                <h3 className="text-sm font-semibold text-gray-700">Current State</h3>
+                <h3 className="text-xs sm:text-sm font-semibold text-gray-700">Current State</h3>
                 <button
                   onClick={handleCopy}
                   className="px-2 py-1 bg-gray-600 text-white rounded text-xs hover:bg-gray-700 transition-colors"
@@ -293,24 +293,24 @@ export default function StateDebugPanel() {
                   Copy
                 </button>
               </div>
-              <pre className="bg-gray-50 p-3 rounded font-mono text-xs overflow-auto flex-1 border border-gray-200 select-text cursor-text">
+              <pre className="bg-gray-50 p-2 sm:p-3 rounded font-mono text-[10px] sm:text-xs overflow-auto flex-1 border border-gray-200 select-text cursor-text">
                 {formattedState}
               </pre>
             </div>
 
             {/* Right Column: Import */}
-            <div className="flex-1 flex flex-col">
-              <h3 className="text-sm font-semibold text-gray-700 mb-2">Import State</h3>
+            <div className="flex-1 flex flex-col min-h-[200px]">
+              <h3 className="text-xs sm:text-sm font-semibold text-gray-700 mb-2">Import State</h3>
               <textarea
                 value={jsonInput}
                 onChange={handleTextareaChange}
                 placeholder="Paste JSON here..."
-                className="border border-gray-300 rounded p-3 font-mono text-xs flex-1 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="border border-gray-300 rounded p-2 sm:p-3 font-mono text-[10px] sm:text-xs flex-1 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
               <button
                 onClick={handleImport}
                 disabled={!jsonInput.trim()}
-                className="mt-2 px-3 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed text-sm"
+                className="mt-2 px-3 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed text-xs sm:text-sm"
               >
                 Import
               </button>
