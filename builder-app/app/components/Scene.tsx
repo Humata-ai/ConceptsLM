@@ -9,7 +9,7 @@ import { isRegion, isPoint } from './quality-domain/types'
 import { Vector3 } from 'three'
 
 function CameraControls() {
-  const { state, getConceptLabels } = useQualityDomain()
+  const { state, getConceptLabels, getInstancePoints } = useQualityDomain()
   const controlsRef = useRef<any>(null)
   const animatingRef = useRef(false)
   const startTargetRef = useRef(new Vector3(0, 0, 0))
@@ -117,6 +117,103 @@ function CameraControls() {
       }
     }
 
+    // If instance is selected
+    if (state.selectedInstanceId) {
+      const instance = state.instances.find(i => i.id === state.selectedInstanceId)
+      if (instance) {
+        const points = getInstancePoints(instance.id)
+        const positions: Vector3[] = []
+
+        // Helper to get point value
+        const getPointValue = (
+          pointDim: typeof points[0]['dimensions'][0] | undefined
+        ): number | undefined => {
+          if (!pointDim || !('value' in pointDim)) return undefined
+          return pointDim.value
+        }
+
+        points.forEach(point => {
+          const domain = state.domains.find(d => d.id === point.domainId)
+          if (!domain || domain.dimensions.length >= 4) return
+
+          const domainPos = domainPositions.get(domain.id)
+          if (!domainPos) return
+
+          const scale = 0.5
+
+          let worldPosition: Vector3
+
+          if (domain.dimensions.length === 1) {
+            // 1D points
+            const dim = domain.dimensions[0]
+            const pointDim = point.dimensions.find(d => d.dimensionId === dim.id)
+            const value = getPointValue(pointDim)
+            if (value === undefined) return
+
+            const [dimMin, dimMax] = dim.range
+            const pos = -5 + ((value - dimMin) / (dimMax - dimMin)) * 10
+
+            worldPosition = new Vector3(
+              domainPos[0] + pos * scale,
+              domainPos[1] + 0.3 * scale,
+              domainPos[2]
+            )
+          } else if (domain.dimensions.length === 2) {
+            // 2D points
+            const dimX = domain.dimensions[0]
+            const dimY = domain.dimensions[1]
+
+            const pointDimX = point.dimensions.find(d => d.dimensionId === dimX.id)
+            const pointDimY = point.dimensions.find(d => d.dimensionId === dimY.id)
+
+            const valueX = getPointValue(pointDimX)
+            const valueY = getPointValue(pointDimY)
+            if (valueX === undefined || valueY === undefined) return
+
+            const [dimMinX, dimMaxX] = dimX.range
+            const [dimMinY, dimMaxY] = dimY.range
+
+            const posX = -5 + ((valueX - dimMinX) / (dimMaxX - dimMinX)) * 10
+            const posY = -5 + ((valueY - dimMinY) / (dimMaxY - dimMinY)) * 10
+
+            worldPosition = new Vector3(
+              domainPos[0] + posX * scale,
+              domainPos[1] + posY * scale,
+              domainPos[2]
+            )
+          } else {
+            // 3D points
+            const values = domain.dimensions.map(dim => {
+              const pointDim = point.dimensions.find(d => d.dimensionId === dim.id)
+              const value = getPointValue(pointDim)
+              if (value === undefined) return null
+
+              const [dimMin, dimMax] = dim.range
+              return -4 + ((value - dimMin) / (dimMax - dimMin)) * 8
+            })
+
+            if (values.some(v => v === null)) return
+
+            worldPosition = new Vector3(
+              domainPos[0] + values[0]! * scale,
+              domainPos[1] + values[1]! * scale,
+              domainPos[2] + values[2]! * scale
+            )
+          }
+
+          positions.push(worldPosition)
+        })
+
+        // Calculate centroid of instance points
+        if (positions.length > 0) {
+          const centroid = new Vector3(0, 0, 0)
+          positions.forEach(pos => centroid.add(pos))
+          centroid.divideScalar(positions.length)
+          return centroid
+        }
+      }
+    }
+
     // If concept is selected
     if (state.selectedConceptId) {
       const concept = state.concepts.find(c => c.id === state.selectedConceptId)
@@ -213,7 +310,7 @@ function CameraControls() {
 
     // Default position
     return new Vector3(0, 0, 0)
-  }, [state.selectedDomainId, state.selectedLabelId, state.selectedLabelDomainId, state.selectedConceptId, state.domains, state.concepts, getConceptLabels])
+  }, [state.selectedDomainId, state.selectedLabelId, state.selectedLabelDomainId, state.selectedInstanceId, state.selectedConceptId, state.domains, state.concepts, state.instances, getConceptLabels, getInstancePoints])
 
   // Update controls target when selection changes with smooth animation
   useEffect(() => {
