@@ -393,7 +393,7 @@ function ConceptVisualization3D({ concept, isSelected = false }: ConceptVisualiz
                   outlineColor="#000000"
                   fillOpacity={isSelected ? 1.0 : 0.7}
                 >
-                  {`${domainName}: ${pointName}`}
+                  {pointName}
                 </Text>
               </Billboard>
             </group>
