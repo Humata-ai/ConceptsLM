@@ -11,8 +11,12 @@ interface ConceptVisualization3DProps {
 }
 
 function ConceptVisualization3D({ concept, isSelected = false }: ConceptVisualization3DProps) {
-  const { state, getConceptLabels, selectConcept } = useQualityDomain()
+  const { state, getConceptLabels, getConceptInstances, getInstancePoints, selectConcept, selectInstance } = useQualityDomain()
   const labels = getConceptLabels(concept.id)
+  const instances = getConceptInstances(concept.id)
+
+  // Check if any instance of this concept is selected
+  const selectedInstance = instances.find(i => i.id === state.selectedInstanceId)
 
   const handleClick = (e: ThreeEvent<MouseEvent>) => {
     e.stopPropagation()
@@ -34,6 +38,106 @@ function ConceptVisualization3D({ concept, isSelected = false }: ConceptVisualiz
     })
     return positions
   }, [state.domains])
+
+  // Calculate instance point positions if an instance is selected
+  const instancePointPositions = useMemo(() => {
+    if (!selectedInstance) return null
+
+    const points = getInstancePoints(selectedInstance.id)
+    const positions: Array<{ pointId: string; domainName: string; pointName: string; position: Vector3 }> = []
+
+    // Helper to get point value
+    const getPointValue = (
+      pointDim: typeof points[0]['dimensions'][0] | undefined
+    ): number | undefined => {
+      if (!pointDim || !('value' in pointDim)) return undefined
+      return pointDim.value
+    }
+
+    points.forEach((point) => {
+      const domain = state.domains.find((d) => d.id === point.domainId)
+      if (!domain) return
+
+      // Skip 4D+ points (can't visualize in 3D)
+      if (domain.dimensions.length >= 4) return
+
+      // Get domain position in world space
+      const domainPos = domainPositions.get(domain.id)
+      if (!domainPos) return
+
+      // Scale by domain scale
+      const scale = 0.5
+
+      let worldPosition: Vector3
+
+      if (domain.dimensions.length === 1) {
+        // 1D points: positioned on X-axis at Y=0.3, Z=0
+        const dim = domain.dimensions[0]
+        const pointDim = point.dimensions.find((d) => d.dimensionId === dim.id)
+        const value = getPointValue(pointDim)
+        if (value === undefined) return
+
+        const [dimMin, dimMax] = dim.range
+        const pos = -5 + ((value - dimMin) / (dimMax - dimMin)) * 10
+
+        worldPosition = new Vector3(
+          domainPos[0] + pos * scale,
+          domainPos[1] + 0.3 * scale,
+          domainPos[2]
+        )
+      } else if (domain.dimensions.length === 2) {
+        // 2D points: positioned on XY plane (vertical)
+        const dimX = domain.dimensions[0]
+        const dimY = domain.dimensions[1]
+
+        const pointDimX = point.dimensions.find((d) => d.dimensionId === dimX.id)
+        const pointDimY = point.dimensions.find((d) => d.dimensionId === dimY.id)
+
+        const valueX = getPointValue(pointDimX)
+        const valueY = getPointValue(pointDimY)
+        if (valueX === undefined || valueY === undefined) return
+
+        const [dimMinX, dimMaxX] = dimX.range
+        const [dimMinY, dimMaxY] = dimY.range
+
+        const posX = -5 + ((valueX - dimMinX) / (dimMaxX - dimMinX)) * 10
+        const posY = -5 + ((valueY - dimMinY) / (dimMaxY - dimMinY)) * 10
+
+        worldPosition = new Vector3(
+          domainPos[0] + posX * scale,
+          domainPos[1] + posY * scale,
+          domainPos[2]
+        )
+      } else {
+        // 3D points: positioned in 3D space
+        const values = domain.dimensions.map((dim) => {
+          const pointDim = point.dimensions.find((d) => d.dimensionId === dim.id)
+          const value = getPointValue(pointDim)
+          if (value === undefined) return null
+
+          const [dimMin, dimMax] = dim.range
+          return -4 + ((value - dimMin) / (dimMax - dimMin)) * 8
+        })
+
+        if (values.some(v => v === null)) return
+
+        worldPosition = new Vector3(
+          domainPos[0] + values[0]! * scale,
+          domainPos[1] + values[1]! * scale,
+          domainPos[2] + values[2]! * scale
+        )
+      }
+
+      positions.push({
+        pointId: point.id,
+        domainName: domain.name,
+        pointName: point.name,
+        position: worldPosition
+      })
+    })
+
+    return positions
+  }, [selectedInstance, getInstancePoints, state.domains, domainPositions])
 
   // Calculate label world positions and centroid
   const { labelPositions, conceptPosition } = useMemo(() => {
@@ -158,11 +262,93 @@ function ConceptVisualization3D({ concept, isSelected = false }: ConceptVisualiz
     }
   }, [labels, state.domains, state.selectedDomainId, domainPositions])
 
+  // Render instance visualization if an instance is selected
+  if (selectedInstance && instancePointPositions && instancePointPositions.length > 0) {
+    return (
+      <group>
+        {/* Instance name billboard */}
+        <Billboard
+          position={[0, 8, 0]}
+          onClick={(e: ThreeEvent<MouseEvent>) => {
+            e.stopPropagation()
+            selectInstance(selectedInstance.id)
+          }}
+          onPointerOver={() => { if (document.body.style) document.body.style.cursor = 'pointer' }}
+          onPointerOut={() => { if (document.body.style) document.body.style.cursor = 'default' }}
+        >
+          {/* Background rectangle */}
+          <mesh position={[0, 0, -0.01]}>
+            <planeGeometry args={[selectedInstance.name.length * 1.2, 2.2]} />
+            <meshBasicMaterial color="#d1fae5" opacity={0.95} transparent />
+          </mesh>
+
+          {/* Instance name */}
+          <Text
+            position={[0, 0, 0]}
+            fontSize={1.8}
+            color="#059669"
+            anchorX="center"
+            anchorY="middle"
+            outlineWidth={0.1}
+            outlineColor="#000000"
+            fillOpacity={1}
+            fontWeight="bold"
+          >
+            {selectedInstance.name}
+          </Text>
+        </Billboard>
+
+        {/* Point markers */}
+        {instancePointPositions.map(({ pointId, domainName, pointName, position }) => (
+          <group key={pointId}>
+            {/* Point sphere */}
+            <mesh position={position}>
+              <sphereGeometry args={[0.3, 16, 16]} />
+              <meshStandardMaterial color="#10b981" />
+            </mesh>
+
+            {/* Point label */}
+            <Billboard position={[position.x, position.y + 1, position.z]}>
+              <Text
+                fontSize={0.6}
+                color="#059669"
+                anchorX="center"
+                anchorY="middle"
+                outlineWidth={0.05}
+                outlineColor="#000000"
+              >
+                {`${domainName}: ${pointName}`}
+              </Text>
+            </Billboard>
+          </group>
+        ))}
+
+        {/* Connection lines between points */}
+        {instancePointPositions.map(({ pointId: pointId1, position: pos1 }, i) =>
+          instancePointPositions.slice(i + 1).map(({ pointId: pointId2, position: pos2 }) => (
+            <Line
+              key={`${pointId1}-${pointId2}`}
+              points={[
+                [pos1.x, pos1.y, pos1.z],
+                [pos2.x, pos2.y, pos2.z],
+              ]}
+              color="#10b981"
+              lineWidth={2}
+              opacity={0.5}
+              transparent
+            />
+          ))
+        )}
+      </group>
+    )
+  }
+
   // If no valid labels to visualize, don't render
   if (labelPositions.length === 0) {
     return null
   }
 
+  // Render concept visualization (default)
   return (
     <group>
       {/* Concept label billboard */}

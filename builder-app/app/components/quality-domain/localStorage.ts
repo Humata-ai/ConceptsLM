@@ -1,7 +1,7 @@
-import type { QualityDomainState, QualityDomain, Concept, QualityDomainLabel, Property, PropertyReference, LabelReference } from './types'
+import type { QualityDomainState, QualityDomain, Concept, ConceptInstance, QualityDomainLabel, Property, PropertyReference, LabelReference } from './types'
 
 const STORAGE_KEY = 'quality-domain-state'
-const STATE_VERSION = 2 // Version 2 uses labels instead of properties
+const STATE_VERSION = 3 // Version 3 adds instances
 
 // Migration: Convert old Property to QualityDomainLabel (Region)
 function migratePropertyToLabel(oldProperty: Property): QualityDomainLabel {
@@ -35,7 +35,8 @@ export function serializeState(state: QualityDomainState): string {
     if (key === 'selectedDomainId' ||
         key === 'selectedLabelId' ||
         key === 'selectedLabelDomainId' ||
-        key === 'selectedConceptId') {
+        key === 'selectedConceptId' ||
+        key === 'selectedInstanceId') {
       return undefined
     }
 
@@ -50,7 +51,7 @@ export function serializeState(state: QualityDomainState): string {
 }
 
 // Same logic as StateDebugPanel import (with migration support)
-export function deserializeState(jsonString: string): { domains: QualityDomain[], concepts: Concept[] } {
+export function deserializeState(jsonString: string): { domains: QualityDomain[], concepts: Concept[], instances: ConceptInstance[] } {
   const parsed = JSON.parse(jsonString)
   const version = parsed.version || 1 // Default to version 1 if not specified
 
@@ -133,7 +134,13 @@ export function deserializeState(jsonString: string): { domains: QualityDomain[]
     return baseConcept
   })
 
-  return { domains, concepts }
+  // Handle instances (version 3+)
+  const instances = (parsed.instances || []).map((instance: any) => ({
+    ...instance,
+    createdAt: new Date(instance.createdAt)
+  }))
+
+  return { domains, concepts, instances }
 }
 
 export function saveToLocalStorage(state: QualityDomainState): void {
@@ -145,7 +152,7 @@ export function saveToLocalStorage(state: QualityDomainState): void {
   }
 }
 
-export function loadFromLocalStorage(): { domains: QualityDomain[], concepts: Concept[] } | null {
+export function loadFromLocalStorage(): { domains: QualityDomain[], concepts: Concept[], instances: ConceptInstance[] } | null {
   try {
     const serialized = localStorage.getItem(STORAGE_KEY)
     if (!serialized) return null

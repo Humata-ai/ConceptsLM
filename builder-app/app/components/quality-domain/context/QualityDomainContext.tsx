@@ -1,7 +1,8 @@
 'use client'
 
 import { createContext, useContext, useReducer, useMemo, useCallback, useEffect, type ReactNode } from 'react'
-import type { QualityDomain, QualityDomainState, QualityDomainAction, QualityDomainLabel, Concept, RegionDimensionRange, PointDimensionValue } from '../types'
+import type { QualityDomain, QualityDomainState, QualityDomainAction, QualityDomainLabel, Concept, ConceptInstance, QualityDomainPoint, RegionDimensionRange, PointDimensionValue } from '../types'
+import { isPoint } from '../types'
 import defaultDataJson from '../defaultData.json'
 import { saveToLocalStorage } from '../localStorage'
 
@@ -14,6 +15,7 @@ interface QualityDomainContextType {
   selectDomain: (id: string | null) => void
   selectLabel: (domainId: string, labelId: string) => void
   selectConcept: (conceptId: string | null) => void
+  selectInstance: (instanceId: string | null) => void
   clearSelection: () => void
   getSelectedDomain: () => QualityDomain | null
   addLabel: (domainId: string, label: QualityDomainLabel) => void
@@ -23,6 +25,11 @@ interface QualityDomainContextType {
   updateConcept: (concept: Concept) => void
   deleteConcept: (id: string) => void
   getConceptLabels: (conceptId: string) => QualityDomainLabel[]
+  addInstance: (instance: ConceptInstance) => void
+  updateInstance: (instance: ConceptInstance) => void
+  deleteInstance: (id: string) => void
+  getInstancePoints: (instanceId: string) => QualityDomainPoint[]
+  getConceptInstances: (conceptId: string) => ConceptInstance[]
 }
 
 const QualityDomainContext = createContext<QualityDomainContextType | undefined>(undefined)
@@ -128,11 +135,13 @@ const initialState: QualityDomainState = {
   selectedLabelId: null,
   selectedLabelDomainId: null,
   selectedConceptId: null,
+  selectedInstanceId: null,
   concepts: jsonData.concepts.map(concept => ({
     ...concept,
     labelRefs: concept.labelRefs,
     createdAt: new Date(concept.createdAt),
   })),
+  instances: [],
 }
 
 function qualityDomainReducer(
@@ -166,6 +175,7 @@ function qualityDomainReducer(
         selectedLabelId: null,
         selectedLabelDomainId: null,
         selectedConceptId: null,
+        selectedInstanceId: null,
       }
     case 'SELECT_LABEL':
       if (!action.payload) {
@@ -181,6 +191,7 @@ function qualityDomainReducer(
         selectedLabelId: action.payload.labelId,
         selectedLabelDomainId: action.payload.domainId,
         selectedConceptId: null,
+        selectedInstanceId: null,
       }
     case 'SELECT_CONCEPT':
       return {
@@ -189,6 +200,16 @@ function qualityDomainReducer(
         selectedLabelId: null,
         selectedLabelDomainId: null,
         selectedConceptId: action.payload,
+        selectedInstanceId: null,
+      }
+    case 'SELECT_INSTANCE':
+      return {
+        ...state,
+        selectedDomainId: null,
+        selectedLabelId: null,
+        selectedLabelDomainId: null,
+        selectedConceptId: null,
+        selectedInstanceId: action.payload,
       }
     case 'CLEAR_SELECTION':
       return {
@@ -197,6 +218,7 @@ function qualityDomainReducer(
         selectedLabelId: null,
         selectedLabelDomainId: null,
         selectedConceptId: null,
+        selectedInstanceId: null,
       }
     case 'ADD_LABEL':
       return {
@@ -251,16 +273,36 @@ function qualityDomainReducer(
       return {
         ...state,
         concepts: state.concepts.filter((concept) => concept.id !== action.payload),
+        instances: state.instances.filter((instance) => instance.conceptId !== action.payload),
+      }
+    case 'ADD_INSTANCE':
+      return {
+        ...state,
+        instances: [...state.instances, action.payload],
+      }
+    case 'UPDATE_INSTANCE':
+      return {
+        ...state,
+        instances: state.instances.map((instance) =>
+          instance.id === action.payload.id ? action.payload : instance
+        ),
+      }
+    case 'DELETE_INSTANCE':
+      return {
+        ...state,
+        instances: state.instances.filter((instance) => instance.id !== action.payload),
       }
     case 'RESTORE_STATE':
       return {
         ...state,
         domains: action.payload.domains,
         concepts: action.payload.concepts,
+        instances: action.payload.instances || [],
         selectedDomainId: null,
         selectedLabelId: null,
         selectedLabelDomainId: null,
         selectedConceptId: null,
+        selectedInstanceId: null,
       }
     default:
       return state
@@ -350,6 +392,40 @@ export function QualityDomainProvider({ children }: { children: ReactNode }) {
     return labels
   }, [state.concepts, state.domains])
 
+  const addInstance = useCallback((instance: ConceptInstance) => {
+    dispatch({ type: 'ADD_INSTANCE', payload: instance })
+  }, [])
+
+  const updateInstance = useCallback((instance: ConceptInstance) => {
+    dispatch({ type: 'UPDATE_INSTANCE', payload: instance })
+  }, [])
+
+  const deleteInstance = useCallback((id: string) => {
+    dispatch({ type: 'DELETE_INSTANCE', payload: id })
+  }, [])
+
+  const selectInstance = useCallback((instanceId: string | null) => {
+    dispatch({ type: 'SELECT_INSTANCE', payload: instanceId })
+  }, [])
+
+  const getInstancePoints = useCallback((instanceId: string): QualityDomainPoint[] => {
+    const instance = state.instances.find((i) => i.id === instanceId)
+    if (!instance) return []
+
+    return instance.pointRefs
+      .map(ref => {
+        const domain = state.domains.find((d) => d.id === ref.domainId)
+        if (!domain) return null
+        const label = domain.labels.find((l) => l.id === ref.pointId)
+        return label && isPoint(label) ? label : null
+      })
+      .filter((p): p is QualityDomainPoint => p !== null)
+  }, [state.instances, state.domains])
+
+  const getConceptInstances = useCallback((conceptId: string): ConceptInstance[] => {
+    return state.instances.filter((i) => i.conceptId === conceptId)
+  }, [state.instances])
+
   // Memoize context value to only recreate when state changes
   const value: QualityDomainContextType = useMemo(() => ({
     state,
@@ -360,6 +436,7 @@ export function QualityDomainProvider({ children }: { children: ReactNode }) {
     selectDomain,
     selectLabel,
     selectConcept,
+    selectInstance,
     clearSelection,
     getSelectedDomain,
     addLabel,
@@ -369,7 +446,12 @@ export function QualityDomainProvider({ children }: { children: ReactNode }) {
     updateConcept,
     deleteConcept,
     getConceptLabels,
-  }), [state, addDomain, updateDomain, deleteDomain, selectDomain, selectLabel, selectConcept, clearSelection, getSelectedDomain, addLabel, updateLabel, deleteLabel, addConcept, updateConcept, deleteConcept, getConceptLabels])
+    addInstance,
+    updateInstance,
+    deleteInstance,
+    getInstancePoints,
+    getConceptInstances,
+  }), [state, addDomain, updateDomain, deleteDomain, selectDomain, selectLabel, selectConcept, selectInstance, clearSelection, getSelectedDomain, addLabel, updateLabel, deleteLabel, addConcept, updateConcept, deleteConcept, getConceptLabels, addInstance, updateInstance, deleteInstance, getInstancePoints, getConceptInstances])
 
   return (
     <QualityDomainContext.Provider value={value}>

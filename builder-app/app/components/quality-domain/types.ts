@@ -88,13 +88,28 @@ export interface Concept {
   createdAt: Date
 }
 
+export interface PointReference {
+  domainId: string
+  pointId: string
+}
+
+export interface ConceptInstance {
+  id: string
+  conceptId: string
+  name: string
+  pointRefs: PointReference[]
+  createdAt: Date
+}
+
 export interface QualityDomainState {
   domains: QualityDomain[]
   selectedDomainId: string | null
   selectedLabelId: string | null
   selectedLabelDomainId: string | null
   selectedConceptId: string | null
+  selectedInstanceId: string | null
   concepts: Concept[]
+  instances: ConceptInstance[]
 }
 
 export type QualityDomainAction =
@@ -104,6 +119,7 @@ export type QualityDomainAction =
   | { type: 'SELECT_DOMAIN'; payload: string | null }
   | { type: 'SELECT_LABEL'; payload: { domainId: string; labelId: string } | null }
   | { type: 'SELECT_CONCEPT'; payload: string | null }
+  | { type: 'SELECT_INSTANCE'; payload: string | null }
   | { type: 'CLEAR_SELECTION' }
   | { type: 'ADD_LABEL'; payload: { domainId: string; label: QualityDomainLabel } }
   | { type: 'UPDATE_LABEL'; payload: { domainId: string; label: QualityDomainLabel } }
@@ -111,4 +127,7 @@ export type QualityDomainAction =
   | { type: 'ADD_CONCEPT'; payload: Concept }
   | { type: 'UPDATE_CONCEPT'; payload: Concept }
   | { type: 'DELETE_CONCEPT'; payload: string }
-  | { type: 'RESTORE_STATE'; payload: { domains: QualityDomain[]; concepts: Concept[] } }
+  | { type: 'ADD_INSTANCE'; payload: ConceptInstance }
+  | { type: 'UPDATE_INSTANCE'; payload: ConceptInstance }
+  | { type: 'DELETE_INSTANCE'; payload: string }
+  | { type: 'RESTORE_STATE'; payload: { domains: QualityDomain[]; concepts: Concept[]; instances: ConceptInstance[] } }

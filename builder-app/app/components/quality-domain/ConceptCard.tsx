@@ -6,7 +6,10 @@ import type { Concept } from './types'
 import IconButton from '@mui/material/IconButton'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
+import Button from '@mui/material/Button'
 import MoreVertIcon from '@mui/icons-material/MoreVert'
+import InstanceModal from './InstanceModal'
+import InstanceCard from './InstanceCard'
 
 interface ConceptCardProps {
   concept: Concept
@@ -15,12 +18,15 @@ interface ConceptCardProps {
 }
 
 export default function ConceptCard({ concept, onEdit, isSelected }: ConceptCardProps) {
-  const { deleteConcept, getConceptLabels, selectConcept } = useQualityDomain()
+  const { state, deleteConcept, getConceptLabels, getConceptInstances, selectConcept } = useQualityDomain()
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
+  const [isInstanceModalOpen, setIsInstanceModalOpen] = useState(false)
+  const [editingInstanceId, setEditingInstanceId] = useState<string | null>(null)
   const open = Boolean(anchorEl)
 
   const labels = getConceptLabels(concept.id)
+  const instances = getConceptInstances(concept.id)
 
   const handleClick = (e: React.MouseEvent) => {
     e.stopPropagation()
@@ -59,7 +65,25 @@ export default function ConceptCard({ concept, onEdit, isSelected }: ConceptCard
     setShowDeleteConfirm(false)
   }
 
+  const handleAddInstance = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    handleMenuClose()
+    setEditingInstanceId(null)
+    setIsInstanceModalOpen(true)
+  }
+
+  const handleEditInstance = (instanceId: string) => {
+    setEditingInstanceId(instanceId)
+    setIsInstanceModalOpen(true)
+  }
+
+  const handleCloseInstanceModal = () => {
+    setIsInstanceModalOpen(false)
+    setEditingInstanceId(null)
+  }
+
   return (
+    <>
     <div
       onClick={handleClick}
       className={`p-3 rounded-lg cursor-pointer transition-colors ${
@@ -128,8 +152,51 @@ export default function ConceptCard({ concept, onEdit, isSelected }: ConceptCard
               ))}
             </div>
           )}
+
+          {isSelected && (
+            <div className="mt-4 border-t pt-3">
+              {instances.length === 0 ? (
+                <div className="text-center py-8 text-gray-500">
+                  <p className="text-xs">No instances yet.</p>
+                </div>
+              ) : (
+                <>
+                  <div className="text-sm font-semibold mb-2 text-gray-700">
+                    Instances ({instances.length})
+                  </div>
+                  <div className="space-y-2">
+                    {instances.map(instance => (
+                      <InstanceCard
+                        key={instance.id}
+                        instance={instance}
+                        onEdit={handleEditInstance}
+                        isSelected={state.selectedInstanceId === instance.id}
+                      />
+                    ))}
+                  </div>
+                </>
+              )}
+              <Button
+                onClick={handleAddInstance}
+                variant="outlined"
+                color="primary"
+                fullWidth
+                sx={{ mt: 1, textTransform: 'none' }}
+              >
+                Create Instance
+              </Button>
+            </div>
+          )}
         </>
       )}
     </div>
+
+    <InstanceModal
+      isOpen={isInstanceModalOpen}
+      conceptId={concept.id}
+      editingInstanceId={editingInstanceId}
+      onClose={handleCloseInstanceModal}
+    />
+    </>
   )
 }
