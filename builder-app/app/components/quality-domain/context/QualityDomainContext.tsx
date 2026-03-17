@@ -76,10 +76,19 @@ interface JsonConcept {
   createdAt: string
 }
 
+interface JsonInstance {
+  id: string
+  conceptId: string
+  name: string
+  pointRefs: { domainId: string; pointId: string }[]
+  createdAt: string
+}
+
 interface JsonState {
   domains: JsonDomain[]
   selectedDomainId: string | null
   concepts: JsonConcept[]
+  instances: JsonInstance[]
 }
 
 // Helper to convert JSON array to readonly tuple
@@ -141,7 +150,11 @@ const initialState: QualityDomainState = {
     labelRefs: concept.labelRefs,
     createdAt: new Date(concept.createdAt),
   })),
-  instances: [],
+  instances: (jsonData.instances || []).map(instance => ({
+    ...instance,
+    pointRefs: instance.pointRefs,
+    createdAt: new Date(instance.createdAt),
+  })),
 }
 
 function qualityDomainReducer(

@@ -1,101 +1,155 @@
 {
   "domains": [
     {
-      "id": "1773537022103-fmb1ksh",
-      "name": "Spatial Domain",
+      "id": "1773702800918-xf53stz",
+      "name": "Age Domain",
       "dimensions": [
         {
-          "id": "1773537006501-mu15unh",
-          "name": "Width Dimension",
-          "range": [0, 100],
-          "type": "continuous"
-        },
-        {
-          "id": "1773536996362-eti1pe4",
-          "name": "Height Dimension",
-          "range": [0, 100],
-          "type": "continuous"
-        },
-        {
-          "id": "1773537013229-lttyoq6",
-          "name": "Depth Dimension",
-          "range": [0, 100],
-          "type": "continuous"
-        }
-      ],
-      "labels": [],
-      "createdAt": "2025-01-13T00:00:00.000Z"
-    },
-    {
-      "id": "1773537259656-e39cnyu",
-      "name": "Color Domain",
-      "dimensions": [
-        {
-          "id": "1773537213940-flo1fpt",
-          "name": "Hue Dimension",
-          "range": [0, 360],
-          "type": "continuous"
-        },
-        {
-          "id": "1773537231699-cmwcz89",
-          "name": "Saturation Dimension",
-          "range": [0, 1],
-          "type": "continuous"
-        },
-        {
-          "id": "1773537244427-kklfhux",
-          "name": "Brightness Dimension",
-          "range": [0, 1],
-          "type": "continuous"
+          "id": "1773702791708-4si6h81",
+          "name": "Years Old",
+          "range": [
+            0,
+            "Infinity"
+          ]
         }
       ],
       "labels": [
         {
           "type": "region",
-          "id": "1773537300000-prop001",
-          "name": "Red",
-          "domainId": "1773537259656-e39cnyu",
+          "id": "1773702827602-pxl8hv1",
+          "name": "Human Life Span",
+          "domainId": "1773702800918-xf53stz",
           "dimensions": [
             {
-              "dimensionId": "1773537213940-flo1fpt",
-              "range": [0, 20]
-            },
-            {
-              "dimensionId": "1773537231699-cmwcz89",
-              "range": [0.6, 1]
-            },
-            {
-              "dimensionId": "1773537244427-kklfhux",
-              "range": [0.3, 0.8]
+              "dimensionId": "1773702791708-4si6h81",
+              "range": [
+                0,
+                125
+              ]
             }
           ],
-          "createdAt": "2025-01-13T00:00:00.000Z"
+          "createdAt": "2026-03-16T23:13:47.602Z"
+        }
+      ],
+      "createdAt": "2026-03-16T23:13:20.918Z"
+    },
+    {
+      "id": "1773703070507-df6oo23",
+      "name": "Name Domain",
+      "dimensions": [
+        {
+          "id": "1773703055063-qlt739z",
+          "name": "Gender Association",
+          "range": [
+            -1,
+            1
+          ]
+        }
+      ],
+      "labels": [
+        {
+          "type": "region",
+          "id": "1773703125056-3lnuqkd",
+          "name": "Male Name",
+          "domainId": "1773703070507-df6oo23",
+          "dimensions": [
+            {
+              "dimensionId": "1773703055063-qlt739z",
+              "range": [
+                0.4,
+                1
+              ]
+            }
+          ],
+          "createdAt": "2026-03-16T23:18:45.056Z"
         },
         {
           "type": "region",
-          "id": "1773537300001-prop002",
-          "name": "Bright",
-          "domainId": "1773537259656-e39cnyu",
+          "id": "1773703145301-oo0gcj4",
+          "name": "Female Name",
+          "domainId": "1773703070507-df6oo23",
           "dimensions": [
             {
-              "dimensionId": "1773537213940-flo1fpt",
-              "range": [0, 360]
-            },
-            {
-              "dimensionId": "1773537231699-cmwcz89",
-              "range": [0, 1]
-            },
-            {
-              "dimensionId": "1773537244427-kklfhux",
-              "range": [0.8, 1]
+              "dimensionId": "1773703055063-qlt739z",
+              "range": [
+                -1,
+                -0.4
+              ]
             }
           ],
-          "createdAt": "2025-01-13T00:00:00.000Z"
+          "createdAt": "2026-03-16T23:19:05.301Z"
+        },
+        {
+          "type": "point",
+          "id": "1773703180360-9acuw64",
+          "name": "Mary",
+          "domainId": "1773703070507-df6oo23",
+          "dimensions": [
+            {
+              "dimensionId": "1773703055063-qlt739z",
+              "value": -0.9
+            }
+          ],
+          "createdAt": "2026-03-16T23:19:40.360Z"
+        },
+        {
+          "type": "region",
+          "id": "1773708297540-mimbwzp",
+          "name": "Neutral Name",
+          "domainId": "1773703070507-df6oo23",
+          "dimensions": [
+            {
+              "dimensionId": "1773703055063-qlt739z",
+              "range": [
+                -0.4,
+                0.4
+              ]
+            }
+          ],
+          "createdAt": "2026-03-17T00:44:57.540Z"
         }
       ],
-      "createdAt": "2025-01-13T00:00:00.000Z"
+      "createdAt": "2026-03-16T23:17:50.507Z"
     }
   ],
-  "selectedDomainId": "1773537259656-e39cnyu",
-  "concepts": []
+  "selectedInstanceId": null,
+  "concepts": [
+    {
+      "id": "1773702840517-tb3khl0",
+      "name": "Human Being",
+      "labelRefs": [
+        {
+          "domainId": "1773702800918-xf53stz",
+          "labelId": "1773702827602-pxl8hv1"
+        },
+        {
+          "domainId": "1773703070507-df6oo23",
+          "labelId": "1773703125056-3lnuqkd"
+        },
+        {
+          "domainId": "1773703070507-df6oo23",
+          "labelId": "1773703145301-oo0gcj4"
+        },
+        {
+          "domainId": "1773703070507-df6oo23",
+          "labelId": "1773708297540-mimbwzp"
+        }
+      ],
+      "createdAt": "2026-03-16T23:14:00.517Z"
+    }
+  ],
+  "instances": [
+    {
+      "id": "1773758404820-ezrbejs",
+      "conceptId": "1773702840517-tb3khl0",
+      "name": "Mary",
+      "pointRefs": [
+        {
+          "domainId": "1773703070507-df6oo23",
+          "pointId": "1773703180360-9acuw64"
+        }
+      ],
+      "createdAt": "2026-03-17T14:40:04.820Z"
+    }
+  ]
 }
