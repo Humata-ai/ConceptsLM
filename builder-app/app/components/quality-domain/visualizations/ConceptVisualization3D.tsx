@@ -354,6 +354,21 @@ function ConceptVisualization3D({ concept, isSelected = false }: ConceptVisualiz
             </Text>
           </Billboard>
 
+          {/* Connection lines from instance to each point */}
+          {positions.map(({ pointId, position }) => (
+            <Line
+              key={`instance-${instance.id}-${pointId}`}
+              points={[
+                [0, 10 + idx * 2, 0],
+                [position.x, position.y, position.z],
+              ]}
+              color={isSelected ? '#3b82f6' : '#60a5fa'}
+              lineWidth={isSelected ? 2 : 1.5}
+              opacity={isSelected ? 0.5 : 0.3}
+              transparent
+            />
+          ))}
+
           {/* Point markers */}
           {positions.map(({ pointId, domainName, pointName, position }) => (
             <group key={pointId}>
