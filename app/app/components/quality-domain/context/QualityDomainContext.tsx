@@ -86,7 +86,6 @@ interface JsonInstance {
 
 interface JsonState {
   domains: JsonDomain[]
-  selectedDomainId: string | null
   concepts: JsonConcept[]
   instances: JsonInstance[]
 }
