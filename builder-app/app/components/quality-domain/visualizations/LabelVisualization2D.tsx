@@ -88,7 +88,7 @@ function LabelVisualization2D({
   ])
 
   const meshPosition = useMemo(() => [centerX, centerY, 0.1] as const, [centerX, centerY])
-  const labelPosition = useMemo(() => [centerX, centerY, 0.3] as const, [centerX, centerY])
+  const labelPosition = useMemo(() => [centerX, centerY, isPointLabel ? 0.5 : 0.3] as const, [centerX, centerY, isPointLabel])
   const rotation = useMemo(() => [0, 0, 0] as const, [])
 
   return (

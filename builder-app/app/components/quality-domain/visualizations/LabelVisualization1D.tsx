@@ -56,7 +56,7 @@ function LabelVisualization1D({
   }
 
   const meshPosition = useMemo(() => [centerPos, 0.3, 0] as const, [centerPos])
-  const labelPosition = useMemo(() => [centerPos, 0.6, 0] as const, [centerPos])
+  const labelPosition = useMemo(() => [centerPos, isPointLabel ? 0.9 : 0.6, 0] as const, [centerPos, isPointLabel])
 
   return (
     <group>

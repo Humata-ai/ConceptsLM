@@ -119,7 +119,7 @@ function LabelVisualization3D({
 
   const labelPosition = useMemo(
     () => isPointLabel
-      ? [position.x, position.y + 1.0, position.z] as const
+      ? [position.x, position.y + 1.5, position.z] as const
       : [position.x, position.y + ranges[1].size / 2 + 1.5, position.z] as const,
     [position.x, position.y, position.z, ranges, isPointLabel]
   )
