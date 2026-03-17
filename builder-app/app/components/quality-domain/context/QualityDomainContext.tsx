@@ -203,12 +203,15 @@ function qualityDomainReducer(
         selectedInstanceId: null,
       }
     case 'SELECT_INSTANCE':
+      const instance = action.payload
+        ? state.instances.find(i => i.id === action.payload)
+        : null
       return {
         ...state,
         selectedDomainId: null,
         selectedLabelId: null,
         selectedLabelDomainId: null,
-        selectedConceptId: null,
+        selectedConceptId: instance ? instance.conceptId : null,
         selectedInstanceId: action.payload,
       }
     case 'CLEAR_SELECTION':

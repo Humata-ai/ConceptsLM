@@ -80,7 +80,7 @@ export default function InstanceCard({ instance, onEdit, isSelected }: InstanceC
       onClick={handleClick}
       className={`p-2 rounded-lg cursor-pointer transition-colors ${
         isSelected
-          ? 'bg-green-100 border-2 border-green-500'
+          ? 'bg-blue-100 border-2 border-blue-500'
           : 'bg-white border border-gray-300 hover:bg-gray-50'
       }`}
     >
@@ -106,8 +106,12 @@ export default function InstanceCard({ instance, onEdit, isSelected }: InstanceC
         <>
           <div className="flex items-start justify-between mb-2">
             <div className="flex-1">
-              <h3 className="font-medium text-sm">{instance.name}</h3>
-              <span className="inline-block mt-1 px-2 py-0.5 text-xs font-medium rounded bg-purple-100 text-purple-700">
+              <h3 className={`font-medium text-sm ${isSelected ? 'text-blue-900' : 'text-gray-900'}`}>{instance.name}</h3>
+              <span className={`inline-block mt-1 px-2 py-0.5 text-xs font-medium rounded ${
+                isSelected
+                  ? 'bg-blue-200 text-blue-700'
+                  : 'bg-gray-200 text-gray-700'
+              }`}>
                 {pointInfo.length} {pointInfo.length === 1 ? 'point' : 'points'} selected
               </span>
             </div>
@@ -130,7 +134,7 @@ export default function InstanceCard({ instance, onEdit, isSelected }: InstanceC
           </div>
           <div className="space-y-1">
             {pointInfo.map((info, index) => (
-              <div key={index} className="text-xs text-gray-600">
+              <div key={index} className={`text-xs ${isSelected ? 'text-blue-600' : 'text-gray-600'}`}>
                 <span className="font-medium">{info?.domainName}:</span>{' '}
                 <span>{info?.pointName}</span>
               </div>

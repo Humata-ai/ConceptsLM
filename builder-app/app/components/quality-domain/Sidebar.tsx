@@ -137,7 +137,7 @@ export default function Sidebar() {
                         <ConceptCard
                           key={concept.id}
                           concept={concept}
-                          isSelected={state.selectedConceptId === concept.id}
+                          isSelected={state.selectedConceptId === concept.id && !state.selectedInstanceId}
                           onEdit={(id) => {
                             setEditingConceptId(id)
                             setIsConceptModalOpen(true)

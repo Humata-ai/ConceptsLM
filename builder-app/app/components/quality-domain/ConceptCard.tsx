@@ -28,6 +28,9 @@ export default function ConceptCard({ concept, onEdit, isSelected }: ConceptCard
   const labels = getConceptLabels(concept.id)
   const instances = getConceptInstances(concept.id)
 
+  // Concept is expanded if it's selected (either directly or via an instance)
+  const isExpanded = state.selectedConceptId === concept.id
+
   const handleClick = (e: React.MouseEvent) => {
     e.stopPropagation()
     selectConcept(concept.id)
@@ -153,28 +156,23 @@ export default function ConceptCard({ concept, onEdit, isSelected }: ConceptCard
             </div>
           )}
 
-          {isSelected && (
+          {isExpanded && (
             <div className="mt-4 border-t pt-3">
               {instances.length === 0 ? (
                 <div className="text-center py-8 text-gray-500">
                   <p className="text-xs">No instances yet.</p>
                 </div>
               ) : (
-                <>
-                  <div className="text-sm font-semibold mb-2 text-gray-700">
-                    Instances ({instances.length})
-                  </div>
-                  <div className="space-y-2">
-                    {instances.map(instance => (
-                      <InstanceCard
-                        key={instance.id}
-                        instance={instance}
-                        onEdit={handleEditInstance}
-                        isSelected={state.selectedInstanceId === instance.id}
-                      />
-                    ))}
-                  </div>
-                </>
+                <div className="space-y-2">
+                  {instances.map(instance => (
+                    <InstanceCard
+                      key={instance.id}
+                      instance={instance}
+                      onEdit={handleEditInstance}
+                      isSelected={state.selectedInstanceId === instance.id}
+                    />
+                  ))}
+                </div>
               )}
               <Button
                 onClick={handleAddInstance}
