@@ -5,6 +5,8 @@ import { useQualityDomain } from '@/app/store'
 import DimensionInput from './DimensionInput'
 import type { QualityDimension, QualityDomain } from './types'
 import { generateId } from './utils'
+import Modal from '@/app/components/common/Modal'
+import { required, arrayMinLength, collectErrors, validateArray } from '@/app/utils/validators'
 
 interface DomainModalProps {
   isOpen: boolean
@@ -56,23 +58,26 @@ export default function DomainModal({ isOpen, editingDomainId, onClose }: Domain
 
   const validate = (): boolean => {
     const newErrors: string[] = []
-
-    if (!name.trim()) {
-      newErrors.push('Domain name is required')
-    }
-
-    if (dimensions.length === 0) {
-      newErrors.push('At least one dimension is required')
-    }
-
-    dimensions.forEach((dim, index) => {
-      if (!dim.name.trim()) {
-        newErrors.push(`Dimension ${index + 1} name is required`)
-      }
-      if (dim.range[0] >= dim.range[1]) {
-        newErrors.push(`Dimension "${dim.name || index + 1}": Min must be less than Max`)
-      }
-    })
+    
+    const nameError = required('Domain name')(name)
+    if (nameError) newErrors.push(nameError)
+    
+    const dimsError = arrayMinLength('dimension', 1)(dimensions)
+    if (dimsError) newErrors.push(dimsError)
+    
+    newErrors.push(...validateArray(
+      dimensions,
+      (dim) => {
+        const errors: string[] = []
+        const nameError = required('name')(dim.name)
+        if (nameError) errors.push(nameError)
+        if (dim.range[0] >= dim.range[1]) {
+          errors.push(`Min must be less than Max`)
+        }
+        return errors.length > 0 ? errors.join(', ') : null
+      },
+      'Dimension'
+    ))
 
     setErrors(newErrors)
     return newErrors.length === 0
@@ -102,34 +107,13 @@ export default function DomainModal({ isOpen, editingDomainId, onClose }: Domain
     onClose()
   }
 
-  const handleCancel = () => {
-    onClose()
-  }
-
-  const handleBackdropClick = (e: React.MouseEvent) => {
-    if (e.target === e.currentTarget) {
-      onClose()
-    }
-  }
-
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Escape') {
-      onClose()
-    }
-  }
-
-  if (!isOpen) return null
-
   return (
-    <div onKeyDown={handleKeyDown}>
-      <div className="modal-backdrop" onClick={handleBackdropClick} />
-      <div className="modal-content" onClick={handleBackdropClick}>
-        <div className="bg-white rounded-lg shadow-xl p-6 max-w-md w-full max-h-[90vh] overflow-y-auto">
-          <h2 className="text-2xl font-bold mb-4">
-            {editingDomain ? 'Edit Quality Domain' : 'Create Quality Domain'}
-          </h2>
-
-          <form onSubmit={handleSubmit} className="space-y-4">
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+      title={editingDomain ? 'Edit Quality Domain' : 'Create Quality Domain'}
+    >
+      <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <label htmlFor="domain-name" className="block text-sm font-medium mb-1">
                 Domain Name
@@ -176,24 +160,22 @@ export default function DomainModal({ isOpen, editingDomainId, onClose }: Domain
               </div>
             )}
 
-            <div className="flex gap-3 justify-end pt-2">
-              <button
-                type="button"
-                onClick={handleCancel}
-                className="px-4 py-2 border border-gray-300 rounded hover:bg-gray-50"
-              >
-                Cancel
-              </button>
-              <button
-                type="submit"
-                className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-              >
-                {editingDomain ? 'Update Domain' : 'Save Domain'}
-              </button>
-            </div>
-          </form>
+        <div className="flex gap-3 justify-end pt-2">
+          <button
+            type="button"
+            onClick={onClose}
+            className="px-4 py-2 border border-gray-300 rounded hover:bg-gray-50"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+          >
+            {editingDomain ? 'Update Domain' : 'Save Domain'}
+          </button>
         </div>
-      </div>
-    </div>
+      </form>
+    </Modal>
   )
 }

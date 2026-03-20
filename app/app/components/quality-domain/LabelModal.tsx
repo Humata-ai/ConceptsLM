@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { useQualityDomain } from '@/app/store'
 import type { QualityDomainLabel, RegionDimensionRange, PointDimensionValue, QualityDimension } from './types'
 import { generateId } from './utils'
+import Modal from '@/app/components/common/Modal'
 
 interface LabelModalProps {
   isOpen: boolean
@@ -171,35 +172,17 @@ export default function LabelModal({
     onClose()
   }
 
-  const handleCancel = () => {
-    onClose()
-  }
-
-  const handleBackdropClick = (e: React.MouseEvent) => {
-    if (e.target === e.currentTarget) {
-      onClose()
-    }
-  }
-
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Escape') {
-      onClose()
-    }
-  }
-
   if (!isOpen || !domain) return null
 
   const showTypeSelection = !editingLabel && !labelType
   const showForm = editingLabel || labelType
 
   return (
-    <div onKeyDown={handleKeyDown}>
-      <div className="modal-backdrop" onClick={handleBackdropClick} />
-      <div className="modal-content" onClick={handleBackdropClick}>
-        <div className="bg-white rounded-lg shadow-xl p-6 max-w-md w-full max-h-[90vh] overflow-y-auto">
-          <h2 className="text-2xl font-bold mb-4">
-            {editingLabel ? 'Edit Label' : 'Create Label'}
-          </h2>
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+      title={editingLabel ? 'Edit Label' : 'Create Label'}
+    >
 
           {showTypeSelection && (
             <div className="space-y-4">
@@ -231,7 +214,7 @@ export default function LabelModal({
               <div className="flex justify-end pt-2">
                 <button
                   type="button"
-                  onClick={handleCancel}
+                  onClick={onClose}
                   className="px-4 py-2 border border-gray-300 rounded hover:bg-gray-50"
                 >
                   Cancel
@@ -367,25 +350,23 @@ export default function LabelModal({
                 </div>
               )}
 
-              <div className="flex gap-3 justify-end pt-2">
-                <button
-                  type="button"
-                  onClick={handleCancel}
-                  className="px-4 py-2 border border-gray-300 rounded hover:bg-gray-50"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-                >
-                  {editingLabel ? 'Update Label' : 'Save Label'}
-                </button>
-              </div>
-            </form>
-          )}
-        </div>
-      </div>
-    </div>
+          <div className="flex gap-3 justify-end pt-2">
+            <button
+              type="button"
+              onClick={onClose}
+              className="px-4 py-2 border border-gray-300 rounded hover:bg-gray-50"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+            >
+              {editingLabel ? 'Update Label' : 'Save Label'}
+            </button>
+          </div>
+        </form>
+      )}
+    </Modal>
   )
 }

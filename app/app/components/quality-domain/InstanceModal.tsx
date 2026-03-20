@@ -6,6 +6,8 @@ import { useQualityDomain } from '@/app/store'
 import type { ConceptInstance, PointReference, QualityDomain } from './types'
 import { isPoint } from './types'
 import { generateId } from './utils'
+import Modal from '@/app/components/common/Modal'
+import { required, arrayMinLength, collectErrors } from '@/app/utils/validators'
 
 interface InstanceModalProps {
   isOpen: boolean
@@ -67,18 +69,18 @@ export default function InstanceModal({
 
   const validate = (): boolean => {
     const newErrors: string[] = []
-
-    if (!name.trim()) {
-      newErrors.push('Instance name is required')
-    }
-
-    if (Object.keys(selectedPoints).length === 0) {
-      newErrors.push('At least one point must be selected')
-    }
-
+    
     if (!concept) {
       newErrors.push('Invalid concept')
+      setErrors(newErrors)
+      return false
     }
+
+    const nameError = required('Instance name')(name)
+    if (nameError) newErrors.push(nameError)
+    
+    const pointsError = arrayMinLength('point', 1)(Object.keys(selectedPoints))
+    if (pointsError) newErrors.push(pointsError)
 
     setErrors(newErrors)
     return newErrors.length === 0
@@ -115,40 +117,21 @@ export default function InstanceModal({
     onClose()
   }
 
-  const handleCancel = () => {
-    onClose()
-  }
-
-  const handleBackdropClick = (e: React.MouseEvent) => {
-    if (e.target === e.currentTarget) {
-      onClose()
-    }
-  }
-
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Escape') {
-      onClose()
-    }
-  }
-
   if (!isOpen || !concept) return null
 
   return createPortal(
-    <div onKeyDown={handleKeyDown}>
-      <div className="modal-backdrop" onClick={handleBackdropClick} />
-      <div className="modal-content" onClick={handleBackdropClick}>
-        <div className="bg-white rounded-lg shadow-xl p-6 max-w-md w-full max-h-[90vh] overflow-y-auto">
-          <h2 className="text-2xl font-bold mb-4">
-            {editingInstance ? 'Edit Instance' : 'Create Instance'}
-          </h2>
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+      title={editingInstance ? 'Edit Instance' : 'Create Instance'}
+    >
+      <div className="bg-blue-50 border border-blue-200 rounded p-3 mb-4">
+        <div className="text-sm font-medium text-blue-900">
+          Concept: {concept.name}
+        </div>
+      </div>
 
-          <div className="bg-blue-50 border border-blue-200 rounded p-3 mb-4">
-            <div className="text-sm font-medium text-blue-900">
-              Concept: {concept.name}
-            </div>
-          </div>
-
-          <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <label htmlFor="instance-name" className="block text-sm font-medium mb-1">
                 Instance Name
@@ -210,25 +193,23 @@ export default function InstanceModal({
               </div>
             )}
 
-            <div className="flex gap-3 justify-end pt-2">
-              <button
-                type="button"
-                onClick={handleCancel}
-                className="px-4 py-2 border border-gray-300 rounded hover:bg-gray-50"
-              >
-                Cancel
-              </button>
-              <button
-                type="submit"
-                className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-              >
-                {editingInstance ? 'Update Instance' : 'Save Instance'}
-              </button>
-            </div>
-          </form>
+        <div className="flex gap-3 justify-end pt-2">
+          <button
+            type="button"
+            onClick={onClose}
+            className="px-4 py-2 border border-gray-300 rounded hover:bg-gray-50"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+          >
+            {editingInstance ? 'Update Instance' : 'Save Instance'}
+          </button>
         </div>
-      </div>
-    </div>,
+      </form>
+    </Modal>,
     document.body
   )
 }
