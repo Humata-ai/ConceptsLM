@@ -5,6 +5,8 @@ import type { QualityDomain } from '../types'
 import LabelVisualization3D from './LabelVisualization3D'
 import { useQualityDomain } from '@/app/store'
 import type { ThreeEvent } from '@react-three/fiber'
+import { useCursorOnHover } from '@/app/hooks/useCursorOnHover'
+import { VISUALIZATION_SIZE, GRID } from './constants'
 
 interface Visualization3DProps {
   domain: QualityDomain
@@ -12,6 +14,7 @@ interface Visualization3DProps {
 
 function Visualization3D({ domain }: Visualization3DProps) {
   const { selectDomain, state } = useQualityDomain()
+  const cursorHandlers = useCursorOnHover()
 
   const handleClick = (e: ThreeEvent<MouseEvent>) => {
     e.stopPropagation()
@@ -25,10 +28,10 @@ function Visualization3D({ domain }: Visualization3DProps) {
   const [minY, maxY] = dimY.range
   const [minZ, maxZ] = dimZ.range
 
-  const sizeX = 8
-  const sizeY = 8
-  const sizeZ = 8
-  const gridDivisions = 4
+  const sizeX = VISUALIZATION_SIZE.SIZE_3D
+  const sizeY = VISUALIZATION_SIZE.SIZE_3D
+  const sizeZ = VISUALIZATION_SIZE.SIZE_3D
+  const gridDivisions = GRID.DIVISIONS_3D
 
   // Create grid lines on all three faces
   const gridLines = useMemo(() => {
@@ -98,8 +101,7 @@ function Visualization3D({ domain }: Visualization3DProps) {
   return (
     <group
       onClick={handleClick}
-      onPointerOver={() => { if (document.body.style) document.body.style.cursor = 'pointer' }}
-      onPointerOut={() => { if (document.body.style) document.body.style.cursor = 'default' }}
+      {...cursorHandlers}
     >
       {/* Transparent box */}
       <mesh>

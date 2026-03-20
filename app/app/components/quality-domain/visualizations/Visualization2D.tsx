@@ -5,6 +5,8 @@ import type { QualityDomain } from '../types'
 import LabelVisualization2D from './LabelVisualization2D'
 import { useQualityDomain } from '@/app/store'
 import type { ThreeEvent } from '@react-three/fiber'
+import { useCursorOnHover } from '@/app/hooks/useCursorOnHover'
+import { VISUALIZATION_SIZE, GRID } from './constants'
 
 interface Visualization2DProps {
   domain: QualityDomain
@@ -12,6 +14,7 @@ interface Visualization2DProps {
 
 export default function Visualization2D({ domain }: Visualization2DProps) {
   const { selectDomain, state } = useQualityDomain()
+  const cursorHandlers = useCursorOnHover()
 
   const handleClick = (e: ThreeEvent<MouseEvent>) => {
     e.stopPropagation()
@@ -23,9 +26,9 @@ export default function Visualization2D({ domain }: Visualization2DProps) {
   const [minX, maxX] = dimX.range
   const [minY, maxY] = dimY.range
 
-  const sizeX = 10
-  const sizeY = 10
-  const gridDivisions = 10
+  const sizeX = VISUALIZATION_SIZE.SIZE_2D
+  const sizeY = VISUALIZATION_SIZE.SIZE_2D
+  const gridDivisions = GRID.DIVISIONS_2D
 
   // Create grid lines
   const gridLines = useMemo(() => {
@@ -61,8 +64,7 @@ export default function Visualization2D({ domain }: Visualization2DProps) {
   return (
     <group
       onClick={handleClick}
-      onPointerOver={() => { if (document.body.style) document.body.style.cursor = 'pointer' }}
-      onPointerOut={() => { if (document.body.style) document.body.style.cursor = 'default' }}
+      {...cursorHandlers}
     >
       {/* Grid plane (transparent) */}
       <mesh>
