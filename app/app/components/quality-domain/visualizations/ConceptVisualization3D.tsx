@@ -4,6 +4,10 @@ import { Vector3 } from 'three'
 import type { Concept } from '../types'
 import { useQualityDomain } from '@/app/store'
 import type { ThreeEvent } from '@react-three/fiber'
+import { useCircularLayoutMap } from '@/app/hooks/useCircularLayout'
+import { useCursorOnHover } from '@/app/hooks/useCursorOnHover'
+import { normalizeDimensionValue } from '@/app/utils/positionCalculations'
+import { DOMAIN_SCALE, VISUALIZATION_SIZE } from './constants'
 
 interface ConceptVisualization3DProps {
   concept: Concept
@@ -15,26 +19,15 @@ function ConceptVisualization3D({ concept, isSelected = false }: ConceptVisualiz
   const labels = getConceptLabels(concept.id)
   const instances = getConceptInstances(concept.id)
 
+  const cursorHandlers = useCursorOnHover()
+
   const handleClick = (e: ThreeEvent<MouseEvent>) => {
     e.stopPropagation()
     selectConcept(concept.id)
   }
 
-  // Calculate domain positions (same as AllDomainsVisualization)
-  const domainPositions = useMemo(() => {
-    const radius = 15
-    const total = state.domains.length
-    const angleStep = (2 * Math.PI) / total
-
-    const positions = new Map<string, readonly [number, number, number]>()
-    state.domains.forEach((domain, index) => {
-      const angle = index * angleStep
-      const x = radius * Math.cos(angle)
-      const z = radius * Math.sin(angle) - 15
-      positions.set(domain.id, [x, 0, z] as const)
-    })
-    return positions
-  }, [state.domains])
+  // Calculate domain positions using shared hook
+  const domainPositions = useCircularLayoutMap(state.domains)
 
   // Calculate instance point positions for all instances
   const allInstancesData = useMemo(() => {
@@ -62,7 +55,7 @@ function ConceptVisualization3D({ concept, isSelected = false }: ConceptVisualiz
         if (!domainPos) return
 
         // Scale by domain scale
-        const scale = 0.5
+        const scale = DOMAIN_SCALE.CONCEPT_VIEW
 
         let worldPosition: Vector3
 
@@ -73,8 +66,7 @@ function ConceptVisualization3D({ concept, isSelected = false }: ConceptVisualiz
           const value = getPointValue(pointDim)
           if (value === undefined) return
 
-          const [dimMin, dimMax] = dim.range
-          const pos = -5 + ((value - dimMin) / (dimMax - dimMin)) * 10
+          const pos = normalizeDimensionValue(value, dim.range, VISUALIZATION_SIZE.SIZE_1D)
 
           worldPosition = new Vector3(
             domainPos[0] + pos * scale,
@@ -93,11 +85,8 @@ function ConceptVisualization3D({ concept, isSelected = false }: ConceptVisualiz
           const valueY = getPointValue(pointDimY)
           if (valueX === undefined || valueY === undefined) return
 
-          const [dimMinX, dimMaxX] = dimX.range
-          const [dimMinY, dimMaxY] = dimY.range
-
-          const posX = -5 + ((valueX - dimMinX) / (dimMaxX - dimMinX)) * 10
-          const posY = -5 + ((valueY - dimMinY) / (dimMaxY - dimMinY)) * 10
+          const posX = normalizeDimensionValue(valueX, dimX.range, VISUALIZATION_SIZE.SIZE_2D)
+          const posY = normalizeDimensionValue(valueY, dimY.range, VISUALIZATION_SIZE.SIZE_2D)
 
           worldPosition = new Vector3(
             domainPos[0] + posX * scale,
@@ -105,14 +94,13 @@ function ConceptVisualization3D({ concept, isSelected = false }: ConceptVisualiz
             domainPos[2]
           )
         } else {
-          // 3D points: positioned in 3D space
+          // 3D points: positioned in 3D space (using smaller size for 3D)
           const values = domain.dimensions.map((dim) => {
             const pointDim = point.dimensions.find((d) => d.dimensionId === dim.id)
             const value = getPointValue(pointDim)
             if (value === undefined) return null
 
-            const [dimMin, dimMax] = dim.range
-            return -4 + ((value - dimMin) / (dimMax - dimMin)) * 8
+            return normalizeDimensionValue(value, dim.range, 8) // 3D uses size of 8
           })
 
           if (values.some(v => v === null)) return
@@ -275,8 +263,7 @@ function ConceptVisualization3D({ concept, isSelected = false }: ConceptVisualiz
       <Billboard
         position={conceptPosition}
         onClick={handleClick}
-        onPointerOver={() => { if (document.body.style) document.body.style.cursor = 'pointer' }}
-        onPointerOut={() => { if (document.body.style) document.body.style.cursor = 'default' }}
+        {...cursorHandlers}
       >
         {/* Background rectangle */}
         <mesh position={[0, 0, -0.01]}>
@@ -325,8 +312,7 @@ function ConceptVisualization3D({ concept, isSelected = false }: ConceptVisualiz
               e.stopPropagation()
               selectInstance(instance.id)
             }}
-            onPointerOver={() => { if (document.body.style) document.body.style.cursor = 'pointer' }}
-            onPointerOut={() => { if (document.body.style) document.body.style.cursor = 'default' }}
+            {...cursorHandlers}
           >
             {/* Background rectangle */}
             <mesh position={[0, 0, -0.01]}>
