@@ -1,4 +1,5 @@
-import type { QualityDomainState, QualityDomain, Concept, ConceptInstance, QualityDomainLabel, Property, PropertyReference, LabelReference } from './types'
+import type { QualityDomain, Concept, ConceptInstance, QualityDomainLabel, Property, PropertyReference, LabelReference } from './types'
+import type { AppState } from '@/app/store'
 
 const STORAGE_KEY = 'quality-domain-state'
 const STATE_VERSION = 3 // Version 3 adds instances
@@ -24,7 +25,7 @@ function migratePropertyRefToLabelRef(oldRef: PropertyReference): LabelReference
 }
 
 // Same logic as StateDebugPanel export
-export function serializeState(state: QualityDomainState): string {
+export function serializeState(state: AppState): string {
   const stateWithVersion = {
     ...state,
     version: STATE_VERSION
@@ -143,7 +144,7 @@ export function deserializeState(jsonString: string): { domains: QualityDomain[]
   return { domains, concepts, instances }
 }
 
-export function saveToLocalStorage(state: QualityDomainState): void {
+export function saveToLocalStorage(state: AppState): void {
   try {
     const serialized = serializeState(state)
     localStorage.setItem(STORAGE_KEY, serialized)

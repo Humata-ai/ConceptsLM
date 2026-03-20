@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { useQualityDomain } from './context/QualityDomainContext'
+import { useQualityDomain } from '@/app/store'
 import ConceptCard from './ConceptCard'
 import ConceptModal from './ConceptModal'
 import Button from '@mui/material/Button'

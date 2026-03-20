@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
-import { useQualityDomain } from './context/QualityDomainContext'
+import { useQualityDomain } from '@/app/store'
 import { useToast } from '../ToastProvider'
 import { loadFromLocalStorage, clearLocalStorage } from './localStorage'
 
