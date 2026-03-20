@@ -1,6 +1,6 @@
 import { useMemo, memo } from 'react'
 import { Text } from '@react-three/drei'
-import { useQualityDomain } from './context/QualityDomainContext'
+import { useQualityDomain } from '@/app/store'
 import DomainVisualization from './DomainVisualization'
 import ConceptVisualization3D from './visualizations/ConceptVisualization3D'
 import type { QualityDomain } from './types'

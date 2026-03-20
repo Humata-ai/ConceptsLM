@@ -2,7 +2,7 @@ import { useMemo, memo } from 'react'
 import { Text, Billboard, Line } from '@react-three/drei'
 import { Vector3 } from 'three'
 import type { Concept } from '../types'
-import { useQualityDomain } from '../context/QualityDomainContext'
+import { useQualityDomain } from '@/app/store'
 import type { ThreeEvent } from '@react-three/fiber'
 
 interface ConceptVisualization3DProps {

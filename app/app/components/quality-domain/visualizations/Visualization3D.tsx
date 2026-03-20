@@ -3,7 +3,7 @@ import { Text } from '@react-three/drei'
 import * as THREE from 'three'
 import type { QualityDomain } from '../types'
 import LabelVisualization3D from './LabelVisualization3D'
-import { useQualityDomain } from '../context/QualityDomainContext'
+import { useQualityDomain } from '@/app/store'
 import type { ThreeEvent } from '@react-three/fiber'
 
 interface Visualization3DProps {

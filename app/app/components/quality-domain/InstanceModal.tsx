@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { createPortal } from 'react-dom'
-import { useQualityDomain } from './context/QualityDomainContext'
+import { useQualityDomain } from '@/app/store'
 import type { ConceptInstance, PointReference, QualityDomain } from './types'
 import { isPoint } from './types'
 import { generateId } from './utils'

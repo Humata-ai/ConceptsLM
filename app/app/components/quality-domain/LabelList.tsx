@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { useQualityDomain } from './context/QualityDomainContext'
+import { useQualityDomain } from '@/app/store'
 import LabelCard from './LabelCard'
 import LabelModal from './LabelModal'
 import Button from '@mui/material/Button'

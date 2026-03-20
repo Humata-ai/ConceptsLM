@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useQualityDomain } from './context/QualityDomainContext'
+import { useQualityDomain } from '@/app/store'
 import type { Concept, LabelReference } from './types'
 import { generateId } from './utils'
 

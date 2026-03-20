@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { useQualityDomain } from './context/QualityDomainContext'
+import { useQualityDomain } from '@/app/store'
 import type { QualityDomainLabel, QualityDomain } from './types'
 import { isRegion, isPoint } from './types'
 import IconButton from '@mui/material/IconButton'

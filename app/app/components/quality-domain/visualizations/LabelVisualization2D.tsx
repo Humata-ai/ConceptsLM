@@ -2,7 +2,7 @@ import { useMemo, memo } from 'react'
 import { Text } from '@react-three/drei'
 import type { QualityDomainLabel, QualityDomain } from '../types'
 import { isRegion, isPoint } from '../types'
-import { useQualityDomain } from '../context/QualityDomainContext'
+import { useQualityDomain } from '@/app/store'
 import type { ThreeEvent } from '@react-three/fiber'
 
 interface LabelVisualization2DProps {
