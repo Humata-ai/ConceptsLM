@@ -5,6 +5,7 @@ import type { QualityDomainLabel, QualityDomain } from '../types'
 import { isRegion, isPoint } from '../types'
 import { useQualityDomain } from '@/app/store'
 import type { ThreeEvent } from '@react-three/fiber'
+import { useCursorOnHover } from '@/app/hooks/useCursorOnHover'
 
 interface LabelVisualization3DProps {
   label: QualityDomainLabel
@@ -30,6 +31,7 @@ function LabelVisualization3D({
 }: LabelVisualization3DProps) {
   const groupRef = useRef<THREE.Group>(null)
   const { selectLabel } = useQualityDomain()
+  const cursorHandlers = useCursorOnHover()
 
   const handleClick = (e: ThreeEvent<MouseEvent>) => {
     e.stopPropagation()
@@ -129,8 +131,7 @@ function LabelVisualization3D({
       <group
         ref={groupRef}
         onClick={handleClick}
-        onPointerOver={() => { if (document.body.style) document.body.style.cursor = 'pointer' }}
-        onPointerOut={() => { if (document.body.style) document.body.style.cursor = 'default' }}
+        {...cursorHandlers}
       />
 
       <Billboard position={labelPosition}>

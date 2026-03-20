@@ -4,6 +4,7 @@ import type { QualityDomainLabel, QualityDomain } from '../types'
 import { isRegion, isPoint } from '../types'
 import { useQualityDomain } from '@/app/store'
 import type { ThreeEvent } from '@react-three/fiber'
+import { useCursorOnHover } from '@/app/hooks/useCursorOnHover'
 
 interface LabelVisualization2DProps {
   label: QualityDomainLabel
@@ -28,6 +29,7 @@ function LabelVisualization2D({
   isSelected = false,
 }: LabelVisualization2DProps) {
   const { selectLabel } = useQualityDomain()
+  const cursorHandlers = useCursorOnHover()
 
   const handleClick = (e: ThreeEvent<MouseEvent>) => {
     e.stopPropagation()
@@ -95,8 +97,7 @@ function LabelVisualization2D({
     <group
       rotation={rotation}
       onClick={handleClick}
-      onPointerOver={() => { if (document.body.style) document.body.style.cursor = 'pointer' }}
-      onPointerOut={() => { if (document.body.style) document.body.style.cursor = 'default' }}
+      {...cursorHandlers}
     >
       {isPointLabel ? (
         <mesh position={meshPosition}>
