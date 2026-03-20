@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react'
 import { useQualityDomain } from '@/app/store'
 import type { Concept, LabelReference } from './types'
 import { generateId } from './utils'
+import Modal from '@/app/components/common/Modal'
+import { required, arrayMinLength, collectErrors } from '@/app/utils/validators'
 
 interface ConceptModalProps {
   isOpen: boolean
@@ -80,14 +82,12 @@ export default function ConceptModal({
 
   const validate = (): boolean => {
     const newErrors: string[] = []
-
-    if (!name.trim()) {
-      newErrors.push('Concept name is required')
-    }
-
-    if (selectedLabelRefs.length === 0) {
-      newErrors.push('At least one label must be selected')
-    }
+    
+    const nameError = required('Concept name')(name)
+    if (nameError) newErrors.push(nameError)
+    
+    const labelsError = arrayMinLength('label', 1)(selectedLabelRefs)
+    if (labelsError) newErrors.push(labelsError)
 
     setErrors(newErrors)
     return newErrors.length === 0
@@ -116,34 +116,13 @@ export default function ConceptModal({
     onClose()
   }
 
-  const handleCancel = () => {
-    onClose()
-  }
-
-  const handleBackdropClick = (e: React.MouseEvent) => {
-    if (e.target === e.currentTarget) {
-      onClose()
-    }
-  }
-
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Escape') {
-      onClose()
-    }
-  }
-
-  if (!isOpen) return null
-
   return (
-    <div onKeyDown={handleKeyDown}>
-      <div className="modal-backdrop" onClick={handleBackdropClick} />
-      <div className="modal-content" onClick={handleBackdropClick}>
-        <div className="bg-white rounded-lg shadow-xl p-6 max-w-md w-full max-h-[90vh] overflow-y-auto">
-          <h2 className="text-2xl font-bold mb-4 text-purple-900">
-            {editingConcept ? 'Edit Concept' : 'Create Concept'}
-          </h2>
-
-          <form onSubmit={handleSubmit} className="space-y-4">
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+      title={editingConcept ? 'Edit Concept' : 'Create Concept'}
+    >
+      <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <label htmlFor="concept-name" className="block text-sm font-medium mb-1">
                 Concept Name
@@ -224,24 +203,22 @@ export default function ConceptModal({
               </div>
             )}
 
-            <div className="flex gap-3 justify-end pt-2">
-              <button
-                type="button"
-                onClick={handleCancel}
-                className="px-4 py-2 border border-gray-300 rounded hover:bg-gray-50"
-              >
-                Cancel
-              </button>
-              <button
-                type="submit"
-                className="px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700"
-              >
-                {editingConcept ? 'Update Concept' : 'Save Concept'}
-              </button>
-            </div>
-          </form>
+        <div className="flex gap-3 justify-end pt-2">
+          <button
+            type="button"
+            onClick={onClose}
+            className="px-4 py-2 border border-gray-300 rounded hover:bg-gray-50"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            className="px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700"
+          >
+            {editingConcept ? 'Update Concept' : 'Save Concept'}
+          </button>
         </div>
-      </div>
-    </div>
+      </form>
+    </Modal>
   )
 }
