@@ -4,6 +4,8 @@ import { useQualityDomain } from '@/app/store'
 import DomainVisualization from './DomainVisualization'
 import ConceptVisualization3D from './visualizations/ConceptVisualization3D'
 import type { QualityDomain } from './types'
+import { useCircularLayout } from '@/app/hooks/useCircularLayout'
+import { DOMAIN_SCALE } from './visualizations/constants'
 
 // Custom comparison for domain items - only re-render if domain data actually changed
 const domainItemAreEqual = (
@@ -69,19 +71,8 @@ function AllDomainsVisualization() {
   const { state } = useQualityDomain()
   const domains = state.domains
 
-  // Memoize positions for all domains
-  const domainPositions = useMemo(() => {
-    const radius = 15
-    const total = domains.length
-    const angleStep = (2 * Math.PI) / total
-
-    return domains.map((_, index) => {
-      const angle = index * angleStep
-      const x = radius * Math.cos(angle)
-      const z = radius * Math.sin(angle) - 15
-      return [x, 0, z] as const
-    })
-  }, [domains.length])
+  // Calculate positions using shared hook
+  const domainPositions = useCircularLayout(domains.length)
 
   const emptyPosition = useMemo(() => [0, 0, 0] as const, [])
 
@@ -105,7 +96,7 @@ function AllDomainsVisualization() {
 
         const position = domainPositions[index]
         const isSelected = state.selectedDomainId === domain.id
-        const scale = isSelected ? 0.55 : 0.5
+        const scale = DOMAIN_SCALE.ALL_DOMAINS_VIEW
 
         const Component = isSelected ? SelectedDomainItem : DomainItem
 
