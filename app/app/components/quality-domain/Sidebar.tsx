@@ -8,8 +8,6 @@ import LabelCard from './LabelCard'
 import LabelModal from './LabelModal'
 import ConceptCard from './ConceptCard'
 import ConceptModal from './ConceptModal'
-import CloseIcon from '@mui/icons-material/Close'
-import MenuIcon from '@mui/icons-material/Menu'
 import CategoryIcon from '@mui/icons-material/Category'
 import ImportExportIcon from '@mui/icons-material/ImportExport'
 import Button from '@mui/material/Button'
@@ -22,8 +20,7 @@ type SidebarView = 'data' | 'import-export'
 
 export default function Sidebar() {
   const { state, getSelectedDomain } = useQualityDomain()
-  const [isOpen, setIsOpen] = useState(true)
-  const [activeView, setActiveView] = useState<SidebarView>('data')
+  const [activeView, setActiveView] = useState<SidebarView | null>('data')
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [editingDomainId, setEditingDomainId] = useState<string | null>(null)
   const [isLabelModalOpen, setIsLabelModalOpen] = useState(false)
@@ -36,19 +33,18 @@ export default function Sidebar() {
   return (
     <>
       <div className="fixed top-0 left-0 h-full z-30 flex">
-        {/* Vertical Tab Strip (always visible when sidebar is open) */}
-        {isOpen && (
-          <div
-            className="h-full flex flex-col items-center py-2 gap-1"
-            style={{
-              width: 48,
-              backgroundColor: 'rgba(245, 245, 245, 0.98)',
-              borderRight: '1px solid rgba(0,0,0,0.08)',
-            }}
-          >
+        {/* Vertical Tab Strip (always visible) */}
+        <div
+          className="h-full flex flex-col items-center py-2 gap-1"
+          style={{
+            width: 48,
+            backgroundColor: 'rgba(245, 245, 245, 0.98)',
+            borderRight: '1px solid rgba(0,0,0,0.08)',
+          }}
+        >
             <Tooltip title="Data Objects" placement="right">
               <IconButton
-                onClick={() => setActiveView('data')}
+                onClick={() => setActiveView(activeView === 'data' ? null : 'data')}
                 sx={{
                   borderRadius: 1,
                   width: 40,
@@ -66,7 +62,7 @@ export default function Sidebar() {
 
             <Tooltip title="Import / Export" placement="right">
               <IconButton
-                onClick={() => setActiveView('import-export')}
+                onClick={() => setActiveView(activeView === 'import-export' ? null : 'import-export')}
                 sx={{
                   borderRadius: 1,
                   width: 40,
@@ -81,11 +77,10 @@ export default function Sidebar() {
                 <ImportExportIcon fontSize="small" />
               </IconButton>
             </Tooltip>
-          </div>
-        )}
+        </div>
 
         {/* Sidebar Content Panel */}
-        {isOpen && (
+        {activeView && (
           <div className="bg-white/95 backdrop-blur-sm shadow-xl h-full overflow-y-auto w-80 flex flex-col">
             {/* Data Objects View */}
             {activeView === 'data' && (
@@ -236,14 +231,6 @@ export default function Sidebar() {
             )}
           </div>
         )}
-
-        {/* Toggle Button (always visible) */}
-        <button
-          onClick={() => setIsOpen(!isOpen)}
-          className="px-2 py-2 bg-blue-600 text-white rounded-r shadow hover:bg-blue-700 transition-colors self-start mt-4 flex items-center justify-center"
-        >
-          {isOpen ? <CloseIcon fontSize="small" /> : <MenuIcon fontSize="small" />}
-        </button>
       </div>
 
       <DomainModal
