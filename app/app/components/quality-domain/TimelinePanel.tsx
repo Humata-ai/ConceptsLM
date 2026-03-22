@@ -28,8 +28,21 @@ const LEFT_COL_X = 60
 const RIGHT_COL_X = 200
 const START_Y = 40
 
+function getDefaultSelection(): SelectedItem {
+  const lastStateRow = MOCK_STATES.length > 0 ? (MOCK_STATES.length - 1) * 2 : -1
+  const lastEventRow = MOCK_EVENTS.length > 0 ? (MOCK_EVENTS.length - 1) * 2 + 1 : -1
+
+  if (lastEventRow >= lastStateRow && MOCK_EVENTS.length > 0) {
+    return { type: 'event', id: MOCK_EVENTS[MOCK_EVENTS.length - 1].id }
+  }
+  if (MOCK_STATES.length > 0) {
+    return { type: 'state', id: MOCK_STATES[MOCK_STATES.length - 1].id }
+  }
+  return null
+}
+
 export default function TimelinePanel() {
-  const [selected, setSelected] = useState<SelectedItem>(null)
+  const [selected, setSelected] = useState<SelectedItem>(getDefaultSelection)
 
   const handleSelect = (type: 'state' | 'event', id: string) => {
     if (selected?.type === type && selected.id === id) {
