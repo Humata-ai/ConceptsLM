@@ -4,7 +4,7 @@ import Scene from './components/Scene'
 import { AppStoreProvider, useQualityDomain } from './store'
 import Sidebar from './components/quality-domain/Sidebar'
 import TableView from './components/quality-domain/TableView'
-import StateDebugPanel from './components/quality-domain/StateDebugPanel'
+
 import { ToastProvider } from './components/ToastProvider'
 import { StateRestoration } from './components/quality-domain/StateRestoration'
 
@@ -19,7 +19,7 @@ function HomeContent() {
       <Sidebar />
       <Scene />
       {show4DTable && selectedDomain && <TableView domain={selectedDomain} />}
-      <StateDebugPanel />
+
     </div>
   )
 }
