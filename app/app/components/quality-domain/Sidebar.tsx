@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { usePathname, useRouter } from 'next/navigation'
 import { useQualityDomain } from '@/app/store'
 import DomainCard from './DomainCard'
 import DomainModal from './DomainModal'
@@ -20,9 +21,29 @@ import ImportExportSection from './ImportExportSection'
 
 type SidebarView = 'data' | 'import-export' | 'timeline'
 
+const VALID_TABS: SidebarView[] = ['data', 'import-export', 'timeline']
+
+function getTabFromPathname(pathname: string): SidebarView | null {
+  const segment = pathname.replace(/^\//, '')
+  if (VALID_TABS.includes(segment as SidebarView)) {
+    return segment as SidebarView
+  }
+  return null
+}
+
 export default function Sidebar() {
   const { state, getSelectedDomain } = useQualityDomain()
-  const [activeView, setActiveView] = useState<SidebarView | null>('data')
+  const pathname = usePathname()
+  const router = useRouter()
+  const activeView = getTabFromPathname(pathname)
+
+  const handleTabClick = (tab: SidebarView) => {
+    if (activeView === tab) {
+      // Already on this tab — stay (no collapse since URL must always have a tab)
+      return
+    }
+    router.push(`/${tab}`)
+  }
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [editingDomainId, setEditingDomainId] = useState<string | null>(null)
   const [isLabelModalOpen, setIsLabelModalOpen] = useState(false)
@@ -46,7 +67,7 @@ export default function Sidebar() {
         >
             <Tooltip title="Data Objects" placement="right">
               <IconButton
-                onClick={() => setActiveView(activeView === 'data' ? null : 'data')}
+                onClick={() => handleTabClick('data')}
                 sx={{
                   borderRadius: 1,
                   width: 40,
@@ -64,7 +85,7 @@ export default function Sidebar() {
 
             <Tooltip title="Timeline" placement="right">
               <IconButton
-                onClick={() => setActiveView(activeView === 'timeline' ? null : 'timeline')}
+                onClick={() => handleTabClick('timeline')}
                 sx={{
                   borderRadius: 1,
                   width: 40,
@@ -82,7 +103,7 @@ export default function Sidebar() {
 
             <Tooltip title="Import / Export" placement="right">
               <IconButton
-                onClick={() => setActiveView(activeView === 'import-export' ? null : 'import-export')}
+                onClick={() => handleTabClick('import-export')}
                 sx={{
                   borderRadius: 1,
                   width: 40,
