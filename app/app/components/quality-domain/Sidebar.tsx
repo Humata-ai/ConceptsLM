@@ -62,24 +62,6 @@ export default function Sidebar() {
               </IconButton>
             </Tooltip>
 
-            <Tooltip title="Import / Export" placement="right">
-              <IconButton
-                onClick={() => setActiveView(activeView === 'import-export' ? null : 'import-export')}
-                sx={{
-                  borderRadius: 1,
-                  width: 40,
-                  height: 40,
-                  backgroundColor: activeView === 'import-export' ? 'primary.main' : 'transparent',
-                  color: activeView === 'import-export' ? 'white' : 'text.secondary',
-                  '&:hover': {
-                    backgroundColor: activeView === 'import-export' ? 'primary.dark' : 'action.hover',
-                  },
-                }}
-              >
-                <ImportExportIcon fontSize="small" />
-              </IconButton>
-            </Tooltip>
-
             <Tooltip title="Timeline" placement="right">
               <IconButton
                 onClick={() => setActiveView(activeView === 'timeline' ? null : 'timeline')}
@@ -95,6 +77,24 @@ export default function Sidebar() {
                 }}
               >
                 <TimelineIcon fontSize="small" />
+              </IconButton>
+            </Tooltip>
+
+            <Tooltip title="Import / Export" placement="right">
+              <IconButton
+                onClick={() => setActiveView(activeView === 'import-export' ? null : 'import-export')}
+                sx={{
+                  borderRadius: 1,
+                  width: 40,
+                  height: 40,
+                  backgroundColor: activeView === 'import-export' ? 'primary.main' : 'transparent',
+                  color: activeView === 'import-export' ? 'white' : 'text.secondary',
+                  '&:hover': {
+                    backgroundColor: activeView === 'import-export' ? 'primary.dark' : 'action.hover',
+                  },
+                }}
+              >
+                <ImportExportIcon fontSize="small" />
               </IconButton>
             </Tooltip>
         </div>
