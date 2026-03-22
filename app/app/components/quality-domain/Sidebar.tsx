@@ -8,15 +8,17 @@ import LabelCard from './LabelCard'
 import LabelModal from './LabelModal'
 import ConceptCard from './ConceptCard'
 import ConceptModal from './ConceptModal'
+import TimelinePanel from './TimelinePanel'
 import CategoryIcon from '@mui/icons-material/Category'
 import ImportExportIcon from '@mui/icons-material/ImportExport'
+import TimelineIcon from '@mui/icons-material/Timeline'
 import Button from '@mui/material/Button'
 import Tooltip from '@mui/material/Tooltip'
 import IconButton from '@mui/material/IconButton'
 import Typography from '@mui/material/Typography'
 import ImportExportSection from './ImportExportSection'
 
-type SidebarView = 'data' | 'import-export'
+type SidebarView = 'data' | 'import-export' | 'timeline'
 
 export default function Sidebar() {
   const { state, getSelectedDomain } = useQualityDomain()
@@ -75,6 +77,24 @@ export default function Sidebar() {
                 }}
               >
                 <ImportExportIcon fontSize="small" />
+              </IconButton>
+            </Tooltip>
+
+            <Tooltip title="Timeline" placement="right">
+              <IconButton
+                onClick={() => setActiveView(activeView === 'timeline' ? null : 'timeline')}
+                sx={{
+                  borderRadius: 1,
+                  width: 40,
+                  height: 40,
+                  backgroundColor: activeView === 'timeline' ? 'primary.main' : 'transparent',
+                  color: activeView === 'timeline' ? 'white' : 'text.secondary',
+                  '&:hover': {
+                    backgroundColor: activeView === 'timeline' ? 'primary.dark' : 'action.hover',
+                  },
+                }}
+              >
+                <TimelineIcon fontSize="small" />
               </IconButton>
             </Tooltip>
         </div>
@@ -226,6 +246,21 @@ export default function Sidebar() {
 
                 <div className="flex-1 overflow-y-auto">
                   <ImportExportSection />
+                </div>
+              </div>
+            )}
+
+            {/* Timeline View */}
+            {activeView === 'timeline' && (
+              <div className="flex flex-col h-full">
+                <div className="px-4 py-3 border-b border-gray-200">
+                  <Typography variant="subtitle1" fontWeight="bold">
+                    Timeline
+                  </Typography>
+                </div>
+
+                <div className="flex-1 overflow-y-auto">
+                  <TimelinePanel />
                 </div>
               </div>
             )}
