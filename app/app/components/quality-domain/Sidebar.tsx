@@ -10,6 +10,7 @@ import LabelModal from './LabelModal'
 import ConceptCard from './ConceptCard'
 import ConceptModal from './ConceptModal'
 import TimelinePanel from './TimelinePanel'
+import EventModal from './EventModal'
 import CategoryIcon from '@mui/icons-material/Category'
 import ImportExportIcon from '@mui/icons-material/ImportExport'
 import TimelineIcon from '@mui/icons-material/Timeline'
@@ -50,6 +51,7 @@ export default function Sidebar() {
   const [editingLabelId, setEditingLabelId] = useState<string | null>(null)
   const [isConceptModalOpen, setIsConceptModalOpen] = useState(false)
   const [editingConceptId, setEditingConceptId] = useState<string | null>(null)
+  const [isEventModalOpen, setIsEventModalOpen] = useState(false)
 
   const selectedDomain = getSelectedDomain()
 
@@ -274,10 +276,19 @@ export default function Sidebar() {
             {/* Timeline View */}
             {activeView === 'timeline' && (
               <div className="flex flex-col h-full">
-                <div className="px-4 py-3 border-b border-gray-200">
+                <div className="px-4 py-3 border-b border-gray-200 flex items-center justify-between">
                   <Typography variant="subtitle1" fontWeight="bold">
                     Timeline
                   </Typography>
+                  <Button
+                    onClick={() => setIsEventModalOpen(true)}
+                    variant="outlined"
+                    color="primary"
+                    size="small"
+                    sx={{ textTransform: 'none' }}
+                  >
+                    Add Event
+                  </Button>
                 </div>
 
                 <div className="flex-1 overflow-y-auto">
@@ -308,6 +319,11 @@ export default function Sidebar() {
         isOpen={isConceptModalOpen}
         editingConceptId={editingConceptId}
         onClose={() => setIsConceptModalOpen(false)}
+      />
+
+      <EventModal
+        isOpen={isEventModalOpen}
+        onClose={() => setIsEventModalOpen(false)}
       />
     </>
   )
