@@ -25,6 +25,7 @@ export default function LabelModal({
   const [regionDimensions, setRegionDimensions] = useState<RegionDimensionRange[]>([])
   const [pointDimensions, setPointDimensions] = useState<PointDimensionValue[]>([])
   const [errors, setErrors] = useState<string[]>([])
+  const [isGenerating, setIsGenerating] = useState(false)
 
   const domain = domainId ? state.domains.find((d) => d.id === domainId) : null
   const editingLabel = editingLabelId && domain
@@ -138,6 +139,51 @@ export default function LabelModal({
     return newErrors.length === 0
   }
 
+  const handleGenerate = async () => {
+    if (!name.trim()) {
+      setErrors(['Please enter a label name before generating'])
+      return
+    }
+    if (!labelType || !domain) return
+
+    setIsGenerating(true)
+    setErrors([])
+
+    try {
+      const response = await fetch('/api/generate-label', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          labelName: name,
+          labelType,
+          domainName: domain.name,
+          dimensions: domain.dimensions.map((d) => ({
+            id: d.id,
+            name: d.name,
+            range: [d.range[0], d.range[1]],
+          })),
+        }),
+      })
+
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.error || 'Failed to generate')
+      }
+
+      const data = await response.json()
+
+      if (labelType === 'region' && data.type === 'region') {
+        setRegionDimensions(data.dimensions)
+      } else if (labelType === 'point' && data.type === 'point') {
+        setPointDimensions(data.dimensions)
+      }
+    } catch (err) {
+      setErrors([err instanceof Error ? err.message : 'Failed to generate label dimensions'])
+    } finally {
+      setIsGenerating(false)
+    }
+  }
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
 
@@ -237,15 +283,25 @@ export default function LabelModal({
                 <label htmlFor="label-name" className="block text-sm font-medium mb-1">
                   Label Name
                 </label>
-                <input
-                  id="label-name"
-                  type="text"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  className="w-full border border-gray-300 rounded px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                  placeholder="e.g., Red, Heavy, Bright"
-                  required
-                />
+                <div className="flex gap-2">
+                  <input
+                    id="label-name"
+                    type="text"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    className="flex-1 border border-gray-300 rounded px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                    placeholder="e.g., Red, Heavy, Bright"
+                    required
+                  />
+                  <button
+                    type="button"
+                    onClick={handleGenerate}
+                    disabled={isGenerating || !name.trim()}
+                    className="px-3 py-2 bg-purple-600 text-white rounded hover:bg-purple-700 disabled:opacity-50 disabled:cursor-not-allowed text-sm whitespace-nowrap"
+                  >
+                    {isGenerating ? 'Generating...' : 'AI Fill'}
+                  </button>
+                </div>
               </div>
 
               {labelType === 'region' && (
