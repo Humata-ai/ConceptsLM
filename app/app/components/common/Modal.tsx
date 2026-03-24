@@ -1,12 +1,13 @@
 'use client'
 
 import { type ReactNode } from 'react'
-import { useModal } from '@/app/hooks/useModal'
+import LinearProgress from '@mui/material/LinearProgress'
 
 interface ModalProps {
   isOpen: boolean
   onClose: () => void
   title: string
+  loading?: boolean
   children: ReactNode
   maxWidth?: 'sm' | 'md' | 'lg' | 'xl' | '2xl'
 }
@@ -15,19 +16,17 @@ interface ModalProps {
  * Shared Modal Component
  * 
  * Provides consistent modal behavior across the application:
- * - Backdrop click to close
- * - Escape key to close
  * - Standard styling
+ * - Users must explicitly close via Cancel/X button
  */
 export default function Modal({ 
   isOpen, 
   onClose, 
   title, 
+  loading,
   children,
   maxWidth = 'md' 
 }: ModalProps) {
-  const { handleBackdropClick, handleKeyDown } = useModal(onClose)
-
   if (!isOpen) return null
 
   const maxWidthClasses = {
@@ -39,12 +38,15 @@ export default function Modal({
   }
 
   return (
-    <div onKeyDown={handleKeyDown}>
-      <div className="modal-backdrop" onClick={handleBackdropClick} />
-      <div className="modal-content" onClick={handleBackdropClick}>
-        <div className={`bg-white rounded-lg shadow-xl p-6 ${maxWidthClasses[maxWidth]} w-full max-h-[90vh] overflow-y-auto`}>
-          <h2 className="text-2xl font-bold mb-4">{title}</h2>
-          {children}
+    <div>
+      <div className="modal-backdrop" />
+      <div className="modal-content">
+        <div className={`bg-white rounded-lg shadow-xl overflow-hidden ${maxWidthClasses[maxWidth]} w-full max-h-[90vh] overflow-y-auto`}>
+          {loading && <LinearProgress />}
+          <div className="p-6">
+            <h2 className="text-2xl font-bold mb-4">{title}</h2>
+            {children}
+          </div>
         </div>
       </div>
     </div>
