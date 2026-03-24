@@ -7,7 +7,7 @@ import type { ConceptInstance, PointReference, QualityDomain } from './types'
 import { isPoint } from './types'
 import { generateId } from './utils'
 import Modal from '@/app/components/common/Modal'
-import { required, arrayMinLength, collectErrors } from '@/app/utils/validators'
+import { required, collectErrors } from '@/app/utils/validators'
 
 interface InstanceModalProps {
   isOpen: boolean
@@ -78,9 +78,6 @@ export default function InstanceModal({
 
     const nameError = required('Instance name')(name)
     if (nameError) newErrors.push(nameError)
-    
-    const pointsError = arrayMinLength('point', 1)(Object.keys(selectedPoints))
-    if (pointsError) newErrors.push(pointsError)
 
     setErrors(newErrors)
     return newErrors.length === 0
