@@ -9,7 +9,7 @@ import TableView from '../components/quality-domain/TableView'
 import { ToastProvider } from '../components/ToastProvider'
 import { StateRestoration } from '../components/quality-domain/StateRestoration'
 
-const VALID_TABS = ['data', 'timeline', 'import-export'] as const
+const VALID_TABS = ['scene', 'timeline', 'import-export'] as const
 
 function TabContent() {
   const { getSelectedDomain } = useQualityDomain()
