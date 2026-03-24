@@ -188,6 +188,13 @@ export function appReducer(state: AppState, action: AppAction): AppState {
         selectedLabelDomainId: null,
         selectedConceptId: null,
         selectedInstanceId: null,
+        hasRestoredState: true,
+      }
+
+    case 'MARK_RESTORED':
+      return {
+        ...state,
+        hasRestoredState: true,
       }
 
     default:

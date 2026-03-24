@@ -136,4 +136,5 @@ export const initialState: AppState = {
     pointRefs: instance.pointRefs,
     createdAt: new Date(instance.createdAt),
   })),
+  hasRestoredState: false,
 }
