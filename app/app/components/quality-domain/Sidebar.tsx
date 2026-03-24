@@ -14,15 +14,16 @@ import EventModal from './EventModal'
 import LayersIcon from '@mui/icons-material/Layers'
 import ImportExportIcon from '@mui/icons-material/ImportExport'
 import TimelineIcon from '@mui/icons-material/Timeline'
+import QuizIcon from '@mui/icons-material/Quiz'
 import Button from '@mui/material/Button'
 import Tooltip from '@mui/material/Tooltip'
 import IconButton from '@mui/material/IconButton'
 import Typography from '@mui/material/Typography'
 import ImportExportSection from './ImportExportSection'
 
-type SidebarView = 'scene' | 'import-export' | 'timeline'
+type SidebarView = 'scene' | 'import-export' | 'timeline' | 'dictionary'
 
-const VALID_TABS: SidebarView[] = ['scene', 'import-export', 'timeline']
+const VALID_TABS: SidebarView[] = ['scene', 'import-export', 'timeline', 'dictionary']
 
 function getTabFromPathname(pathname: string): SidebarView | null {
   const segment = pathname.replace(/^\//, '')
@@ -37,12 +38,15 @@ export default function Sidebar() {
   const pathname = usePathname()
   const router = useRouter()
   const activeView = getTabFromPathname(pathname)
+  const [collapsed, setCollapsed] = useState(false)
+  const visibleView = collapsed ? null : activeView
 
   const handleTabClick = (tab: SidebarView) => {
     if (activeView === tab) {
-      // Already on this tab — stay (no collapse since URL must always have a tab)
+      setCollapsed((prev) => !prev)
       return
     }
+    setCollapsed(false)
     router.push(`/${tab}`)
   }
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -74,10 +78,10 @@ export default function Sidebar() {
                   borderRadius: 1,
                   width: 40,
                   height: 40,
-                  backgroundColor: activeView === 'scene' ? 'primary.main' : 'transparent',
-                  color: activeView === 'scene' ? 'white' : 'text.secondary',
+                  backgroundColor: visibleView === 'scene' ? 'primary.main' : 'transparent',
+                  color: visibleView === 'scene' ? 'white' : 'text.secondary',
                   '&:hover': {
-                    backgroundColor: activeView === 'scene' ? 'primary.dark' : 'action.hover',
+                    backgroundColor: visibleView === 'scene' ? 'primary.dark' : 'action.hover',
                   },
                 }}
               >
@@ -92,14 +96,32 @@ export default function Sidebar() {
                   borderRadius: 1,
                   width: 40,
                   height: 40,
-                  backgroundColor: activeView === 'timeline' ? 'primary.main' : 'transparent',
-                  color: activeView === 'timeline' ? 'white' : 'text.secondary',
+                  backgroundColor: visibleView === 'timeline' ? 'primary.main' : 'transparent',
+                  color: visibleView === 'timeline' ? 'white' : 'text.secondary',
                   '&:hover': {
-                    backgroundColor: activeView === 'timeline' ? 'primary.dark' : 'action.hover',
+                    backgroundColor: visibleView === 'timeline' ? 'primary.dark' : 'action.hover',
                   },
                 }}
               >
                 <TimelineIcon fontSize="small" />
+              </IconButton>
+            </Tooltip>
+
+            <Tooltip title="Dictionary" placement="right">
+              <IconButton
+                onClick={() => handleTabClick('dictionary')}
+                sx={{
+                  borderRadius: 1,
+                  width: 40,
+                  height: 40,
+                  backgroundColor: visibleView === 'dictionary' ? 'primary.main' : 'transparent',
+                  color: visibleView === 'dictionary' ? 'white' : 'text.secondary',
+                  '&:hover': {
+                    backgroundColor: visibleView === 'dictionary' ? 'primary.dark' : 'action.hover',
+                  },
+                }}
+              >
+                <QuizIcon fontSize="small" />
               </IconButton>
             </Tooltip>
 
@@ -110,10 +132,10 @@ export default function Sidebar() {
                   borderRadius: 1,
                   width: 40,
                   height: 40,
-                  backgroundColor: activeView === 'import-export' ? 'primary.main' : 'transparent',
-                  color: activeView === 'import-export' ? 'white' : 'text.secondary',
+                  backgroundColor: visibleView === 'import-export' ? 'primary.main' : 'transparent',
+                  color: visibleView === 'import-export' ? 'white' : 'text.secondary',
                   '&:hover': {
-                    backgroundColor: activeView === 'import-export' ? 'primary.dark' : 'action.hover',
+                    backgroundColor: visibleView === 'import-export' ? 'primary.dark' : 'action.hover',
                   },
                 }}
               >
@@ -123,7 +145,7 @@ export default function Sidebar() {
         </div>
 
         {/* Sidebar Content Panel */}
-        {activeView && (
+        {visibleView && (
           <div className="bg-white/95 backdrop-blur-sm shadow-xl h-full overflow-y-auto w-80 flex flex-col">
             {/* Scene View */}
             {activeView === 'scene' && (
@@ -293,6 +315,24 @@ export default function Sidebar() {
 
                 <div className="flex-1 overflow-y-auto">
                   <TimelinePanel />
+                </div>
+              </div>
+            )}
+
+            {/* Dictionary View */}
+            {activeView === 'dictionary' && (
+              <div className="flex flex-col h-full">
+                <div className="px-4 py-3 border-b border-gray-200">
+                  <Typography variant="subtitle1" fontWeight="bold">
+                    Dictionary
+                  </Typography>
+                </div>
+                <div className="flex-1 overflow-y-auto">
+                  <div className="px-4 py-2">
+                    <div className="p-3 rounded-lg bg-white border border-gray-300 hover:bg-gray-50 cursor-pointer transition-colors">
+                      <h3 className="font-medium">Follow</h3>
+                    </div>
+                  </div>
                 </div>
               </div>
             )}

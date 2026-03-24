@@ -35,6 +35,7 @@ export type AppAction =
   
   // State restoration
   | { type: 'RESTORE_STATE'; payload: { domains: QualityDomain[]; concepts: Concept[]; instances: ConceptInstance[] } }
+  | { type: 'MARK_RESTORED' }
 
 /**
  * App State
@@ -51,4 +52,5 @@ export interface AppState {
   selectedInstanceId: string | null
   concepts: Concept[]
   instances: ConceptInstance[]
+  hasRestoredState: boolean
 }

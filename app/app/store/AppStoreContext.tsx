@@ -67,8 +67,9 @@ const AppStoreContext = createContext<AppStoreContextType | undefined>(undefined
 export function AppStoreProvider({ children }: { children: ReactNode }) {
   const [state, dispatch] = useReducer(appReducer, initialState)
 
-  // Auto-save to localStorage on every state change
+  // Auto-save to localStorage on every state change, but only after restoration is done
   useEffect(() => {
+    if (!state.hasRestoredState) return
     saveToLocalStorage(state)
   }, [state])
 

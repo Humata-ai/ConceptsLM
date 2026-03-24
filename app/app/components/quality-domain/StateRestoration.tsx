@@ -1,24 +1,22 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useEffect } from 'react'
 import { useQualityDomain } from '@/app/store'
 import { useToast } from '../ToastProvider'
 import { loadFromLocalStorage, clearLocalStorage } from './localStorage'
 
 export function StateRestoration() {
-  const { dispatch } = useQualityDomain()
+  const { state, dispatch } = useQualityDomain()
   const { showToast } = useToast()
-  const hasCheckedRef = useRef(false)
 
-  // Check localStorage on mount
+  // Check localStorage on mount — only runs once thanks to hasRestoredState in the store
   useEffect(() => {
-    if (hasCheckedRef.current) return
-    hasCheckedRef.current = true
+    if (state.hasRestoredState) return
 
     const savedState = loadFromLocalStorage()
 
     if (savedState) {
-      // Restore state
+      // Restore state (also sets hasRestoredState: true)
       dispatch({ type: 'RESTORE_STATE', payload: savedState })
 
       // Show toast with undo button
@@ -29,8 +27,11 @@ export function StateRestoration() {
         // Reload the page to get default state
         window.location.reload()
       })
+    } else {
+      // Nothing to restore, but mark as checked so we don't re-run
+      dispatch({ type: 'MARK_RESTORED' })
     }
-  }, [dispatch, showToast])
+  }, [state.hasRestoredState, dispatch, showToast])
 
   return null // This component doesn't render anything
 }

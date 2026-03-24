@@ -32,12 +32,13 @@ export function serializeState(state: AppState): string {
   }
 
   const persistableState = JSON.stringify(stateWithVersion, (key, value) => {
-    // Filter out selection state
+    // Filter out selection state and transient flags
     if (key === 'selectedDomainId' ||
         key === 'selectedLabelId' ||
         key === 'selectedLabelDomainId' ||
         key === 'selectedConceptId' ||
-        key === 'selectedInstanceId') {
+        key === 'selectedInstanceId' ||
+        key === 'hasRestoredState') {
       return undefined
     }
 
