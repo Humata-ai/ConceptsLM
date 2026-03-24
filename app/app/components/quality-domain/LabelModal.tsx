@@ -5,6 +5,9 @@ import { useQualityDomain } from '@/app/store'
 import type { QualityDomainLabel, RegionDimensionRange, PointDimensionValue, QualityDimension } from './types'
 import { generateId } from './utils'
 import Modal from '@/app/components/common/Modal'
+import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome'
+import Tooltip from '@mui/material/Tooltip'
+import Button from '@mui/material/Button'
 
 interface LabelModalProps {
   isOpen: boolean
@@ -228,6 +231,7 @@ export default function LabelModal({
       isOpen={isOpen}
       onClose={onClose}
       title={editingLabel ? 'Edit Label' : 'Create Label'}
+      loading={isGenerating}
     >
 
           {showTypeSelection && (
@@ -283,32 +287,38 @@ export default function LabelModal({
                 <label htmlFor="label-name" className="block text-sm font-medium mb-1">
                   Label Name
                 </label>
-                <div className="flex gap-2">
-                  <input
-                    id="label-name"
-                    type="text"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    className="flex-1 border border-gray-300 rounded px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                    placeholder="e.g., Red, Heavy, Bright"
-                    required
-                  />
-                  <button
-                    type="button"
-                    onClick={handleGenerate}
-                    disabled={isGenerating || !name.trim()}
-                    className="px-3 py-2 bg-purple-600 text-white rounded hover:bg-purple-700 disabled:opacity-50 disabled:cursor-not-allowed text-sm whitespace-nowrap"
-                  >
-                    {isGenerating ? 'Generating...' : 'AI Fill'}
-                  </button>
-                </div>
+                <input
+                  id="label-name"
+                  type="text"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  className="w-full border border-gray-300 rounded px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                  placeholder="e.g., Red, Heavy, Bright"
+                  required
+                />
               </div>
 
               {labelType === 'region' && (
                 <div>
-                  <label className="block text-sm font-medium mb-2">
-                    Dimension Ranges (Domain: {domain.name})
-                  </label>
+                  <div className="flex items-center justify-between mb-2">
+                    <label className="text-sm font-medium">
+                      Dimension Ranges (Domain: {domain.name})
+                    </label>
+                    <Tooltip title="AI Fill">
+                      <span>
+                        <Button
+                          onClick={handleGenerate}
+                          disabled={isGenerating || !name.trim()}
+                          color="secondary"
+                          variant="outlined"
+                          size="small"
+                          sx={{ minWidth: 0, p: 0.5 }}
+                        >
+                          <AutoAwesomeIcon sx={{ fontSize: 16 }} />
+                        </Button>
+                      </span>
+                    </Tooltip>
+                  </div>
                   <div className="space-y-3">
                     {regionDimensions.map((dr) => {
                       const dimension = domain.dimensions.find((d) => d.id === dr.dimensionId)
@@ -363,9 +373,25 @@ export default function LabelModal({
 
               {labelType === 'point' && (
                 <div>
-                  <label className="block text-sm font-medium mb-2">
-                    Dimension Values (Domain: {domain.name})
-                  </label>
+                  <div className="flex items-center justify-between mb-2">
+                    <label className="text-sm font-medium">
+                      Dimension Values (Domain: {domain.name})
+                    </label>
+                    <Tooltip title="AI Fill">
+                      <span>
+                        <Button
+                          onClick={handleGenerate}
+                          disabled={isGenerating || !name.trim()}
+                          color="secondary"
+                          variant="outlined"
+                          size="small"
+                          sx={{ minWidth: 0, p: 0.5 }}
+                        >
+                          <AutoAwesomeIcon sx={{ fontSize: 16 }} />
+                        </Button>
+                      </span>
+                    </Tooltip>
+                  </div>
                   <div className="space-y-3">
                     {pointDimensions.map((pd) => {
                       const dimension = domain.dimensions.find((d) => d.id === pd.dimensionId)
