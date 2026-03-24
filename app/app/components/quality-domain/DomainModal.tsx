@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useQualityDomain } from '@/app/store'
 import DimensionInput from './DimensionInput'
+import DomainNameInput from './DomainNameInput'
 import type { QualityDimension, QualityDomain } from './types'
 import { generateId } from './utils'
 import Modal from '@/app/components/common/Modal'
@@ -114,20 +115,7 @@ export default function DomainModal({ isOpen, editingDomainId, onClose }: Domain
       title={editingDomain ? 'Edit Quality Domain' : 'Create Quality Domain'}
     >
       <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <label htmlFor="domain-name" className="block text-sm font-medium mb-1">
-                Domain Name
-              </label>
-              <input
-                id="domain-name"
-                type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                className="w-full border border-gray-300 rounded px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                placeholder="e.g., Temperature Range"
-                required
-              />
-            </div>
+            <DomainNameInput value={name} onChange={setName} />
 
             <div>
               <label className="block text-sm font-medium mb-2">Dimensions</label>
