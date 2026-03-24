@@ -11,7 +11,7 @@ import ConceptCard from './ConceptCard'
 import ConceptModal from './ConceptModal'
 import TimelinePanel from './TimelinePanel'
 import EventModal from './EventModal'
-import CategoryIcon from '@mui/icons-material/Category'
+import LayersIcon from '@mui/icons-material/Layers'
 import ImportExportIcon from '@mui/icons-material/ImportExport'
 import TimelineIcon from '@mui/icons-material/Timeline'
 import Button from '@mui/material/Button'
@@ -20,9 +20,9 @@ import IconButton from '@mui/material/IconButton'
 import Typography from '@mui/material/Typography'
 import ImportExportSection from './ImportExportSection'
 
-type SidebarView = 'data' | 'import-export' | 'timeline'
+type SidebarView = 'scene' | 'import-export' | 'timeline'
 
-const VALID_TABS: SidebarView[] = ['data', 'import-export', 'timeline']
+const VALID_TABS: SidebarView[] = ['scene', 'import-export', 'timeline']
 
 function getTabFromPathname(pathname: string): SidebarView | null {
   const segment = pathname.replace(/^\//, '')
@@ -67,21 +67,21 @@ export default function Sidebar() {
             borderRight: '1px solid rgba(0,0,0,0.08)',
           }}
         >
-            <Tooltip title="Data Objects" placement="right">
+            <Tooltip title="Scene" placement="right">
               <IconButton
-                onClick={() => handleTabClick('data')}
+                onClick={() => handleTabClick('scene')}
                 sx={{
                   borderRadius: 1,
                   width: 40,
                   height: 40,
-                  backgroundColor: activeView === 'data' ? 'primary.main' : 'transparent',
-                  color: activeView === 'data' ? 'white' : 'text.secondary',
+                  backgroundColor: activeView === 'scene' ? 'primary.main' : 'transparent',
+                  color: activeView === 'scene' ? 'white' : 'text.secondary',
                   '&:hover': {
-                    backgroundColor: activeView === 'data' ? 'primary.dark' : 'action.hover',
+                    backgroundColor: activeView === 'scene' ? 'primary.dark' : 'action.hover',
                   },
                 }}
               >
-                <CategoryIcon fontSize="small" />
+                <LayersIcon fontSize="small" />
               </IconButton>
             </Tooltip>
 
@@ -125,8 +125,8 @@ export default function Sidebar() {
         {/* Sidebar Content Panel */}
         {activeView && (
           <div className="bg-white/95 backdrop-blur-sm shadow-xl h-full overflow-y-auto w-80 flex flex-col">
-            {/* Data Objects View */}
-            {activeView === 'data' && (
+            {/* Scene View */}
+            {activeView === 'scene' && (
               <div className="flex flex-col h-full">
                 <div className="px-4 py-3 border-b border-gray-200">
                   <Typography variant="subtitle1" fontWeight="bold">
