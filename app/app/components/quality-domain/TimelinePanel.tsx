@@ -5,21 +5,11 @@ import CircleIcon from '@mui/icons-material/Circle'
 import BeenhereIcon from '@mui/icons-material/Beenhere'
 
 // Mock data for the timeline
-const MOCK_STATES = [
-  { id: 's1', label: 'Initialized' },
-  { id: 's2', label: 'Processing' },
-  { id: 's3', label: 'Validating' },
-  { id: 's4', label: 'Completed' },
-]
+const MOCK_STATES = [{ id: 's1' }, { id: 's2' }, { id: 's3' }, { id: 's4' }]
 
-const MOCK_EVENTS = [
-  { id: 'e1', label: 'onStart' },
-  { id: 'e2', label: 'onProcess' },
-  { id: 'e3', label: 'onValidate' },
-  { id: 'e4', label: 'onComplete' },
-]
+const MOCK_EVENTS = [{ id: 'e1' }, { id: 'e2' }, { id: 'e3' }, { id: 'e4' }]
 
-type SelectedItem = { type: 'state'; id: string } | { type: 'event'; id: string } | null
+type SelectedItem = { type: 'scene'; id: string } | { type: 'event'; id: string } | null
 
 // Vertical spacing constants
 const ROW_HEIGHT = 80
@@ -28,23 +18,10 @@ const LEFT_COL_X = 60
 const RIGHT_COL_X = 200
 const START_Y = 40
 
-function getDefaultSelection(): SelectedItem {
-  const lastStateRow = MOCK_STATES.length > 0 ? (MOCK_STATES.length - 1) * 2 : -1
-  const lastEventRow = MOCK_EVENTS.length > 0 ? (MOCK_EVENTS.length - 1) * 2 + 1 : -1
-
-  if (lastEventRow >= lastStateRow && MOCK_EVENTS.length > 0) {
-    return { type: 'event', id: MOCK_EVENTS[MOCK_EVENTS.length - 1].id }
-  }
-  if (MOCK_STATES.length > 0) {
-    return { type: 'state', id: MOCK_STATES[MOCK_STATES.length - 1].id }
-  }
-  return null
-}
-
 export default function TimelinePanel() {
-  const [selected, setSelected] = useState<SelectedItem>(getDefaultSelection)
+  const [selected, setSelected] = useState<SelectedItem>(null)
 
-  const handleSelect = (type: 'state' | 'event', id: string) => {
+  const handleSelect = (type: 'scene' | 'event', id: string) => {
     if (selected?.type === type && selected.id === id) {
       setSelected(null)
     } else {
@@ -72,7 +49,7 @@ export default function TimelinePanel() {
       <div className="flex px-4 pt-3 pb-1">
         <div className="flex-1 text-center">
           <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
-            State
+            Scene
           </span>
         </div>
         <div className="flex-1 text-center">
@@ -133,7 +110,7 @@ export default function TimelinePanel() {
           {/* State icons (CircleIcon) */}
           {MOCK_STATES.map((state, i) => {
             const pos = statePositions[i]
-            const isSelected = selected?.type === 'state' && selected.id === state.id
+            const isSelected = selected?.type === 'scene' && selected.id === state.id
             return (
               <foreignObject
                 key={state.id}
@@ -141,7 +118,7 @@ export default function TimelinePanel() {
                 y={pos.y - ICON_SIZE / 2}
                 width={ICON_SIZE}
                 height={ICON_SIZE}
-                onClick={() => handleSelect('state', state.id)}
+                onClick={() => handleSelect('scene', state.id)}
                 style={{ cursor: 'pointer' }}
               >
                 <CircleIcon
@@ -179,20 +156,6 @@ export default function TimelinePanel() {
           })}
         </svg>
       </div>
-
-      {/* Selected item detail */}
-      {selected && (
-        <div className="px-4 py-3 border-t border-gray-200 bg-gray-50">
-          <div className="text-xs text-gray-500 uppercase tracking-wider mb-1">
-            Selected {selected.type}
-          </div>
-          <div className="text-sm font-medium text-gray-800">
-            {selected.type === 'state'
-              ? MOCK_STATES.find((s) => s.id === selected.id)?.label
-              : MOCK_EVENTS.find((e) => e.id === selected.id)?.label}
-          </div>
-        </div>
-      )}
     </div>
   )
 }
