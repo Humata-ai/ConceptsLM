@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useQualityDomain } from '@/app/store'
 import Modal from '@/app/components/common/Modal'
 
 interface EventModalProps {
@@ -9,19 +10,26 @@ interface EventModalProps {
 }
 
 export default function EventModal({ isOpen, onClose }: EventModalProps) {
-  const [subject, setSubject] = useState('')
+  const { state } = useQualityDomain()
+  const [subjectInstanceId, setSubjectInstanceId] = useState('')
   const [forceVector, setForceVector] = useState('')
   const [resultVector, setResultVector] = useState('')
-  const [patient, setPatient] = useState('')
+  const [patientInstanceId, setPatientInstanceId] = useState('')
 
   useEffect(() => {
     if (isOpen) {
-      setSubject('')
+      setSubjectInstanceId('')
       setForceVector('')
       setResultVector('')
-      setPatient('')
+      setPatientInstanceId('')
     }
   }, [isOpen])
+
+  // Group instances by their parent concept for the dropdown
+  const instancesByConcept = state.concepts.map((concept) => ({
+    concept,
+    instances: state.instances.filter((i) => i.conceptId === concept.id),
+  })).filter((group) => group.instances.length > 0)
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -40,14 +48,29 @@ export default function EventModal({ isOpen, onClose }: EventModalProps) {
           <label htmlFor="event-subject" className="block text-sm font-medium mb-1">
             Subject
           </label>
-          <input
-            id="event-subject"
-            type="text"
-            value={subject}
-            onChange={(e) => setSubject(e.target.value)}
-            className="w-full border border-gray-300 rounded px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-            placeholder="Subject"
-          />
+          {instancesByConcept.length === 0 ? (
+            <div className="text-xs text-gray-500 italic border border-gray-200 rounded p-3">
+              No concept instances available. Create instances from the Data tab first.
+            </div>
+          ) : (
+            <select
+              id="event-subject"
+              value={subjectInstanceId}
+              onChange={(e) => setSubjectInstanceId(e.target.value)}
+              className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            >
+              <option value="">-- Select a concept instance --</option>
+              {instancesByConcept.map(({ concept, instances }) => (
+                <optgroup key={concept.id} label={concept.name}>
+                  {instances.map((instance) => (
+                    <option key={instance.id} value={instance.id}>
+                      {instance.name}
+                    </option>
+                  ))}
+                </optgroup>
+              ))}
+            </select>
+          )}
         </div>
 
         <div>
@@ -82,14 +105,29 @@ export default function EventModal({ isOpen, onClose }: EventModalProps) {
           <label htmlFor="event-patient" className="block text-sm font-medium mb-1">
             Patient
           </label>
-          <input
-            id="event-patient"
-            type="text"
-            value={patient}
-            onChange={(e) => setPatient(e.target.value)}
-            className="w-full border border-gray-300 rounded px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-            placeholder="Patient"
-          />
+          {instancesByConcept.length === 0 ? (
+            <div className="text-xs text-gray-500 italic border border-gray-200 rounded p-3">
+              No concept instances available. Create instances from the Data tab first.
+            </div>
+          ) : (
+            <select
+              id="event-patient"
+              value={patientInstanceId}
+              onChange={(e) => setPatientInstanceId(e.target.value)}
+              className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            >
+              <option value="">-- Select a concept instance --</option>
+              {instancesByConcept.map(({ concept, instances }) => (
+                <optgroup key={concept.id} label={concept.name}>
+                  {instances.map((instance) => (
+                    <option key={instance.id} value={instance.id}>
+                      {instance.name}
+                    </option>
+                  ))}
+                </optgroup>
+              ))}
+            </select>
+          )}
         </div>
 
         <div className="flex gap-3 justify-end pt-2">
