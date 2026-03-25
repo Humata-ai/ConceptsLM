@@ -2,6 +2,44 @@
 
 import type { QualityDimension } from './types'
 
+interface ToggleKnobProps {
+  checked: boolean
+  onChange: (checked: boolean) => void
+}
+
+function ToggleKnob({ checked, onChange }: ToggleKnobProps) {
+  return (
+    <button
+      type="button"
+      role="switch"
+      aria-checked={checked}
+      onClick={() => onChange(!checked)}
+      className={`relative inline-flex h-5 w-9 shrink-0 items-center rounded-full transition-colors cursor-pointer ${
+        checked ? 'bg-blue-600' : 'bg-gray-300'
+      }`}
+    >
+      <span
+        className={`inline-block h-3.5 w-3.5 rounded-full bg-white transition-transform ${
+          checked ? 'translate-x-4.5' : 'translate-x-0.5'
+        }`}
+      />
+    </button>
+  )
+}
+
+interface ToggleLabelProps {
+  active: boolean
+  children: React.ReactNode
+}
+
+function ToggleLabel({ active, children }: ToggleLabelProps) {
+  return (
+    <span className={`text-sm text-gray-700 whitespace-nowrap transition-opacity ${active ? 'opacity-100' : 'opacity-70'}`}>
+      {children}
+    </span>
+  )
+}
+
 interface DimensionInputProps {
   dimension: QualityDimension
   onChange: (dimension: QualityDimension) => void
@@ -47,80 +85,84 @@ export default function DimensionInput({
   const minError = dimension.range[0] >= dimension.range[1]
 
   return (
-    <div className="flex gap-2 items-start">
-      <input
-        type="text"
-        value={dimension.name}
-        onChange={(e) => handleNameChange(e.target.value)}
-        placeholder="Dimension name"
-        className="flex-1 border border-gray-300 rounded px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-        required
-      />
-
-      {/* Min value with infinity checkbox */}
-      <div className="flex items-center gap-1">
-        <input
-          type="number"
-          value={isMinInfinity ? '' : dimension.range[0]}
-          onChange={(e) => handleMinChange(e.target.value)}
-          placeholder="Min"
-          disabled={isMinInfinity}
-          className={`w-20 border rounded px-2 py-2 focus:ring-2 focus:outline-none ${
-            isMinInfinity
-              ? 'bg-gray-100 text-gray-500'
-              : minError
-              ? 'border-red-500 focus:ring-red-500'
-              : 'border-gray-300 focus:ring-blue-500'
-          }`}
-          required={!isMinInfinity}
-        />
-        <label className="flex items-center gap-1 text-sm whitespace-nowrap">
+    <div className="border border-gray-200 rounded-lg p-3 space-y-3">
+      {/* Row 1: Dimension Name + Remove button */}
+      <div className="flex items-start gap-2">
+        <div className="flex-1">
+          <label className="block text-xs font-medium text-gray-600 mb-1">Dimension Name</label>
           <input
-            type="checkbox"
-            checked={isMinInfinity}
-            onChange={(e) => handleMinInfinityToggle(e.target.checked)}
-            className="w-4 h-4"
+            type="text"
+            value={dimension.name}
+            onChange={(e) => handleNameChange(e.target.value)}
+            placeholder="Dimension name"
+            className="w-full border border-gray-300 rounded px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            required
           />
-          <span className="text-gray-700">-∞</span>
-        </label>
+        </div>
+        <button
+          type="button"
+          onClick={onRemove}
+          className="text-red-600 hover:text-red-800 font-bold px-1 py-1 mt-5"
+          aria-label="Remove dimension"
+        >
+          ✕
+        </button>
       </div>
 
-      {/* Max value with infinity checkbox */}
-      <div className="flex items-center gap-1">
-        <input
-          type="number"
-          value={isMaxInfinity ? '' : dimension.range[1]}
-          onChange={(e) => handleMaxChange(e.target.value)}
-          placeholder="Max"
-          disabled={isMaxInfinity}
-          className={`w-20 border rounded px-2 py-2 focus:ring-2 focus:outline-none ${
-            isMaxInfinity
-              ? 'bg-gray-100 text-gray-500'
-              : minError
-              ? 'border-red-500 focus:ring-red-500'
-              : 'border-gray-300 focus:ring-blue-500'
-          }`}
-          required={!isMaxInfinity}
-        />
-        <label className="flex items-center gap-1 text-sm whitespace-nowrap">
-          <input
-            type="checkbox"
-            checked={isMaxInfinity}
-            onChange={(e) => handleMaxInfinityToggle(e.target.checked)}
-            className="w-4 h-4"
-          />
-          <span className="text-gray-700">∞</span>
-        </label>
-      </div>
+      {/* Row 2: Minimum and Maximum side by side */}
+      <div className="flex gap-4">
+        {/* Minimum section */}
+        <div className="flex-1 min-w-0">
+          <label className="block text-xs font-medium text-gray-600 mb-1">Minimum</label>
+          <div className="flex items-center gap-2">
+            <input
+              type="number"
+              value={isMinInfinity ? '' : dimension.range[0]}
+              onChange={(e) => handleMinChange(e.target.value)}
+              placeholder="Min"
+              tabIndex={isMinInfinity ? -1 : undefined}
+              className={`w-20 min-w-0 border rounded px-2 py-1.5 text-sm focus:ring-2 focus:outline-none transition-opacity ${
+                isMinInfinity
+                  ? 'opacity-70 pointer-events-none'
+                  : minError
+                  ? 'border-red-500 focus:ring-red-500'
+                  : 'border-gray-300 focus:ring-blue-500'
+              }`}
+            />
+            <ToggleKnob
+              checked={isMinInfinity}
+              onChange={handleMinInfinityToggle}
+            />
+            <ToggleLabel active={isMinInfinity}>-Infinity</ToggleLabel>
+          </div>
+        </div>
 
-      <button
-        type="button"
-        onClick={onRemove}
-        className="text-red-600 hover:text-red-800 font-bold px-2 py-2"
-        aria-label="Remove dimension"
-      >
-        ✕
-      </button>
+        {/* Maximum section */}
+        <div className="flex-1 min-w-0">
+          <label className="block text-xs font-medium text-gray-600 mb-1">Maximum</label>
+          <div className="flex items-center gap-2">
+            <input
+              type="number"
+              value={isMaxInfinity ? '' : dimension.range[1]}
+              onChange={(e) => handleMaxChange(e.target.value)}
+              placeholder="Max"
+              tabIndex={isMaxInfinity ? -1 : undefined}
+              className={`w-20 min-w-0 border rounded px-2 py-1.5 text-sm focus:ring-2 focus:outline-none transition-opacity ${
+                isMaxInfinity
+                  ? 'opacity-70 pointer-events-none'
+                  : minError
+                  ? 'border-red-500 focus:ring-red-500'
+                  : 'border-gray-300 focus:ring-blue-500'
+              }`}
+            />
+            <ToggleKnob
+              checked={isMaxInfinity}
+              onChange={handleMaxInfinityToggle}
+            />
+            <ToggleLabel active={isMaxInfinity}>Infinity</ToggleLabel>
+          </div>
+        </div>
+      </div>
     </div>
   )
 }
