@@ -1,6 +1,7 @@
 'use client'
 
 import { type ReactNode } from 'react'
+import { createPortal } from 'react-dom'
 import LinearProgress from '@mui/material/LinearProgress'
 
 interface ModalProps {
@@ -18,6 +19,7 @@ interface ModalProps {
  * Provides consistent modal behavior across the application:
  * - Standard styling
  * - Users must explicitly close via Cancel/X button
+ * - Portals to document.body to escape any stacking context or overflow constraints
  */
 export default function Modal({ 
   isOpen, 
@@ -37,7 +39,7 @@ export default function Modal({
     '2xl': 'max-w-2xl',
   }
 
-  return (
+  return createPortal(
     <div>
       <div className="modal-backdrop" />
       <div className="modal-content">
@@ -49,6 +51,7 @@ export default function Modal({
           </div>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   )
 }
