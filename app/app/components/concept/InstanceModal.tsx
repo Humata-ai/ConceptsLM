@@ -3,9 +3,9 @@
 import { useState, useEffect } from 'react'
 import { createPortal } from 'react-dom'
 import { useQualityDomain } from '@/app/store'
-import type { ConceptInstance, PointReference, QualityDomain } from './types'
-import { isPoint } from './types'
-import { generateId } from './utils'
+import type { ConceptInstance, PointReference, QualityDomain } from '../shared/types'
+import { isPoint } from '../shared/types'
+import { generateId } from '../shared/utils'
 import Modal from '@/app/components/common/Modal'
 import { required, collectErrors } from '@/app/utils/validators'
 

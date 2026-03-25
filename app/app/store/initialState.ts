@@ -1,6 +1,6 @@
 import type { AppState } from './types'
-import type { QualityDomain, Concept, ConceptInstance, QualityDomainLabel, RegionDimensionRange, PointDimensionValue } from '../components/quality-domain/types'
-import defaultDataJson from '../components/quality-domain/defaultData.json'
+import type { QualityDomain, Concept, ConceptInstance, QualityDomainLabel, RegionDimensionRange, PointDimensionValue } from '../components/shared/types'
+import defaultDataJson from '../components/shared/defaultData.json'
 
 /**
  * JSON-compatible types for loading from file

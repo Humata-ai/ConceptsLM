@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from 'react'
 import { useQualityDomain } from '@/app/store'
-import type { Concept, LabelReference } from './types'
-import { generateId } from './utils'
+import type { Concept, LabelReference } from '../shared/types'
+import { generateId } from '../shared/utils'
 import Modal from '@/app/components/common/Modal'
 import { required, arrayMinLength, collectErrors } from '@/app/utils/validators'
 

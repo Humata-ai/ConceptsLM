@@ -1,11 +1,11 @@
 import { useMemo, memo } from 'react'
 import { Text } from '@react-three/drei'
 import { useQualityDomain } from '@/app/store'
-import DomainVisualization from './DomainVisualization'
-import ConceptVisualization3D from './visualizations/ConceptVisualization3D'
-import type { QualityDomain } from './types'
+import DomainVisualization from '../quality-domain/DomainVisualization'
+import ConceptVisualization3D from '../concept/ConceptVisualization3D'
+import type { QualityDomain } from '../shared/types'
 import { useCircularLayout } from '@/app/hooks/useCircularLayout'
-import { DOMAIN_SCALE } from './visualizations/constants'
+import { DOMAIN_SCALE } from '../quality-domain/visualizations/constants'
 
 // Custom comparison for domain items - only re-render if domain data actually changed
 const domainItemAreEqual = (

@@ -1,4 +1,4 @@
-import type { QualityDomain, QualityDomainLabel, Concept, ConceptInstance } from '../components/quality-domain/types'
+import type { QualityDomain, QualityDomainLabel, Concept, ConceptInstance } from '../components/shared/types'
 
 /**
  * App Store Action Types

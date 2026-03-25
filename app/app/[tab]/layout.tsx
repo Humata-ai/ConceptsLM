@@ -1,10 +1,10 @@
 'use client'
 
-import Scene from '../components/Scene'
+import Scene from '../components/scene/Scene'
 import { useQualityDomain } from '../store'
-import Sidebar from '../components/quality-domain/Sidebar'
-import TableView from '../components/quality-domain/TableView'
-import { StateRestoration } from '../components/quality-domain/StateRestoration'
+import Sidebar from '../components/scene/Sidebar'
+import TableView from '../components/scene/TableView'
+import { StateRestoration } from '../components/scene/StateRestoration'
 
 export default function TabLayout({ children }: { children: React.ReactNode }) {
   const { getSelectedDomain } = useQualityDomain()

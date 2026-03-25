@@ -1,6 +1,6 @@
 'use client'
 
-import type { PointDimensionValue, QualityDimension } from '../types'
+import type { PointDimensionValue, QualityDimension } from '../../shared/types'
 import AiFillButton from './AiFillButton'
 
 interface PointDimensionFormProps {

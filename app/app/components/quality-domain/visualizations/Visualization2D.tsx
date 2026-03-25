@@ -1,7 +1,7 @@
 import { useMemo, type ReactElement } from 'react'
 import { Text } from '@react-three/drei'
 import * as THREE from 'three'
-import type { QualityDomain } from '../types'
+import type { QualityDomain } from '../../shared/types'
 import LabelVisualization2D from './LabelVisualization2D'
 import { useQualityDomain } from '@/app/store'
 import type { ThreeEvent } from '@react-three/fiber'

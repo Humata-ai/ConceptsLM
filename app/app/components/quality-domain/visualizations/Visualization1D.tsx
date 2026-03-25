@@ -1,5 +1,5 @@
 import { Text } from '@react-three/drei'
-import type { QualityDomain } from '../types'
+import type { QualityDomain } from '../../shared/types'
 import LabelVisualization1D from './LabelVisualization1D'
 
 interface Visualization1DProps {

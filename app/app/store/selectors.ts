@@ -1,6 +1,6 @@
 import type { AppState } from './types'
-import type { QualityDomain, QualityDomainLabel, QualityDomainPoint, ConceptInstance } from '../components/quality-domain/types'
-import { isPoint } from '../components/quality-domain/types'
+import type { QualityDomain, QualityDomainLabel, QualityDomainPoint, ConceptInstance } from '../components/shared/types'
+import { isPoint } from '../components/shared/types'
 
 /**
  * App Store Selectors

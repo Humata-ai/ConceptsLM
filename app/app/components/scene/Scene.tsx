@@ -3,9 +3,9 @@
 import { useEffect, useMemo, useRef } from 'react'
 import { Canvas } from '@react-three/fiber'
 import { OrbitControls } from '@react-three/drei'
-import AllDomainsVisualization from './quality-domain/AllDomainsVisualization'
+import AllDomainsVisualization from './AllDomainsVisualization'
 import { useQualityDomain } from '@/app/store'
-import { isRegion, isPoint } from './quality-domain/types'
+import { isRegion, isPoint } from '../shared/types'
 import { normalizeToRange } from '@/app/utils/positionCalculations'
 import { Vector3 } from 'three'
 
