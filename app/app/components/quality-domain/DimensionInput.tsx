@@ -1,5 +1,6 @@
 'use client'
 
+import CloseIcon from '@mui/icons-material/Close'
 import type { QualityDimension } from './types'
 import LinearValueRange from './LinearValueRange'
 
@@ -27,28 +28,28 @@ export default function DimensionInput({
   }
 
   return (
-    <div className="border border-gray-200 rounded-lg p-3 space-y-3">
-      {/* Row 1: Dimension Name + Remove button */}
-      <div className="flex items-start gap-2">
-        <div className="flex-1">
-          <label className="block text-xs font-medium text-gray-600 mb-2">Dimension name</label>
-          <input
-            type="text"
-            value={dimension.name}
-            onChange={(e) => handleNameChange(e.target.value)}
-            placeholder="Dimension name"
-            className="w-full border border-gray-300 rounded px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-            required
-          />
-        </div>
-        <button
-          type="button"
-          onClick={onRemove}
-          className="text-red-600 hover:text-red-800 font-bold px-1 py-1 mt-5"
-          aria-label="Remove dimension"
-        >
-          ✕
-        </button>
+    <div className="relative border border-gray-200 rounded-lg p-3 space-y-3">
+      {/* Remove button - top right corner */}
+      <button
+        type="button"
+        onClick={onRemove}
+        className="absolute -top-2 -right-2 w-5 h-5 flex items-center justify-center rounded-full bg-gray-200 text-gray-500 hover:bg-gray-300 hover:text-gray-700 cursor-pointer"
+        aria-label="Remove dimension"
+      >
+        <CloseIcon sx={{ fontSize: 12 }} />
+      </button>
+
+      {/* Row 1: Dimension Name */}
+      <div>
+        <label className="block text-xs font-medium text-gray-600 mb-2">Dimension name</label>
+        <input
+          type="text"
+          value={dimension.name}
+          onChange={(e) => handleNameChange(e.target.value)}
+          placeholder="Dimension name"
+          className="w-full border border-gray-300 rounded px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+          required
+        />
       </div>
 
       {/* Row 2: Linear Value Range */}
