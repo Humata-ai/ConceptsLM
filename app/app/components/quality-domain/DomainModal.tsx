@@ -112,7 +112,7 @@ export default function DomainModal({ isOpen, editingDomainId, onClose }: Domain
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      title={editingDomain ? 'Edit Quality Domain' : 'Create Quality Domain'}
+      title={editingDomain ? 'Edit quality domain' : 'Create quality domain'}
     >
       <form onSubmit={handleSubmit} className="space-y-4">
             <DomainNameInput value={name} onChange={setName} />
@@ -134,7 +134,7 @@ export default function DomainModal({ isOpen, editingDomainId, onClose }: Domain
                 onClick={handleAddDimension}
                 className="mt-2 text-blue-600 hover:text-blue-800 text-sm font-medium"
               >
-                + Add Dimension
+                + Add dimension
               </button>
             </div>
 
@@ -160,7 +160,7 @@ export default function DomainModal({ isOpen, editingDomainId, onClose }: Domain
             type="submit"
             className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
           >
-            {editingDomain ? 'Update Domain' : 'Save Domain'}
+            {editingDomain ? 'Update domain' : 'Save domain'}
           </button>
         </div>
       </form>
