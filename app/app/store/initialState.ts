@@ -136,5 +136,6 @@ export const initialState: AppState = {
     pointRefs: instance.pointRefs,
     createdAt: new Date(instance.createdAt),
   })),
+  words: [],
   hasRestoredState: false,
 }

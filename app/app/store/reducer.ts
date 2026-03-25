@@ -176,6 +176,27 @@ export function appReducer(state: AppState, action: AppAction): AppState {
         instances: state.instances.filter((instance) => instance.id !== action.payload),
       }
 
+    // Word actions
+    case 'ADD_WORD':
+      return {
+        ...state,
+        words: [...state.words, action.payload],
+      }
+
+    case 'UPDATE_WORD':
+      return {
+        ...state,
+        words: state.words.map((word) =>
+          word.id === action.payload.id ? action.payload : word
+        ),
+      }
+
+    case 'DELETE_WORD':
+      return {
+        ...state,
+        words: state.words.filter((word) => word.id !== action.payload),
+      }
+
     // State restoration
     case 'RESTORE_STATE':
       return {
@@ -183,6 +204,7 @@ export function appReducer(state: AppState, action: AppAction): AppState {
         domains: action.payload.domains,
         concepts: action.payload.concepts,
         instances: action.payload.instances || [],
+        words: action.payload.words || [],
         selectedDomainId: null,
         selectedLabelId: null,
         selectedLabelDomainId: null,

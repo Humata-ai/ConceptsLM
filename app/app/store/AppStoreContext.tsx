@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useReducer, useMemo, useCallback, useEffect, type ReactNode } from 'react'
 import type { AppState, AppAction } from './types'
-import type { QualityDomain, QualityDomainLabel, Concept, ConceptInstance, QualityDomainPoint } from '../components/shared/types'
+import type { QualityDomain, QualityDomainLabel, Concept, ConceptInstance, QualityDomainPoint, Word } from '../components/shared/types'
 import { appReducer } from './reducer'
 import { initialState } from './initialState'
 import { 
@@ -48,6 +48,11 @@ interface AppStoreContextType {
   addInstance: (instance: ConceptInstance) => void
   updateInstance: (instance: ConceptInstance) => void
   deleteInstance: (id: string) => void
+  
+  // Word methods
+  addWord: (word: Word) => void
+  updateWord: (word: Word) => void
+  deleteWord: (id: string) => void
   
   // Selector methods
   getSelectedDomain: () => QualityDomain | null
@@ -142,6 +147,18 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
     dispatch({ type: 'DELETE_INSTANCE', payload: id })
   }, [])
 
+  const addWordMethod = useCallback((word: Word) => {
+    dispatch({ type: 'ADD_WORD', payload: word })
+  }, [])
+
+  const updateWordMethod = useCallback((word: Word) => {
+    dispatch({ type: 'UPDATE_WORD', payload: word })
+  }, [])
+
+  const deleteWordMethod = useCallback((id: string) => {
+    dispatch({ type: 'DELETE_WORD', payload: id })
+  }, [])
+
   // Memoize selector methods
   const getSelectedDomainMethod = useCallback(() => {
     return getSelectedDomain(state)
@@ -180,6 +197,9 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
     addInstance: addInstanceMethod,
     updateInstance: updateInstanceMethod,
     deleteInstance: deleteInstanceMethod,
+    addWord: addWordMethod,
+    updateWord: updateWordMethod,
+    deleteWord: deleteWordMethod,
     getSelectedDomain: getSelectedDomainMethod,
     getConceptLabels: getConceptLabelsMethod,
     getInstancePoints: getInstancePointsMethod,
@@ -203,6 +223,9 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
     addInstanceMethod,
     updateInstanceMethod,
     deleteInstanceMethod,
+    addWordMethod,
+    updateWordMethod,
+    deleteWordMethod,
     getSelectedDomainMethod,
     getConceptLabelsMethod,
     getInstancePointsMethod,

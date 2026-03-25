@@ -1,5 +1,5 @@
 import type { AppAction } from './types'
-import type { QualityDomain, QualityDomainLabel, Concept, ConceptInstance } from '../components/shared/types'
+import type { QualityDomain, QualityDomainLabel, Concept, ConceptInstance, Word } from '../components/shared/types'
 
 /**
  * Action Creators
@@ -102,12 +102,29 @@ export const deleteInstance = (id: string): AppAction => ({
   payload: id,
 })
 
+// Word action creators
+export const addWord = (word: Word): AppAction => ({
+  type: 'ADD_WORD',
+  payload: word,
+})
+
+export const updateWord = (word: Word): AppAction => ({
+  type: 'UPDATE_WORD',
+  payload: word,
+})
+
+export const deleteWord = (id: string): AppAction => ({
+  type: 'DELETE_WORD',
+  payload: id,
+})
+
 // State restoration action creator
 export const restoreState = (
   domains: QualityDomain[],
   concepts: Concept[],
-  instances: ConceptInstance[]
+  instances: ConceptInstance[],
+  words: Word[] = []
 ): AppAction => ({
   type: 'RESTORE_STATE',
-  payload: { domains, concepts, instances },
+  payload: { domains, concepts, instances, words },
 })
