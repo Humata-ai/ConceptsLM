@@ -6,6 +6,7 @@ import { OrbitControls } from '@react-three/drei'
 import AllDomainsVisualization from './quality-domain/AllDomainsVisualization'
 import { useQualityDomain } from '@/app/store'
 import { isRegion, isPoint } from './quality-domain/types'
+import { normalizeToRange } from '@/app/utils/positionCalculations'
 import { Vector3 } from 'three'
 
 function CameraControls() {
@@ -66,9 +67,8 @@ function CameraControls() {
           // 1D label
           const dim = domain.dimensions[0]
           const labelRange = getLabelRange(dim.id)
-          const [dimMin, dimMax] = dim.range
-          const minPos = -5 + ((labelRange[0] - dimMin) / (dimMax - dimMin)) * 10
-          const maxPos = -5 + ((labelRange[1] - dimMin) / (dimMax - dimMin)) * 10
+          const minPos = normalizeToRange(labelRange[0], dim.range, [-5, 5])
+          const maxPos = normalizeToRange(labelRange[1], dim.range, [-5, 5])
           const centerPos = (minPos + maxPos) / 2
 
           return new Vector3(
@@ -82,13 +82,11 @@ function CameraControls() {
           const dimY = domain.dimensions[1]
           const labelRangeX = getLabelRange(dimX.id)
           const labelRangeY = getLabelRange(dimY.id)
-          const [dimMinX, dimMaxX] = dimX.range
-          const [dimMinY, dimMaxY] = dimY.range
 
-          const minX = -5 + ((labelRangeX[0] - dimMinX) / (dimMaxX - dimMinX)) * 10
-          const maxX = -5 + ((labelRangeX[1] - dimMinX) / (dimMaxX - dimMinX)) * 10
-          const minY = -5 + ((labelRangeY[0] - dimMinY) / (dimMaxY - dimMinY)) * 10
-          const maxY = -5 + ((labelRangeY[1] - dimMinY) / (dimMaxY - dimMinY)) * 10
+          const minX = normalizeToRange(labelRangeX[0], dimX.range, [-5, 5])
+          const maxX = normalizeToRange(labelRangeX[1], dimX.range, [-5, 5])
+          const minY = normalizeToRange(labelRangeY[0], dimY.range, [-5, 5])
+          const maxY = normalizeToRange(labelRangeY[1], dimY.range, [-5, 5])
 
           const centerX = (minX + maxX) / 2
           const centerY = (minY + maxY) / 2
@@ -102,9 +100,8 @@ function CameraControls() {
           // 3D label
           const ranges = domain.dimensions.map(dim => {
             const labelRange = getLabelRange(dim.id)
-            const [dimMin, dimMax] = dim.range
-            const min = -4 + ((labelRange[0] - dimMin) / (dimMax - dimMin)) * 8
-            const max = -4 + ((labelRange[1] - dimMin) / (dimMax - dimMin)) * 8
+            const min = normalizeToRange(labelRange[0], dim.range, [-4, 4])
+            const max = normalizeToRange(labelRange[1], dim.range, [-4, 4])
             return { center: (min + max) / 2 }
           })
 
@@ -249,9 +246,8 @@ function CameraControls() {
           if (domain.dimensions.length === 1) {
             const dim = domain.dimensions[0]
             const labelRange = getLabelRange(dim.id)
-            const [dimMin, dimMax] = dim.range
-            const minPos = -5 + ((labelRange[0] - dimMin) / (dimMax - dimMin)) * 10
-            const maxPos = -5 + ((labelRange[1] - dimMin) / (dimMax - dimMin)) * 10
+            const minPos = normalizeToRange(labelRange[0], dim.range, [-5, 5])
+            const maxPos = normalizeToRange(labelRange[1], dim.range, [-5, 5])
             const centerPos = (minPos + maxPos) / 2
 
             positions.push(new Vector3(
@@ -264,13 +260,11 @@ function CameraControls() {
             const dimY = domain.dimensions[1]
             const labelRangeX = getLabelRange(dimX.id)
             const labelRangeY = getLabelRange(dimY.id)
-            const [dimMinX, dimMaxX] = dimX.range
-            const [dimMinY, dimMaxY] = dimY.range
 
-            const minX = -5 + ((labelRangeX[0] - dimMinX) / (dimMaxX - dimMinX)) * 10
-            const maxX = -5 + ((labelRangeX[1] - dimMinX) / (dimMaxX - dimMinX)) * 10
-            const minY = -5 + ((labelRangeY[0] - dimMinY) / (dimMaxY - dimMinY)) * 10
-            const maxY = -5 + ((labelRangeY[1] - dimMinY) / (dimMaxY - dimMinY)) * 10
+            const minX = normalizeToRange(labelRangeX[0], dimX.range, [-5, 5])
+            const maxX = normalizeToRange(labelRangeX[1], dimX.range, [-5, 5])
+            const minY = normalizeToRange(labelRangeY[0], dimY.range, [-5, 5])
+            const maxY = normalizeToRange(labelRangeY[1], dimY.range, [-5, 5])
 
             const centerX = (minX + maxX) / 2
             const centerY = (minY + maxY) / 2
@@ -283,9 +277,8 @@ function CameraControls() {
           } else if (domain.dimensions.length === 3) {
             const ranges = domain.dimensions.map(dim => {
               const labelRange = getLabelRange(dim.id)
-              const [dimMin, dimMax] = dim.range
-              const min = -4 + ((labelRange[0] - dimMin) / (dimMax - dimMin)) * 8
-              const max = -4 + ((labelRange[1] - dimMin) / (dimMax - dimMin)) * 8
+              const min = normalizeToRange(labelRange[0], dim.range, [-4, 4])
+              const max = normalizeToRange(labelRange[1], dim.range, [-4, 4])
               return { center: (min + max) / 2 }
             })
 
