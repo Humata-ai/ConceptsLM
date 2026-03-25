@@ -6,7 +6,7 @@ import { useQualityDomain } from '@/app/store'
 import type { ThreeEvent } from '@react-three/fiber'
 import { useCircularLayoutMap } from '@/app/hooks/useCircularLayout'
 import { useCursorOnHover } from '@/app/hooks/useCursorOnHover'
-import { normalizeDimensionValue } from '@/app/utils/positionCalculations'
+import { normalizeDimensionValue, normalizeToRange } from '@/app/utils/positionCalculations'
 import { DOMAIN_SCALE, VISUALIZATION_SIZE } from './constants'
 
 interface ConceptVisualization3DProps {
@@ -168,10 +168,9 @@ function ConceptVisualization3D({ concept, isSelected = false }: ConceptVisualiz
         const dim = domain.dimensions[0]
         const labelDim = label.dimensions.find((d) => d.dimensionId === dim.id)
         const labelRange = getLabelRange(labelDim, dim.range)
-        const [dimMin, dimMax] = dim.range
 
-        const minPos = -5 + ((labelRange[0] - dimMin) / (dimMax - dimMin)) * 10
-        const maxPos = -5 + ((labelRange[1] - dimMin) / (dimMax - dimMin)) * 10
+        const minPos = normalizeToRange(labelRange[0], dim.range, [-5, 5])
+        const maxPos = normalizeToRange(labelRange[1], dim.range, [-5, 5])
         const centerPos = (minPos + maxPos) / 2
 
         worldPosition = new Vector3(
@@ -191,13 +190,10 @@ function ConceptVisualization3D({ concept, isSelected = false }: ConceptVisualiz
         const labelRangeX = getLabelRange(labelDimX, dimX.range)
         const labelRangeY = getLabelRange(labelDimY, dimY.range)
 
-        const [dimMinX, dimMaxX] = dimX.range
-        const [dimMinY, dimMaxY] = dimY.range
-
-        const minX = -5 + ((labelRangeX[0] - dimMinX) / (dimMaxX - dimMinX)) * 10
-        const maxX = -5 + ((labelRangeX[1] - dimMinX) / (dimMaxX - dimMinX)) * 10
-        const minY = -5 + ((labelRangeY[0] - dimMinY) / (dimMaxY - dimMinY)) * 10
-        const maxY = -5 + ((labelRangeY[1] - dimMinY) / (dimMaxY - dimMinY)) * 10
+        const minX = normalizeToRange(labelRangeX[0], dimX.range, [-5, 5])
+        const maxX = normalizeToRange(labelRangeX[1], dimX.range, [-5, 5])
+        const minY = normalizeToRange(labelRangeY[0], dimY.range, [-5, 5])
+        const maxY = normalizeToRange(labelRangeY[1], dimY.range, [-5, 5])
 
         const centerX = (minX + maxX) / 2
         const centerY = (minY + maxY) / 2
@@ -213,10 +209,9 @@ function ConceptVisualization3D({ concept, isSelected = false }: ConceptVisualiz
         const ranges = domain.dimensions.map((dim) => {
           const labelDim = label.dimensions.find((d) => d.dimensionId === dim.id)
           const labelRange = getLabelRange(labelDim, dim.range)
-          const [dimMin, dimMax] = dim.range
 
-          const min = -4 + ((labelRange[0] - dimMin) / (dimMax - dimMin)) * 8
-          const max = -4 + ((labelRange[1] - dimMin) / (dimMax - dimMin)) * 8
+          const min = normalizeToRange(labelRange[0], dim.range, [-4, 4])
+          const max = normalizeToRange(labelRange[1], dim.range, [-4, 4])
 
           return { center: (min + max) / 2 }
         })

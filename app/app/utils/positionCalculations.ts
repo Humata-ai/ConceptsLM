@@ -80,6 +80,12 @@ export function normalizeToRange(
     return (targetMin + targetMax) / 2
   }
   
+  // Handle infinite source ranges (e.g. [-Infinity, Infinity])
+  // Arithmetic with Infinity produces NaN, so return center of target range
+  if (!isFinite(sourceMin) || !isFinite(sourceMax)) {
+    return (targetMin + targetMax) / 2
+  }
+  
   const normalized = (value - sourceMin) / (sourceMax - sourceMin)
   return targetMin + normalized * (targetMax - targetMin)
 }
