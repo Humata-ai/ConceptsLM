@@ -1,4 +1,4 @@
-import type { QualityDomain, QualityDomainLabel, Concept, ConceptInstance } from '../components/shared/types'
+import type { QualityDomain, QualityDomainLabel, Concept, ConceptInstance, Word } from '../components/shared/types'
 
 /**
  * App Store Action Types
@@ -33,8 +33,13 @@ export type AppAction =
   | { type: 'UPDATE_INSTANCE'; payload: ConceptInstance }
   | { type: 'DELETE_INSTANCE'; payload: string }
   
+  // Word actions
+  | { type: 'ADD_WORD'; payload: Word }
+  | { type: 'UPDATE_WORD'; payload: Word }
+  | { type: 'DELETE_WORD'; payload: string }
+  
   // State restoration
-  | { type: 'RESTORE_STATE'; payload: { domains: QualityDomain[]; concepts: Concept[]; instances: ConceptInstance[] } }
+  | { type: 'RESTORE_STATE'; payload: { domains: QualityDomain[]; concepts: Concept[]; instances: ConceptInstance[]; words?: Word[] } }
   | { type: 'MARK_RESTORED' }
 
 /**
@@ -52,5 +57,6 @@ export interface AppState {
   selectedInstanceId: string | null
   concepts: Concept[]
   instances: ConceptInstance[]
+  words: Word[]
   hasRestoredState: boolean
 }

@@ -1,69 +1,54 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useRef, useCallback } from 'react'
 import { useQualityDomain } from '@/app/store'
 import Button from '@mui/material/Button'
 import Alert from '@mui/material/Alert'
 import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
-import TextField from '@mui/material/TextField'
-import ContentCopyIcon from '@mui/icons-material/ContentCopy'
-import FileUploadIcon from '@mui/icons-material/FileUpload'
+import DownloadIcon from '@mui/icons-material/Download'
+import UploadFileIcon from '@mui/icons-material/UploadFile'
 
 export default function ImportExportSection() {
   const { state, addDomain, deleteDomain, selectDomain, addConcept, deleteConcept } = useQualityDomain()
-  const [jsonInput, setJsonInput] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState<string | null>(null)
+  const [isDragOver, setIsDragOver] = useState(false)
+  const fileInputRef = useRef<HTMLInputElement>(null)
 
   // Custom replacer to handle Infinity values and filter out selection state
-  const formattedState = JSON.stringify(state, (key, value) => {
-    if (
-      key === 'selectedDomainId' ||
-      key === 'selectedLabelId' ||
-      key === 'selectedLabelDomainId' ||
-      key === 'selectedConceptId'
-    ) {
-      return undefined
-    }
-    if (value === Infinity) return 'Infinity'
-    if (value === -Infinity) return '-Infinity'
-    return value
-  }, 2)
-
-  const handleCopy = async () => {
-    try {
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        await navigator.clipboard.writeText(formattedState)
-        setSuccess('Copied to clipboard!')
-        setTimeout(() => setSuccess(null), 2000)
-      } else {
-        const textArea = document.createElement('textarea')
-        textArea.value = formattedState
-        textArea.style.position = 'fixed'
-        textArea.style.left = '-999999px'
-        textArea.style.top = '-999999px'
-        document.body.appendChild(textArea)
-        textArea.focus()
-        textArea.select()
-
-        try {
-          const successful = document.execCommand('copy')
-          document.body.removeChild(textArea)
-          if (successful) {
-            setSuccess('Copied to clipboard!')
-            setTimeout(() => setSuccess(null), 2000)
-          } else {
-            throw new Error('Copy command failed')
-          }
-        } catch (err) {
-          document.body.removeChild(textArea)
-          throw err
-        }
+  const getFormattedState = () =>
+    JSON.stringify(state, (key, value) => {
+      if (
+        key === 'selectedDomainId' ||
+        key === 'selectedLabelId' ||
+        key === 'selectedLabelDomainId' ||
+        key === 'selectedConceptId'
+      ) {
+        return undefined
       }
+      if (value === Infinity) return 'Infinity'
+      if (value === -Infinity) return '-Infinity'
+      return value
+    }, 2)
+
+  const handleDownload = () => {
+    try {
+      const json = getFormattedState()
+      const blob = new Blob([json], { type: 'application/json' })
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = `conceptslm-state-${new Date().toISOString().slice(0, 10)}.json`
+      document.body.appendChild(a)
+      a.click()
+      document.body.removeChild(a)
+      URL.revokeObjectURL(url)
+      setSuccess('State downloaded!')
+      setTimeout(() => setSuccess(null), 2000)
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : String(err)
-      setError(`Failed to copy: ${errorMessage}`)
+      setError(`Failed to download: ${errorMessage}`)
       setTimeout(() => setError(null), 5000)
     }
   }
@@ -141,12 +126,12 @@ export default function ImportExportSection() {
     return true
   }
 
-  const handleImport = () => {
+  const importFromJson = (jsonString: string) => {
     setError(null)
     setSuccess(null)
 
     try {
-      const parsed = JSON.parse(jsonInput)
+      const parsed = JSON.parse(jsonString)
 
       if (!validateState(parsed)) {
         return
@@ -195,7 +180,6 @@ export default function ImportExportSection() {
       selectDomain(null)
 
       setSuccess('State imported successfully!')
-      setJsonInput('')
       setTimeout(() => setSuccess(null), 2000)
     } catch (err) {
       if (err instanceof SyntaxError) {
@@ -203,6 +187,61 @@ export default function ImportExportSection() {
       } else {
         setError(`Import failed: ${err instanceof Error ? err.message : String(err)}`)
       }
+    }
+  }
+
+  const handleFileRead = useCallback((file: File) => {
+    if (!file.name.endsWith('.json') && file.type !== 'application/json') {
+      setError('Please upload a JSON file')
+      setTimeout(() => setError(null), 5000)
+      return
+    }
+
+    const reader = new FileReader()
+    reader.onload = (e) => {
+      const text = e.target?.result
+      if (typeof text === 'string') {
+        importFromJson(text)
+      }
+    }
+    reader.onerror = () => {
+      setError('Failed to read file')
+      setTimeout(() => setError(null), 5000)
+    }
+    reader.readAsText(file)
+  }, [state, deleteDomain, deleteConcept, addDomain, addConcept, selectDomain])
+
+  const handleFileInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (file) {
+      handleFileRead(file)
+    }
+    // Reset so the same file can be re-uploaded
+    if (fileInputRef.current) {
+      fileInputRef.current.value = ''
+    }
+  }
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    setIsDragOver(true)
+  }
+
+  const handleDragLeave = (e: React.DragEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    setIsDragOver(false)
+  }
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    setIsDragOver(false)
+
+    const file = e.dataTransfer.files?.[0]
+    if (file) {
+      handleFileRead(file)
     }
   }
 
@@ -220,81 +259,72 @@ export default function ImportExportSection() {
         </Alert>
       )}
 
-      {/* Summary */}
-      <Box sx={{ mb: 2, p: 1.5, bgcolor: 'grey.50', borderRadius: 1, border: '1px solid', borderColor: 'grey.200' }}>
-        <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 600 }}>
-          Domains: {state.domains.length} &middot; Labels:{' '}
-          {state.domains.reduce((total, d) => total + d.labels.length, 0)} &middot; Concepts:{' '}
-          {state.concepts.length}
-        </Typography>
-      </Box>
-
       {/* Export */}
-      <Typography variant="subtitle2" color="text.secondary" sx={{ mb: 1 }}>
-        Export State
-      </Typography>
       <Box
         sx={{
-          bgcolor: 'grey.50',
-          border: '1px solid',
-          borderColor: 'grey.200',
-          borderRadius: 1,
-          p: 1,
-          maxHeight: 200,
-          overflow: 'auto',
-          mb: 1
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          mb: 3,
         }}
       >
-        <pre style={{ margin: 0, fontSize: '10px', fontFamily: 'monospace', whiteSpace: 'pre-wrap', wordBreak: 'break-all' }}>
-          {formattedState}
-        </pre>
+        <Typography variant="subtitle2" color="text.secondary">
+          Export State
+        </Typography>
+        <Button
+          onClick={handleDownload}
+          variant="outlined"
+          size="small"
+          startIcon={<DownloadIcon />}
+          sx={{ textTransform: 'none' }}
+        >
+          Download
+        </Button>
       </Box>
-      <Button
-        onClick={handleCopy}
-        variant="outlined"
-        size="small"
-        fullWidth
-        startIcon={<ContentCopyIcon />}
-        sx={{ textTransform: 'none', mb: 3 }}
-      >
-        Copy to clipboard
-      </Button>
 
       {/* Import */}
       <Typography variant="subtitle2" color="text.secondary" sx={{ mb: 1 }}>
         Import State
       </Typography>
-      <TextField
-        multiline
-        minRows={4}
-        maxRows={8}
-        fullWidth
-        value={jsonInput}
-        onChange={(e) => {
-          setJsonInput(e.target.value)
-          setError(null)
-        }}
-        placeholder="Paste JSON here..."
-        size="small"
-        sx={{
-          mb: 1,
-          '& .MuiInputBase-input': {
-            fontFamily: 'monospace',
-            fontSize: '11px'
-          }
-        }}
+
+      {/* Hidden file input */}
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept=".json,application/json"
+        onChange={handleFileInput}
+        style={{ display: 'none' }}
       />
-      <Button
-        onClick={handleImport}
-        disabled={!jsonInput.trim()}
-        variant="contained"
-        size="small"
-        fullWidth
-        startIcon={<FileUploadIcon />}
-        sx={{ textTransform: 'none' }}
+
+      {/* Drop zone */}
+      <Box
+        onDragOver={handleDragOver}
+        onDragLeave={handleDragLeave}
+        onDrop={handleDrop}
+        onClick={() => fileInputRef.current?.click()}
+        sx={{
+          border: '2px dashed',
+          borderColor: isDragOver ? 'primary.main' : 'grey.300',
+          borderRadius: 1,
+          p: 3,
+          textAlign: 'center',
+          cursor: 'pointer',
+          bgcolor: isDragOver ? 'primary.50' : 'grey.50',
+          transition: 'all 0.2s ease',
+          '&:hover': {
+            borderColor: 'primary.light',
+            bgcolor: 'grey.100',
+          },
+        }}
       >
-        Import
-      </Button>
+        <UploadFileIcon sx={{ fontSize: 32, color: isDragOver ? 'primary.main' : 'grey.400', mb: 1 }} />
+        <Typography variant="body2" color="text.secondary">
+          Drag & drop a JSON file here
+        </Typography>
+        <Typography variant="caption" color="text.disabled">
+          or click to browse
+        </Typography>
+      </Box>
     </Box>
   )
 }

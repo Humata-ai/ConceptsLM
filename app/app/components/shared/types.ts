@@ -101,6 +101,28 @@ export interface ConceptInstance {
   createdAt: Date
 }
 
+// ===== Dictionary Word Types =====
+
+export type WordClass = 'noun' | 'adjective' | 'verb' | 'adverb' | 'preposition'
+
+export const WORD_CLASS_LABELS: Record<WordClass, string> = {
+  noun: 'Noun',
+  adjective: 'Adjective',
+  verb: 'Verb',
+  adverb: 'Adverb',
+  preposition: 'Preposition',
+}
+
+export const WORD_CLASSES: WordClass[] = ['noun', 'adjective', 'verb', 'adverb', 'preposition']
+
+export interface Word {
+  id: string
+  name: string
+  wordClass: WordClass
+  definition: string
+  createdAt: Date
+}
+
 export interface QualityDomainState {
   domains: QualityDomain[]
   selectedDomainId: string | null

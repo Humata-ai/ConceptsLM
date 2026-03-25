@@ -1,4 +1,4 @@
-import type { QualityDomain, Concept, ConceptInstance, QualityDomainLabel, Property, PropertyReference, LabelReference } from './types'
+import type { QualityDomain, Concept, ConceptInstance, QualityDomainLabel, Property, PropertyReference, LabelReference, Word } from './types'
 import type { AppState } from '@/app/store'
 
 const STORAGE_KEY = 'quality-domain-state'
@@ -53,7 +53,7 @@ export function serializeState(state: AppState): string {
 }
 
 // Same logic as StateDebugPanel import (with migration support)
-export function deserializeState(jsonString: string): { domains: QualityDomain[], concepts: Concept[], instances: ConceptInstance[] } {
+export function deserializeState(jsonString: string): { domains: QualityDomain[], concepts: Concept[], instances: ConceptInstance[], words: Word[] } {
   const parsed = JSON.parse(jsonString)
   const version = parsed.version || 1 // Default to version 1 if not specified
 
@@ -142,7 +142,13 @@ export function deserializeState(jsonString: string): { domains: QualityDomain[]
     createdAt: new Date(instance.createdAt)
   }))
 
-  return { domains, concepts, instances }
+  // Handle words
+  const words = (parsed.words || []).map((word: any) => ({
+    ...word,
+    createdAt: new Date(word.createdAt)
+  }))
+
+  return { domains, concepts, instances, words }
 }
 
 export function saveToLocalStorage(state: AppState): void {
@@ -154,7 +160,7 @@ export function saveToLocalStorage(state: AppState): void {
   }
 }
 
-export function loadFromLocalStorage(): { domains: QualityDomain[], concepts: Concept[], instances: ConceptInstance[] } | null {
+export function loadFromLocalStorage(): { domains: QualityDomain[], concepts: Concept[], instances: ConceptInstance[], words: Word[] } | null {
   try {
     const serialized = localStorage.getItem(STORAGE_KEY)
     if (!serialized) return null
