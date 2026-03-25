@@ -5,6 +5,7 @@ import { useQualityDomain } from '@/app/store'
 import type { QualityDomainLabel, RegionDimensionRange, PointDimensionValue, QualityDimension } from './types'
 import { generateId } from './utils'
 import Modal from '@/app/components/common/Modal'
+import LinearValueRange from './LinearValueRange'
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome'
 import Tooltip from '@mui/material/Tooltip'
 import Button from '@mui/material/Button'
@@ -54,7 +55,10 @@ export default function LabelModal({
         setRegionDimensions(
           domain.dimensions.map((dim) => ({
             dimensionId: dim.id,
-            range: dim.range,
+            range: [
+              dim.range[0] === -Infinity ? 0 : dim.range[0],
+              dim.range[1] === Infinity ? 1 : dim.range[1],
+            ] as const,
           }))
         )
         setPointDimensions(
@@ -230,7 +234,7 @@ export default function LabelModal({
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      title={editingLabel ? 'Edit Label' : 'Create Label'}
+      title={editingLabel ? 'Edit label' : 'Create label'}
       loading={isGenerating}
     >
 
@@ -285,7 +289,7 @@ export default function LabelModal({
 
               <div>
                 <label htmlFor="label-name" className="block text-sm font-medium mb-1">
-                  Label Name
+                  Label name
                 </label>
                 <input
                   id="label-name"
@@ -302,7 +306,7 @@ export default function LabelModal({
                 <div>
                   <div className="flex items-center justify-between mb-2">
                     <label className="text-sm font-medium">
-                      Dimension Ranges (Domain: {domain.name})
+                      Dimension ranges (Domain: {domain.name})
                     </label>
                     <Tooltip title="AI Fill">
                       <span>
@@ -326,44 +330,19 @@ export default function LabelModal({
 
                       return (
                         <div key={dr.dimensionId} className="border border-gray-200 rounded p-3">
-                          <div className="text-sm font-medium mb-2">{dimension.name}</div>
+                          <div className="text-sm font-medium mb-1">{dimension.name}</div>
                           <div className="text-xs text-gray-500 mb-2">
                             Domain range: [{dimension.range[0]}, {dimension.range[1]}]
                           </div>
-                          <div className="grid grid-cols-2 gap-2">
-                            <div>
-                              <label className="block text-xs text-gray-600 mb-1">Min</label>
-                              <input
-                                type="number"
-                                value={dr.range[0]}
-                                onChange={(e) =>
-                                  handleRegionRangeChange(
-                                    dr.dimensionId,
-                                    'min',
-                                    parseFloat(e.target.value)
-                                  )
-                                }
-                                step="any"
-                                className="w-full border border-gray-300 rounded px-2 py-1 text-sm focus:ring-1 focus:ring-blue-500 focus:outline-none"
-                              />
-                            </div>
-                            <div>
-                              <label className="block text-xs text-gray-600 mb-1">Max</label>
-                              <input
-                                type="number"
-                                value={dr.range[1]}
-                                onChange={(e) =>
-                                  handleRegionRangeChange(
-                                    dr.dimensionId,
-                                    'max',
-                                    parseFloat(e.target.value)
-                                  )
-                                }
-                                step="any"
-                                className="w-full border border-gray-300 rounded px-2 py-1 text-sm focus:ring-1 focus:ring-blue-500 focus:outline-none"
-                              />
-                            </div>
-                          </div>
+                          <LinearValueRange
+                            min={dr.range[0]}
+                            max={dr.range[1]}
+                            onMinChange={(value) => handleRegionRangeChange(dr.dimensionId, 'min', value)}
+                            onMaxChange={(value) => handleRegionRangeChange(dr.dimensionId, 'max', value)}
+                            allowMinInfinity={dimension.range[0] === -Infinity}
+                            allowMaxInfinity={dimension.range[1] === Infinity}
+                            label=""
+                          />
                         </div>
                       )
                     })}
@@ -375,7 +354,7 @@ export default function LabelModal({
                 <div>
                   <div className="flex items-center justify-between mb-2">
                     <label className="text-sm font-medium">
-                      Dimension Values (Domain: {domain.name})
+                      Dimension values (Domain: {domain.name})
                     </label>
                     <Tooltip title="AI Fill">
                       <span>
@@ -444,7 +423,7 @@ export default function LabelModal({
               type="submit"
               className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
             >
-              {editingLabel ? 'Update Label' : 'Save Label'}
+              {editingLabel ? 'Update label' : 'Save label'}
             </button>
           </div>
         </form>
