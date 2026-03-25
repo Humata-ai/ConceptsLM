@@ -1,6 +1,6 @@
 'use client'
 
-import type { RegionDimensionRange, QualityDimension } from '../types'
+import type { RegionDimensionRange, QualityDimension } from '../../shared/types'
 import LinearValueRange from '../LinearValueRange'
 import AiFillButton from './AiFillButton'
 

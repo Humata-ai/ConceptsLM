@@ -1,13 +1,13 @@
 import { useMemo, memo } from 'react'
 import { Text, Billboard, Line } from '@react-three/drei'
 import { Vector3 } from 'three'
-import type { Concept } from '../types'
+import type { Concept } from '../shared/types'
 import { useQualityDomain } from '@/app/store'
 import type { ThreeEvent } from '@react-three/fiber'
 import { useCircularLayoutMap } from '@/app/hooks/useCircularLayout'
 import { useCursorOnHover } from '@/app/hooks/useCursorOnHover'
 import { normalizeDimensionValue, normalizeToRange } from '@/app/utils/positionCalculations'
-import { DOMAIN_SCALE, VISUALIZATION_SIZE } from './constants'
+import { DOMAIN_SCALE, VISUALIZATION_SIZE } from '../quality-domain/visualizations/constants'
 
 interface ConceptVisualization3DProps {
   concept: Concept

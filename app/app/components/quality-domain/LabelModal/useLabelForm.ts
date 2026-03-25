@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from 'react'
 import { useQualityDomain } from '@/app/store'
-import type { QualityDomainLabel, RegionDimensionRange, PointDimensionValue, QualityDomain } from '../types'
-import { generateId } from '../utils'
+import type { QualityDomainLabel, RegionDimensionRange, PointDimensionValue, QualityDomain } from '../../shared/types'
+import { generateId } from '../../shared/utils'
 
 interface UseLabelFormProps {
   isOpen: boolean

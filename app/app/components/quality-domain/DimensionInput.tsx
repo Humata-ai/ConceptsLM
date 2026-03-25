@@ -1,7 +1,7 @@
 'use client'
 
 import CloseIcon from '@mui/icons-material/Close'
-import type { QualityDimension } from './types'
+import type { QualityDimension } from '../shared/types'
 import LinearValueRange from './LinearValueRange'
 
 interface DimensionInputProps {

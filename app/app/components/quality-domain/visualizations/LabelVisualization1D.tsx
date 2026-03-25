@@ -1,7 +1,7 @@
 import { useMemo, memo } from 'react'
 import { Text } from '@react-three/drei'
-import type { QualityDomainLabel, QualityDomain } from '../types'
-import { isRegion, isPoint } from '../types'
+import type { QualityDomainLabel, QualityDomain } from '../../shared/types'
+import { isRegion, isPoint } from '../../shared/types'
 
 interface LabelVisualization1DProps {
   label: QualityDomainLabel

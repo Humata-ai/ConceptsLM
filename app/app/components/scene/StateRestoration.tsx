@@ -3,7 +3,7 @@
 import { useEffect } from 'react'
 import { useQualityDomain } from '@/app/store'
 import { useToast } from '../ToastProvider'
-import { loadFromLocalStorage, clearLocalStorage } from './localStorage'
+import { loadFromLocalStorage, clearLocalStorage } from '../shared/localStorage'
 
 export function StateRestoration() {
   const { state, dispatch } = useQualityDomain()

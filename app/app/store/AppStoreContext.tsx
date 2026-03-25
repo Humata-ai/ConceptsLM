@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useReducer, useMemo, useCallback, useEffect, type ReactNode } from 'react'
 import type { AppState, AppAction } from './types'
-import type { QualityDomain, QualityDomainLabel, Concept, ConceptInstance, QualityDomainPoint } from '../components/quality-domain/types'
+import type { QualityDomain, QualityDomainLabel, Concept, ConceptInstance, QualityDomainPoint } from '../components/shared/types'
 import { appReducer } from './reducer'
 import { initialState } from './initialState'
 import { 
@@ -11,7 +11,7 @@ import {
   getInstancePoints, 
   getConceptInstances 
 } from './selectors'
-import { saveToLocalStorage } from '../components/quality-domain/localStorage'
+import { saveToLocalStorage } from '../components/shared/localStorage'
 
 /**
  * App Store Context Type

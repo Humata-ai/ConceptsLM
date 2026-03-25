@@ -1,7 +1,7 @@
 'use client'
 
-import type { QualityDomain } from './types'
-import { isRegion, isPoint } from './types'
+import type { QualityDomain } from '../shared/types'
+import { isRegion, isPoint } from '../shared/types'
 
 interface TableViewProps {
   domain: QualityDomain

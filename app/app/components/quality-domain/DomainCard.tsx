@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useQualityDomain } from '@/app/store'
-import type { QualityDomain } from './types'
+import type { QualityDomain } from '../shared/types'
 import IconButton from '@mui/material/IconButton'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'

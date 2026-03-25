@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import type { QualityDomain } from './types'
+import type { QualityDomain } from '../shared/types'
 import Visualization1D from './visualizations/Visualization1D'
 import Visualization2D from './visualizations/Visualization2D'
 import Visualization3D from './visualizations/Visualization3D'
