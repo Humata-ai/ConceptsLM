@@ -20,9 +20,20 @@ export default function TabPage({ params }: { params: Promise<{ tab: string[] }>
     if (!VALID_LIBRARY_SECTIONS.includes(section as typeof VALID_LIBRARY_SECTIONS[number])) {
       notFound()
     }
-    // No further nesting allowed
-    if (tab.length > 2) {
-      notFound()
+    
+    // Dictionary supports deeper nesting: /library/dictionary/<word> and /library/dictionary/<word>/edit
+    if (section === 'dictionary') {
+      if (tab.length > 4) {
+        notFound()
+      }
+      if (tab.length === 4 && tab[3] !== 'edit') {
+        notFound()
+      }
+    } else {
+      // No further nesting allowed for other sections
+      if (tab.length > 2) {
+        notFound()
+      }
     }
   }
 
