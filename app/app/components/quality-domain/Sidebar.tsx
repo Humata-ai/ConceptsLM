@@ -14,16 +14,16 @@ import EventModal from './EventModal'
 import LayersIcon from '@mui/icons-material/Layers'
 import ImportExportIcon from '@mui/icons-material/ImportExport'
 import TimelineIcon from '@mui/icons-material/Timeline'
-import QuizIcon from '@mui/icons-material/Quiz'
+import CollectionsBookmarkIcon from '@mui/icons-material/CollectionsBookmark'
 import Button from '@mui/material/Button'
 import Tooltip from '@mui/material/Tooltip'
 import IconButton from '@mui/material/IconButton'
 import Typography from '@mui/material/Typography'
 import ImportExportSection from './ImportExportSection'
 
-type SidebarView = 'scene' | 'import-export' | 'timeline' | 'dictionary'
+type SidebarView = 'scene' | 'import-export' | 'timeline' | 'library'
 
-const VALID_TABS: SidebarView[] = ['scene', 'import-export', 'timeline', 'dictionary']
+const VALID_TABS: SidebarView[] = ['scene', 'import-export', 'timeline', 'library']
 
 function getTabFromPathname(pathname: string): SidebarView | null {
   const segment = pathname.replace(/^\//, '')
@@ -107,21 +107,21 @@ export default function Sidebar() {
               </IconButton>
             </Tooltip>
 
-            <Tooltip title="Dictionary" placement="right">
+            <Tooltip title="Library" placement="right">
               <IconButton
-                onClick={() => handleTabClick('dictionary')}
+                onClick={() => handleTabClick('library')}
                 sx={{
                   borderRadius: 1,
                   width: 40,
                   height: 40,
-                  backgroundColor: visibleView === 'dictionary' ? 'primary.main' : 'transparent',
-                  color: visibleView === 'dictionary' ? 'white' : 'text.secondary',
+                  backgroundColor: visibleView === 'library' ? 'primary.main' : 'transparent',
+                  color: visibleView === 'library' ? 'white' : 'text.secondary',
                   '&:hover': {
-                    backgroundColor: visibleView === 'dictionary' ? 'primary.dark' : 'action.hover',
+                    backgroundColor: visibleView === 'library' ? 'primary.dark' : 'action.hover',
                   },
                 }}
               >
-                <QuizIcon fontSize="small" />
+                <CollectionsBookmarkIcon fontSize="small" />
               </IconButton>
             </Tooltip>
 
@@ -319,12 +319,12 @@ export default function Sidebar() {
               </div>
             )}
 
-            {/* Dictionary View */}
-            {activeView === 'dictionary' && (
+            {/* Library View */}
+            {activeView === 'library' && (
               <div className="flex flex-col h-full">
                 <div className="px-4 py-3 border-b border-gray-200">
                   <Typography variant="subtitle1" fontWeight="bold">
-                    Dictionary
+                    Library
                   </Typography>
                 </div>
                 <div className="flex-1 overflow-y-auto">
