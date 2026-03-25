@@ -1,5 +1,6 @@
 'use client'
 
+import TextField from '@mui/material/TextField'
 import type { QualityDimension } from './types'
 
 interface ToggleKnobProps {
@@ -89,7 +90,7 @@ export default function DimensionInput({
       {/* Row 1: Dimension Name + Remove button */}
       <div className="flex items-start gap-2">
         <div className="flex-1">
-          <label className="block text-xs font-medium text-gray-600 mb-1">Dimension Name</label>
+          <label className="block text-xs font-medium text-gray-600 mb-2">Dimension name</label>
           <input
             type="text"
             value={dimension.name}
@@ -110,24 +111,26 @@ export default function DimensionInput({
       </div>
 
       {/* Row 2: Minimum and Maximum side by side */}
+      <label className="block text-xs font-medium text-gray-600 mb-4">Dimension value range</label>
       <div className="flex gap-4">
         {/* Minimum section */}
         <div className="flex-1 min-w-0">
-          <label className="block text-xs font-medium text-gray-600 mb-1">Minimum</label>
           <div className="flex items-center gap-2">
-            <input
+            <TextField
               type="number"
+              label="Minimum"
               value={isMinInfinity ? '' : dimension.range[0]}
               onChange={(e) => handleMinChange(e.target.value)}
-              placeholder="Min"
+              size="small"
               tabIndex={isMinInfinity ? -1 : undefined}
-              className={`w-20 min-w-0 border rounded px-2 py-1.5 text-sm focus:ring-2 focus:outline-none transition-opacity ${
-                isMinInfinity
-                  ? 'opacity-70 pointer-events-none'
-                  : minError
-                  ? 'border-red-500 focus:ring-red-500'
-                  : 'border-gray-300 focus:ring-blue-500'
-              }`}
+              error={!isMinInfinity && minError}
+              sx={{
+                width: 100,
+                minWidth: 0,
+                transition: 'opacity 0.2s',
+                opacity: isMinInfinity ? 0.7 : 1,
+                pointerEvents: isMinInfinity ? 'none' : 'auto',
+              }}
             />
             <ToggleKnob
               checked={isMinInfinity}
@@ -139,21 +142,22 @@ export default function DimensionInput({
 
         {/* Maximum section */}
         <div className="flex-1 min-w-0">
-          <label className="block text-xs font-medium text-gray-600 mb-1">Maximum</label>
           <div className="flex items-center gap-2">
-            <input
+            <TextField
               type="number"
+              label="Maximum"
               value={isMaxInfinity ? '' : dimension.range[1]}
               onChange={(e) => handleMaxChange(e.target.value)}
-              placeholder="Max"
+              size="small"
               tabIndex={isMaxInfinity ? -1 : undefined}
-              className={`w-20 min-w-0 border rounded px-2 py-1.5 text-sm focus:ring-2 focus:outline-none transition-opacity ${
-                isMaxInfinity
-                  ? 'opacity-70 pointer-events-none'
-                  : minError
-                  ? 'border-red-500 focus:ring-red-500'
-                  : 'border-gray-300 focus:ring-blue-500'
-              }`}
+              error={!isMaxInfinity && minError}
+              sx={{
+                width: 100,
+                minWidth: 0,
+                transition: 'opacity 0.2s',
+                opacity: isMaxInfinity ? 0.7 : 1,
+                pointerEvents: isMaxInfinity ? 'none' : 'auto',
+              }}
             />
             <ToggleKnob
               checked={isMaxInfinity}

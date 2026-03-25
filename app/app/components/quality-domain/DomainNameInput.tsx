@@ -35,7 +35,7 @@ export default function DomainNameInput({ value, onChange }: DomainNameInputProp
   return (
     <div>
       <label htmlFor="domain-name" className="block text-sm font-medium mb-1">
-        Domain Name
+        Domain name
       </label>
       <input
         id="domain-name"
