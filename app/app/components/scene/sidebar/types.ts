@@ -30,3 +30,20 @@ export function getLibrarySectionFromPathname(pathname: string): LibrarySection 
   }
   return null
 }
+
+export interface DictionaryWordRoute {
+  wordSlug: string
+  isEdit: boolean
+}
+
+export function getDictionaryWordFromPathname(pathname: string): DictionaryWordRoute | null {
+  const segments = pathname.replace(/^\//, '').split('/')
+  // /library/dictionary/<word-slug> or /library/dictionary/<word-slug>/edit
+  if (segments[0] === 'library' && segments[1] === 'dictionary' && segments.length >= 3 && segments[2]) {
+    return {
+      wordSlug: decodeURIComponent(segments[2]),
+      isEdit: segments[3] === 'edit',
+    }
+  }
+  return null
+}
