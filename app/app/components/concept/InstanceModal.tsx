@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { createPortal } from 'react-dom'
 import { useQualityDomain } from '@/app/store'
 import type { ConceptInstance, PointReference, QualityDomain } from '../shared/types'
 import { isPoint } from '../shared/types'
@@ -116,7 +115,7 @@ export default function InstanceModal({
 
   if (!isOpen || !concept) return null
 
-  return createPortal(
+  return (
     <Modal
       isOpen={isOpen}
       onClose={onClose}
@@ -206,7 +205,6 @@ export default function InstanceModal({
           </button>
         </div>
       </form>
-    </Modal>,
-    document.body
+    </Modal>
   )
 }
