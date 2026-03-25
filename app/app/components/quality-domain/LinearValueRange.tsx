@@ -88,22 +88,27 @@ export default function LinearValueRange({
         {/* Minimum section */}
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2">
-            <TextField
-              type="number"
-              label="Minimum"
-              value={isMinInfinity ? '' : min}
-              onChange={(e) => handleMinInputChange(e.target.value)}
-              size="small"
-              tabIndex={isMinInfinity ? -1 : undefined}
-              error={!isMinInfinity && rangeError}
-              sx={{
-                width: 100,
-                minWidth: 0,
-                transition: 'opacity 0.2s',
-                opacity: isMinInfinity ? 0.7 : 1,
-                pointerEvents: isMinInfinity ? 'none' : 'auto',
-              }}
-            />
+            <div
+              onClick={() => isMinInfinity && handleMinInfinityToggle(false)}
+              className={`min-w-0 shrink ${isMinInfinity ? 'cursor-pointer' : ''}`}
+            >
+              <TextField
+                type="number"
+                label="Min"
+                value={isMinInfinity ? '' : min}
+                onChange={(e) => handleMinInputChange(e.target.value)}
+                size="small"
+                tabIndex={isMinInfinity ? -1 : undefined}
+                error={!isMinInfinity && rangeError}
+                sx={{
+                  width: '100%',
+                  minWidth: 0,
+                  transition: 'opacity 0.2s',
+                  opacity: isMinInfinity ? 0.7 : 1,
+                  pointerEvents: isMinInfinity ? 'none' : 'auto',
+                }}
+              />
+            </div>
             <ToggleKnob
               checked={isMinInfinity}
               onChange={handleMinInfinityToggle}
@@ -115,22 +120,27 @@ export default function LinearValueRange({
         {/* Maximum section */}
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2">
-            <TextField
-              type="number"
-              label="Maximum"
-              value={isMaxInfinity ? '' : max}
-              onChange={(e) => handleMaxInputChange(e.target.value)}
-              size="small"
-              tabIndex={isMaxInfinity ? -1 : undefined}
-              error={!isMaxInfinity && rangeError}
-              sx={{
-                width: 100,
-                minWidth: 0,
-                transition: 'opacity 0.2s',
-                opacity: isMaxInfinity ? 0.7 : 1,
-                pointerEvents: isMaxInfinity ? 'none' : 'auto',
-              }}
-            />
+            <div
+              onClick={() => isMaxInfinity && handleMaxInfinityToggle(false)}
+              className={`min-w-0 shrink ${isMaxInfinity ? 'cursor-pointer' : ''}`}
+            >
+              <TextField
+                type="number"
+                label="Max"
+                value={isMaxInfinity ? '' : max}
+                onChange={(e) => handleMaxInputChange(e.target.value)}
+                size="small"
+                tabIndex={isMaxInfinity ? -1 : undefined}
+                error={!isMaxInfinity && rangeError}
+                sx={{
+                  width: '100%',
+                  minWidth: 0,
+                  transition: 'opacity 0.2s',
+                  opacity: isMaxInfinity ? 0.7 : 1,
+                  pointerEvents: isMaxInfinity ? 'none' : 'auto',
+                }}
+              />
+            </div>
             <ToggleKnob
               checked={isMaxInfinity}
               onChange={handleMaxInfinityToggle}
