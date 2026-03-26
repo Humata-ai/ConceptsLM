@@ -1,16 +1,20 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useImperativeHandle, forwardRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAppStore } from '@/app/store'
 import { WORD_CLASSES, WORD_CLASS_LABELS } from '../shared/types'
 import type { WordClass } from '../shared/types'
 
+export interface WordEditViewHandle {
+  save: () => void
+}
+
 interface WordEditViewProps {
   wordSlug: string
 }
 
-export default function WordEditView({ wordSlug }: WordEditViewProps) {
+const WordEditView = forwardRef<WordEditViewHandle, WordEditViewProps>(function WordEditView({ wordSlug }, ref) {
   const router = useRouter()
   const { state, updateWord } = useAppStore()
 
@@ -45,9 +49,9 @@ export default function WordEditView({ wordSlug }: WordEditViewProps) {
     router.push(`/library/dictionary/${encodeURIComponent(wordSlug)}`)
   }
 
-  const handleCancel = () => {
-    router.push(`/library/dictionary/${encodeURIComponent(wordSlug)}`)
-  }
+  useImperativeHandle(ref, () => ({
+    save: handleSave,
+  }))
 
   return (
     <div className="px-4 py-4 space-y-4">
@@ -85,23 +89,8 @@ export default function WordEditView({ wordSlug }: WordEditViewProps) {
           placeholder="Enter the definition of this word..."
         />
       </div>
-
-      <div className="flex gap-3 justify-end pt-2">
-        <button
-          type="button"
-          onClick={handleCancel}
-          className="px-4 py-2 border border-gray-300 rounded hover:bg-gray-50"
-        >
-          Cancel
-        </button>
-        <button
-          type="button"
-          onClick={handleSave}
-          className="px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700"
-        >
-          Save
-        </button>
-      </div>
     </div>
   )
-}
+})
+
+export default WordEditView

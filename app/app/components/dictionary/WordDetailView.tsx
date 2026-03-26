@@ -1,6 +1,5 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
 import { useAppStore } from '@/app/store'
 import { WORD_CLASS_LABELS } from '../shared/types'
 
@@ -9,7 +8,6 @@ interface WordDetailViewProps {
 }
 
 export default function WordDetailView({ wordSlug }: WordDetailViewProps) {
-  const router = useRouter()
   const { state } = useAppStore()
 
   const word = state.words.find(
@@ -22,10 +20,6 @@ export default function WordDetailView({ wordSlug }: WordDetailViewProps) {
         <p className="text-sm">Word not found.</p>
       </div>
     )
-  }
-
-  const handleEdit = () => {
-    router.push(`/library/dictionary/${encodeURIComponent(wordSlug)}/edit`)
   }
 
   return (
@@ -41,16 +35,6 @@ export default function WordDetailView({ wordSlug }: WordDetailViewProps) {
         <p className="text-sm text-gray-800">
           {word.definition || <span className="italic text-gray-400">No definition yet.</span>}
         </p>
-      </div>
-
-      <div className="flex justify-end pt-2">
-        <button
-          type="button"
-          onClick={handleEdit}
-          className="px-4 py-2 border border-gray-300 rounded hover:bg-gray-50 text-sm"
-        >
-          Edit
-        </button>
       </div>
     </div>
   )

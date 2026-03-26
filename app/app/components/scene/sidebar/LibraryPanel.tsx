@@ -1,11 +1,14 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 import Typography from '@mui/material/Typography'
 import Tooltip from '@mui/material/Tooltip'
 import Button from '@mui/material/Button'
+import IconButton from '@mui/material/IconButton'
 import AddIcon from '@mui/icons-material/Add'
+import EditIcon from '@mui/icons-material/Edit'
+import SaveIcon from '@mui/icons-material/Save'
 import MenuBookIcon from '@mui/icons-material/MenuBook'
 import CategoryIcon from '@mui/icons-material/Category'
 import TuneIcon from '@mui/icons-material/Tune'
@@ -17,6 +20,7 @@ import { useAppStore } from '@/app/store'
 import { WORD_CLASS_LABELS } from '../../shared/types'
 import AddWordModal from '../../dictionary/AddWordModal'
 import WordEditView from '../../dictionary/WordEditView'
+import type { WordEditViewHandle } from '../../dictionary/WordEditView'
 import WordDetailView from '../../dictionary/WordDetailView'
 
 const LIBRARY_MENU_ITEMS: { section: LibrarySection; icon: React.ReactNode }[] = [
@@ -110,6 +114,7 @@ export default function LibraryPanel() {
   const activeSection = getLibrarySectionFromPathname(pathname)
   const wordRoute = getDictionaryWordFromPathname(pathname)
   const [isAddWordModalOpen, setIsAddWordModalOpen] = useState(false)
+  const wordEditRef = useRef<WordEditViewHandle>(null)
 
   const handleNavigateToSection = (section: LibrarySection) => {
     router.push(`/library/${section}`)
@@ -126,17 +131,37 @@ export default function LibraryPanel() {
       { label: 'Dictionary', href: '/library/dictionary' },
       { label: decodeURIComponent(wordRoute.wordSlug) },
     ]
-    if (wordRoute.isEdit) {
-      titleSegments.push({ label: 'Edit' })
-    }
+
+    const wordHeaderAction = wordRoute.isEdit ? (
+      <Tooltip title="Save">
+        <IconButton
+          size="small"
+          onClick={() => wordEditRef.current?.save()}
+          sx={{ color: 'text.secondary' }}
+        >
+          <SaveIcon fontSize="small" />
+        </IconButton>
+      </Tooltip>
+    ) : (
+      <Tooltip title="Edit">
+        <IconButton
+          size="small"
+          onClick={() => router.push(`/library/dictionary/${encodeURIComponent(wordRoute.wordSlug)}/edit`)}
+          sx={{ color: 'text.secondary' }}
+        >
+          <EditIcon fontSize="small" />
+        </IconButton>
+      </Tooltip>
+    )
 
     return (
       <SidebarPanel
         title={titleSegments}
         onNavigate={handleBreadcrumbNavigate}
+        headerAction={wordHeaderAction}
       >
         {wordRoute.isEdit ? (
-          <WordEditView wordSlug={wordRoute.wordSlug} />
+          <WordEditView ref={wordEditRef} wordSlug={wordRoute.wordSlug} />
         ) : (
           <WordDetailView wordSlug={wordRoute.wordSlug} />
         )}
