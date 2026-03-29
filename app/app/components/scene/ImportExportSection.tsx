@@ -6,45 +6,80 @@ import Button from '@mui/material/Button'
 import Alert from '@mui/material/Alert'
 import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
+import ToggleButton from '@mui/material/ToggleButton'
+import ToggleButtonGroup from '@mui/material/ToggleButtonGroup'
 import DownloadIcon from '@mui/icons-material/Download'
 import UploadFileIcon from '@mui/icons-material/UploadFile'
 
+type ExportType = 'library' | 'scene'
+
+/**
+ * Exported file format discriminator.
+ * - "library": contains only library state (words).
+ * - "scene": contains scene state (domains, concepts, instances) AND library state (words).
+ */
+interface ExportEnvelope {
+  exportType: ExportType
+  version: number
+  [key: string]: unknown
+}
+
+const EXPORT_VERSION = 1
+
 export default function ImportExportSection() {
-  const { state, addDomain, deleteDomain, selectDomain, addConcept, deleteConcept } = useQualityDomain()
+  const { state, dispatch } = useQualityDomain()
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState<string | null>(null)
   const [isDragOver, setIsDragOver] = useState(false)
+  const [exportType, setExportType] = useState<ExportType>('scene')
   const fileInputRef = useRef<HTMLInputElement>(null)
 
-  // Custom replacer to handle Infinity values and filter out selection state
-  const getFormattedState = () =>
-    JSON.stringify(state, (key, value) => {
-      if (
-        key === 'selectedDomainId' ||
-        key === 'selectedLabelId' ||
-        key === 'selectedLabelDomainId' ||
-        key === 'selectedConceptId'
-      ) {
-        return undefined
+  // ---------- helpers ----------
+
+  const infinityReplacer = (_key: string, value: unknown) => {
+    if (value === Infinity) return 'Infinity'
+    if (value === -Infinity) return '-Infinity'
+    return value
+  }
+
+  // ---------- export ----------
+
+  const buildExportPayload = (): string => {
+    if (exportType === 'library') {
+      const payload: ExportEnvelope = {
+        exportType: 'library',
+        version: EXPORT_VERSION,
+        words: state.library.words,
       }
-      if (value === Infinity) return 'Infinity'
-      if (value === -Infinity) return '-Infinity'
-      return value
-    }, 2)
+      return JSON.stringify(payload, infinityReplacer, 2)
+    }
+
+    // Scene export includes both scene AND library state
+    const payload: ExportEnvelope = {
+      exportType: 'scene',
+      version: EXPORT_VERSION,
+      domains: state.scene.domains,
+      concepts: state.scene.concepts,
+      instances: state.scene.instances,
+      words: state.library.words,
+    }
+    return JSON.stringify(payload, infinityReplacer, 2)
+  }
 
   const handleDownload = () => {
     try {
-      const json = getFormattedState()
+      const json = buildExportPayload()
       const blob = new Blob([json], { type: 'application/json' })
       const url = URL.createObjectURL(blob)
       const a = document.createElement('a')
       a.href = url
-      a.download = `conceptslm-state-${new Date().toISOString().slice(0, 10)}.json`
+      const label = exportType === 'library' ? 'library' : 'scene'
+      a.download = `conceptslm-${label}-${new Date().toISOString().slice(0, 10)}.json`
       document.body.appendChild(a)
       a.click()
       document.body.removeChild(a)
       URL.revokeObjectURL(url)
-      setSuccess('State downloaded!')
+      setSuccess(`${exportType === 'library' ? 'Library' : 'Scene'} state downloaded!`)
       setTimeout(() => setSuccess(null), 2000)
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : String(err)
@@ -53,19 +88,43 @@ export default function ImportExportSection() {
     }
   }
 
-  const validateState = (data: any): boolean => {
-    if (!data || typeof data !== 'object') {
-      setError('Invalid JSON: must be an object')
+  // ---------- validation ----------
+
+  const validateWords = (words: unknown): boolean => {
+    if (!Array.isArray(words)) {
+      setError("Invalid state: 'words' must be an array")
       return false
     }
+    for (let i = 0; i < words.length; i++) {
+      const w = words[i]
+      if (!w || typeof w !== 'object') {
+        setError(`Invalid word at index ${i}: must be an object`)
+        return false
+      }
+      if (!w.id || typeof w.id !== 'string') {
+        setError(`Invalid word at index ${i}: missing or invalid 'id'`)
+        return false
+      }
+      if (!w.name || typeof w.name !== 'string') {
+        setError(`Invalid word at index ${i}: missing or invalid 'name'`)
+        return false
+      }
+      if (!w.wordClass || typeof w.wordClass !== 'string') {
+        setError(`Invalid word at index ${i}: missing or invalid 'wordClass'`)
+        return false
+      }
+    }
+    return true
+  }
 
-    if (!Array.isArray(data.domains)) {
+  const validateDomains = (domains: unknown): boolean => {
+    if (!Array.isArray(domains)) {
       setError("Invalid state: missing 'domains' array")
       return false
     }
 
-    for (let i = 0; i < data.domains.length; i++) {
-      const domain = data.domains[i]
+    for (let i = 0; i < domains.length; i++) {
+      const domain = domains[i]
 
       if (!domain.id || typeof domain.id !== 'string') {
         setError(`Invalid domain at index ${i}: missing or invalid 'id'`)
@@ -105,7 +164,7 @@ export default function ImportExportSection() {
           return false
         }
 
-        const isValidRangeValue = (val: any) =>
+        const isValidRangeValue = (val: unknown) =>
           typeof val === 'number' || val === 'Infinity' || val === '-Infinity'
 
         if (!isValidRangeValue(dim.range[0]) || !isValidRangeValue(dim.range[1])) {
@@ -126,6 +185,57 @@ export default function ImportExportSection() {
     return true
   }
 
+  // ---------- deserialization helpers ----------
+
+  const convertInfinity = (val: unknown): number => {
+    if (val === 'Infinity') return Infinity
+    if (val === '-Infinity') return -Infinity
+    return val as number
+  }
+
+  const parseDomains = (rawDomains: any[]) =>
+    rawDomains.map((domain: any) => ({
+      ...domain,
+      createdAt: new Date(domain.createdAt),
+      dimensions: domain.dimensions.map((dim: any) => ({
+        ...dim,
+        range: [convertInfinity(dim.range[0]), convertInfinity(dim.range[1])] as const,
+      })),
+      labels: (domain.labels || []).map((label: any) => ({
+        ...label,
+        createdAt: new Date(label.createdAt),
+        dimensions: label.dimensions.map((d: any) => {
+          if ('range' in d) {
+            return {
+              ...d,
+              range: [convertInfinity(d.range[0]), convertInfinity(d.range[1])] as const,
+            }
+          }
+          return d
+        }),
+      })),
+    }))
+
+  const parseConcepts = (rawConcepts: any[]) =>
+    (rawConcepts || []).map((concept: any) => ({
+      ...concept,
+      createdAt: new Date(concept.createdAt),
+    }))
+
+  const parseInstances = (rawInstances: any[]) =>
+    (rawInstances || []).map((instance: any) => ({
+      ...instance,
+      createdAt: new Date(instance.createdAt),
+    }))
+
+  const parseWords = (rawWords: any[]) =>
+    (rawWords || []).map((word: any) => ({
+      ...word,
+      createdAt: new Date(word.createdAt),
+    }))
+
+  // ---------- import ----------
+
   const importFromJson = (jsonString: string) => {
     setError(null)
     setSuccess(null)
@@ -133,54 +243,84 @@ export default function ImportExportSection() {
     try {
       const parsed = JSON.parse(jsonString)
 
-      if (!validateState(parsed)) {
+      if (!parsed || typeof parsed !== 'object') {
+        setError('Invalid JSON: must be an object')
         return
       }
 
-      // Clear existing domains
-      state.scene.domains.forEach((domain) => {
-        deleteDomain(domain.id)
-      })
+      const detectedType: ExportType = parsed.exportType === 'library'
+        ? 'library'
+        : parsed.exportType === 'scene'
+          ? 'scene'
+          // Legacy files (before exportType was added) are treated as scene exports
+          // if they have a 'domains' key, otherwise fall back based on heuristics
+          : parsed.domains !== undefined
+            ? 'scene'
+            : parsed.words !== undefined
+              ? 'library'
+              // Check for the old nested scene/library structure from localStorage
+              : parsed.scene !== undefined
+                ? 'scene'
+                : 'scene' // default
 
-      // Clear existing concepts
-      state.scene.concepts.forEach((concept) => {
-        deleteConcept(concept.id)
-      })
+      if (detectedType === 'library') {
+        // --- Library-only import ---
+        const rawWords = parsed.words
+        if (!validateWords(rawWords)) return
 
-      // Add new domains with converted dates and Infinity values
-      parsed.domains.forEach((domain: any) => {
-        addDomain({
-          ...domain,
-          createdAt: new Date(domain.createdAt),
-          dimensions: domain.dimensions.map((dim: any) => {
-            const convertValue = (val: any) => {
-              if (val === 'Infinity') return Infinity
-              if (val === '-Infinity') return -Infinity
-              return val
-            }
+        const words = parseWords(rawWords)
+        dispatch({ type: 'RESTORE_LIBRARY_STATE', payload: { words } })
 
-            return {
-              ...dim,
-              range: [convertValue(dim.range[0]), convertValue(dim.range[1])] as const
-            }
-          })
-        })
-      })
-
-      // Add new concepts with converted dates
-      if (parsed.concepts && Array.isArray(parsed.concepts)) {
-        parsed.concepts.forEach((concept: any) => {
-          addConcept({
-            ...concept,
-            createdAt: new Date(concept.createdAt)
-          })
-        })
+        setSuccess(`Library state imported successfully! (${words.length} word${words.length !== 1 ? 's' : ''})`)
+        setTimeout(() => setSuccess(null), 3000)
+        return
       }
 
-      selectDomain(null)
+      // --- Scene import (includes library) ---
+      // Support both new flat format and old nested scene/library format
+      let rawDomains: any[]
+      let rawConcepts: any[]
+      let rawInstances: any[]
+      let rawWords: any[]
 
-      setSuccess('State imported successfully!')
-      setTimeout(() => setSuccess(null), 2000)
+      if (parsed.scene) {
+        // Old localStorage/StateDebugPanel format: { scene: { domains, concepts, instances }, library: { words } }
+        rawDomains = parsed.scene.domains || []
+        rawConcepts = parsed.scene.concepts || []
+        rawInstances = parsed.scene.instances || []
+        rawWords = parsed.library?.words || []
+      } else {
+        // New flat format: { exportType, domains, concepts, instances, words }
+        rawDomains = parsed.domains || []
+        rawConcepts = parsed.concepts || []
+        rawInstances = parsed.instances || []
+        rawWords = parsed.words || []
+      }
+
+      if (!validateDomains(rawDomains)) return
+      if (rawWords.length > 0 && !validateWords(rawWords)) return
+
+      const domains = parseDomains(rawDomains)
+      const concepts = parseConcepts(rawConcepts)
+      const instances = parseInstances(rawInstances)
+      const words = parseWords(rawWords)
+
+      dispatch({
+        type: 'RESTORE_SCENE_STATE',
+        payload: { domains, concepts, instances },
+      })
+      dispatch({
+        type: 'RESTORE_LIBRARY_STATE',
+        payload: { words },
+      })
+
+      const parts: string[] = []
+      parts.push(`${domains.length} domain${domains.length !== 1 ? 's' : ''}`)
+      parts.push(`${concepts.length} concept${concepts.length !== 1 ? 's' : ''}`)
+      parts.push(`${instances.length} instance${instances.length !== 1 ? 's' : ''}`)
+      parts.push(`${words.length} word${words.length !== 1 ? 's' : ''}`)
+      setSuccess(`Scene state imported successfully! (${parts.join(', ')})`)
+      setTimeout(() => setSuccess(null), 3000)
     } catch (err) {
       if (err instanceof SyntaxError) {
         setError(`Invalid JSON syntax: ${err.message}`)
@@ -189,6 +329,8 @@ export default function ImportExportSection() {
       }
     }
   }
+
+  // ---------- file handling ----------
 
   const handleFileRead = useCallback((file: File) => {
     if (!file.name.endsWith('.json') && file.type !== 'application/json') {
@@ -209,14 +351,14 @@ export default function ImportExportSection() {
       setTimeout(() => setError(null), 5000)
     }
     reader.readAsText(file)
-  }, [state, deleteDomain, deleteConcept, addDomain, addConcept, selectDomain])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state, dispatch])
 
   const handleFileInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (file) {
       handleFileRead(file)
     }
-    // Reset so the same file can be re-uploaded
     if (fileInputRef.current) {
       fileInputRef.current.value = ''
     }
@@ -245,6 +387,8 @@ export default function ImportExportSection() {
     }
   }
 
+  // ---------- render ----------
+
   return (
     <Box sx={{ px: 2, py: 2 }}>
       {/* Status Messages */}
@@ -260,17 +404,43 @@ export default function ImportExportSection() {
       )}
 
       {/* Export */}
+      <Typography variant="subtitle2" color="text.secondary" sx={{ mb: 1 }}>
+        Export State
+      </Typography>
+
+      {/* Export type selector */}
+      <ToggleButtonGroup
+        value={exportType}
+        exclusive
+        onChange={(_e, value) => {
+          if (value !== null) setExportType(value as ExportType)
+        }}
+        size="small"
+        fullWidth
+        sx={{ mb: 1.5 }}
+      >
+        <ToggleButton value="library" sx={{ textTransform: 'none', fontSize: '0.8rem' }}>
+          Library Only
+        </ToggleButton>
+        <ToggleButton value="scene" sx={{ textTransform: 'none', fontSize: '0.8rem' }}>
+          Scene (includes Library)
+        </ToggleButton>
+      </ToggleButtonGroup>
+
+      <Typography variant="caption" color="text.disabled" sx={{ display: 'block', mb: 1.5, lineHeight: 1.3 }}>
+        {exportType === 'library'
+          ? 'Exports only library data (words).'
+          : 'Exports scene data (domains, concepts, instances) and library data (words).'}
+      </Typography>
+
       <Box
         sx={{
           display: 'flex',
           alignItems: 'center',
-          justifyContent: 'space-between',
+          justifyContent: 'flex-end',
           mb: 3,
         }}
       >
-        <Typography variant="subtitle2" color="text.secondary">
-          Export State
-        </Typography>
         <Button
           onClick={handleDownload}
           variant="outlined"
@@ -278,13 +448,16 @@ export default function ImportExportSection() {
           startIcon={<DownloadIcon />}
           sx={{ textTransform: 'none' }}
         >
-          Download
+          Download {exportType === 'library' ? 'Library' : 'Scene'}
         </Button>
       </Box>
 
       {/* Import */}
-      <Typography variant="subtitle2" color="text.secondary" sx={{ mb: 1 }}>
+      <Typography variant="subtitle2" color="text.secondary" sx={{ mb: 0.5 }}>
         Import State
+      </Typography>
+      <Typography variant="caption" color="text.disabled" sx={{ display: 'block', mb: 1, lineHeight: 1.3 }}>
+        The import type is detected automatically from the file contents.
       </Typography>
 
       {/* Hidden file input */}

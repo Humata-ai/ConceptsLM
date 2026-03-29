@@ -6,7 +6,7 @@ import CloseIcon from '@mui/icons-material/Close'
 import CodeIcon from '@mui/icons-material/Code'
 
 export default function StateDebugPanel() {
-  const { state, addDomain, deleteDomain, selectDomain, addConcept, deleteConcept } = useQualityDomain()
+  const { state, dispatch } = useQualityDomain()
   const [isOpen, setIsOpen] = useState(false)
   const [jsonInput, setJsonInput] = useState("")
   const [error, setError] = useState<string | null>(null)
@@ -18,7 +18,9 @@ export default function StateDebugPanel() {
     if (key === 'selectedDomainId' ||
       key === 'selectedLabelId' ||
       key === 'selectedLabelDomainId' ||
-      key === 'selectedConceptId') {
+      key === 'selectedConceptId' ||
+      key === 'selectedInstanceId' ||
+      key === 'selectedWordId') {
       return undefined  // Exclude from export
     }
 
@@ -69,19 +71,9 @@ export default function StateDebugPanel() {
     }
   }
 
-  const validateState = (data: any): boolean => {
-    if (!data || typeof data !== "object") {
-      setError("Invalid JSON: must be an object")
-      return false
-    }
-
-    if (!Array.isArray(data.domains)) {
-      setError("Invalid state: missing 'domains' array")
-      return false
-    }
-
-    for (let i = 0; i < data.domains.length; i++) {
-      const domain = data.domains[i]
+  const validateDomains = (domains: any[]): boolean => {
+    for (let i = 0; i < domains.length; i++) {
+      const domain = domains[i]
 
       if (!domain.id || typeof domain.id !== "string") {
         setError(`Invalid domain at index ${i}: missing or invalid 'id'`)
@@ -144,6 +136,53 @@ export default function StateDebugPanel() {
     return true
   }
 
+  const convertInfinity = (val: any) => {
+    if (val === "Infinity") return Infinity
+    if (val === "-Infinity") return -Infinity
+    return val
+  }
+
+  const parseDomains = (rawDomains: any[]) =>
+    rawDomains.map((domain: any) => ({
+      ...domain,
+      createdAt: new Date(domain.createdAt),
+      dimensions: domain.dimensions.map((dim: any) => ({
+        ...dim,
+        range: [convertInfinity(dim.range[0]), convertInfinity(dim.range[1])] as const,
+      })),
+      labels: (domain.labels || []).map((label: any) => ({
+        ...label,
+        createdAt: new Date(label.createdAt),
+        dimensions: label.dimensions.map((d: any) => {
+          if ('range' in d) {
+            return {
+              ...d,
+              range: [convertInfinity(d.range[0]), convertInfinity(d.range[1])] as const,
+            }
+          }
+          return d
+        }),
+      })),
+    }))
+
+  const parseConcepts = (rawConcepts: any[]) =>
+    (rawConcepts || []).map((concept: any) => ({
+      ...concept,
+      createdAt: new Date(concept.createdAt),
+    }))
+
+  const parseInstances = (rawInstances: any[]) =>
+    (rawInstances || []).map((instance: any) => ({
+      ...instance,
+      createdAt: new Date(instance.createdAt),
+    }))
+
+  const parseWords = (rawWords: any[]) =>
+    (rawWords || []).map((word: any) => ({
+      ...word,
+      createdAt: new Date(word.createdAt),
+    }))
+
   const handleImport = () => {
     setError(null)
     setSuccess(null)
@@ -151,53 +190,64 @@ export default function StateDebugPanel() {
     try {
       const parsed = JSON.parse(jsonInput)
 
-      if (!validateState(parsed)) {
+      if (!parsed || typeof parsed !== "object") {
+        setError("Invalid JSON: must be an object")
         return
       }
 
-      // Clear existing domains
-      state.scene.domains.forEach(domain => {
-        deleteDomain(domain.id)
-      })
+      // Detect export type
+      const isLibraryOnly = parsed.exportType === 'library'
 
-      // Clear existing concepts
-      state.scene.concepts.forEach(concept => {
-        deleteConcept(concept.id)
-      })
-
-      // Add new domains with converted dates and Infinity values
-      parsed.domains.forEach((domain: any) => {
-        addDomain({
-          ...domain,
-          createdAt: new Date(domain.createdAt),
-          dimensions: domain.dimensions.map((dim: any) => {
-            // Convert "Infinity" strings back to actual Infinity
-            const convertValue = (val: any) => {
-              if (val === "Infinity") return Infinity
-              if (val === "-Infinity") return -Infinity
-              return val
-            }
-
-            return {
-              ...dim,
-              range: [convertValue(dim.range[0]), convertValue(dim.range[1])] as const
-            }
-          })
-        })
-      })
-
-      // Add new concepts with converted dates
-      if (parsed.concepts && Array.isArray(parsed.concepts)) {
-        parsed.concepts.forEach((concept: any) => {
-          addConcept({
-            ...concept,
-            createdAt: new Date(concept.createdAt)
-          })
-        })
+      if (isLibraryOnly) {
+        // Library-only import
+        const words = parseWords(parsed.words || [])
+        dispatch({ type: 'RESTORE_LIBRARY_STATE', payload: { words } })
+        setSuccess(`Library state imported! (${words.length} word${words.length !== 1 ? 's' : ''})`)
+        setJsonInput("")
+        setTimeout(() => setSuccess(null), 2000)
+        return
       }
 
-      // Clear selection state after import (no items selected by default)
-      selectDomain(null)
+      // Scene import (includes library)
+      let rawDomains: any[]
+      let rawConcepts: any[]
+      let rawInstances: any[]
+      let rawWords: any[]
+
+      if (parsed.scene) {
+        // Old nested format
+        rawDomains = parsed.scene.domains || []
+        rawConcepts = parsed.scene.concepts || []
+        rawInstances = parsed.scene.instances || []
+        rawWords = parsed.library?.words || []
+      } else {
+        // Flat format (new or legacy)
+        rawDomains = parsed.domains || []
+        rawConcepts = parsed.concepts || []
+        rawInstances = parsed.instances || []
+        rawWords = parsed.words || []
+      }
+
+      if (!Array.isArray(rawDomains)) {
+        setError("Invalid state: missing 'domains' array")
+        return
+      }
+
+      if (!validateDomains(rawDomains)) return
+
+      const domains = parseDomains(rawDomains)
+      const concepts = parseConcepts(rawConcepts)
+      const instances = parseInstances(rawInstances)
+      const words = parseWords(rawWords)
+
+      dispatch({
+        type: 'RESTORE_SCENE_STATE',
+        payload: { domains, concepts, instances },
+      })
+      dispatch({
+        type: 'RESTORE_LIBRARY_STATE',
+        payload: { words },
+      })
 
       setSuccess("State imported successfully!")
       setJsonInput("")
@@ -247,7 +297,7 @@ export default function StateDebugPanel() {
 
           {/* Summary Section */}
           <div className="mb-4 p-2 sm:p-3 bg-gray-50 rounded border border-gray-200">
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-4 text-xs sm:text-sm">
+            <div className="grid grid-cols-1 sm:grid-cols-4 gap-2 sm:gap-4 text-xs sm:text-sm">
               <div>
                 <span className="font-semibold text-gray-700">Domains:</span>{" "}
                 <span className="text-gray-900">{state.scene.domains.length}</span>
@@ -261,6 +311,10 @@ export default function StateDebugPanel() {
               <div>
                 <span className="font-semibold text-purple-700">Concepts:</span>{" "}
                 <span className="text-purple-900">{state.scene.concepts.length}</span>
+              </div>
+              <div>
+                <span className="font-semibold text-blue-700">Words:</span>{" "}
+                <span className="text-blue-900">{state.library.words.length}</span>
               </div>
             </div>
             {state.scene.concepts.length > 0 && (
@@ -304,7 +358,7 @@ export default function StateDebugPanel() {
               <textarea
                 value={jsonInput}
                 onChange={handleTextareaChange}
-                placeholder="Paste JSON here..."
+                placeholder="Paste JSON here (library-only or full scene export)..."
                 className="border border-gray-300 rounded p-2 sm:p-3 font-mono text-[10px] sm:text-xs flex-1 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
               <button
