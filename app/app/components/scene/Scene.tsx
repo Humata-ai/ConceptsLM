@@ -453,6 +453,9 @@ export default function Scene({ activeTab = null }: SceneProps) {
           concepts={visualizationData.concepts}
           selectedDomainId={visualizationData.selectedDomainId}
           selectedConceptId={visualizationData.selectedConceptId}
+          emptyMessage={mode === 'library'
+            ? 'Select a word to visualize its conceptual space.'
+            : 'No domains yet. Click "+ Add Domain" to create one.'}
         />
         <CameraControls />
       </Canvas>

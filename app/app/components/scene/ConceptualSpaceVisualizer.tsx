@@ -18,6 +18,8 @@ export interface ConceptualSpaceVisualizerProps {
   concepts: Concept[]
   selectedDomainId: string | null
   selectedConceptId: string | null
+  /** Text shown when there are no domains to visualize */
+  emptyMessage?: string
 }
 
 // Custom comparison for domain items - only re-render if domain data actually changed
@@ -85,6 +87,7 @@ function ConceptualSpaceVisualizer({
   concepts,
   selectedDomainId,
   selectedConceptId,
+  emptyMessage = 'No domains yet. Click "+ Add Domain" to create one.',
 }: ConceptualSpaceVisualizerProps) {
   // Calculate positions using shared hook
   const domainPositions = useCircularLayout(domains.length)
@@ -95,7 +98,7 @@ function ConceptualSpaceVisualizer({
   if (domains.length === 0) {
     return (
       <Text position={emptyPosition} fontSize={1.5} color="gray">
-        No domains yet. Click &quot;+ Add Domain&quot; to create one.
+        {emptyMessage}
       </Text>
     )
   }
