@@ -6,6 +6,7 @@ import { OrbitControls } from '@react-three/drei'
 import ConceptualSpaceVisualizer from './ConceptualSpaceVisualizer'
 import { useQualityDomain } from '@/app/store'
 import { isRegion } from '../shared/types'
+import type { QualityDomain, Concept } from '../shared/types'
 import { normalizeToRange } from '@/app/utils/positionCalculations'
 import { Vector3 } from 'three'
 import type { SidebarView } from './sidebar/types'
@@ -401,45 +402,12 @@ function LibraryCameraControls() {
   )
 }
 
-/**
- * Inner scene content that renders inside the Canvas.
- * Both modes use ConceptualSpaceVisualizer -- the library tab just
- * passes empty data for now until conceptual space data is wired up.
- */
-function SceneVisualization({
-  mode,
-  sceneState,
-}: {
-  mode: VisualizationMode
-  sceneState: { domains: any[]; concepts: any[]; selectedDomainId: string | null; selectedConceptId: string | null }
-}) {
-  if (mode === 'library') {
-    // TODO: Wire up conceptual space data from the selected word/library item.
-    // For now, render an empty ConceptualSpaceVisualizer as a placeholder.
-    return (
-      <>
-        <ConceptualSpaceVisualizer
-          domains={[]}
-          concepts={[]}
-          selectedDomainId={null}
-          selectedConceptId={null}
-        />
-        <LibraryCameraControls />
-      </>
-    )
-  }
-
-  return (
-    <>
-      <ConceptualSpaceVisualizer
-        domains={sceneState.domains}
-        concepts={sceneState.concepts}
-        selectedDomainId={sceneState.selectedDomainId}
-        selectedConceptId={sceneState.selectedConceptId}
-      />
-      <SceneCameraControls />
-    </>
-  )
+/** Empty conceptual space data for tabs that don't have data yet */
+const EMPTY_CONCEPTUAL_SPACE = {
+  domains: [] as QualityDomain[],
+  concepts: [] as Concept[],
+  selectedDomainId: null,
+  selectedConceptId: null,
 }
 
 interface SceneProps {
@@ -451,17 +419,28 @@ export default function Scene({ activeTab = null }: SceneProps) {
 
   const mode = getVisualizationMode(activeTab)
 
-  // Pre-compute scene data to pass into the Canvas
-  const sceneData = useMemo(() => ({
-    domains: state.scene.domains,
-    concepts: state.scene.concepts,
-    selectedDomainId: state.scene.selectedDomainId,
-    selectedConceptId: state.scene.selectedConceptId,
-  }), [state.scene.domains, state.scene.concepts, state.scene.selectedDomainId, state.scene.selectedConceptId])
+  // Select the conceptual space data based on the active tab.
+  // Scene tab: uses scene state from the store.
+  // Library tab: empty for now -- will be wired to the selected word's conceptual space.
+  const visualizationData = useMemo(() => {
+    if (mode === 'library') {
+      return EMPTY_CONCEPTUAL_SPACE
+    }
+
+    return {
+      domains: state.scene.domains,
+      concepts: state.scene.concepts,
+      selectedDomainId: state.scene.selectedDomainId,
+      selectedConceptId: state.scene.selectedConceptId,
+    }
+  }, [mode, state.scene.domains, state.scene.concepts, state.scene.selectedDomainId, state.scene.selectedConceptId])
+
+  const CameraControls = mode === 'library' ? LibraryCameraControls : SceneCameraControls
 
   return (
     <div className="w-full h-screen">
       <Canvas
+        key={mode}
         camera={{ position: [0, 0, 60], fov: 50, near: 0.1, far: 1000 }}
         style={{ background: 'white' }}
         frameloop="always"
@@ -469,10 +448,13 @@ export default function Scene({ activeTab = null }: SceneProps) {
       >
         <ambientLight intensity={0.5} />
         <directionalLight position={[10, 10, 10]} intensity={0.8} />
-        <SceneVisualization
-          mode={mode}
-          sceneState={sceneData}
+        <ConceptualSpaceVisualizer
+          domains={visualizationData.domains}
+          concepts={visualizationData.concepts}
+          selectedDomainId={visualizationData.selectedDomainId}
+          selectedConceptId={visualizationData.selectedConceptId}
         />
+        <CameraControls />
       </Canvas>
     </div>
   )
