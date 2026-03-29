@@ -3,13 +3,33 @@
 import { useEffect, useMemo, useRef } from 'react'
 import { Canvas } from '@react-three/fiber'
 import { OrbitControls } from '@react-three/drei'
-import AllDomainsVisualization from './AllDomainsVisualization'
+import { usePathname } from 'next/navigation'
+import ConceptualSpaceVisualizer from './ConceptualSpaceVisualizer'
+import WordVisualization from './WordVisualization'
 import { useQualityDomain } from '@/app/store'
 import { isRegion, isPoint } from '../shared/types'
 import { normalizeToRange } from '@/app/utils/positionCalculations'
 import { Vector3 } from 'three'
+import type { SidebarView } from './sidebar/types'
+import { getDictionaryWordFromPathname } from './sidebar/types'
+import type { Word } from '../shared/types'
 
-function CameraControls() {
+/**
+ * Determines which visualization mode the 3D viewer should be in
+ * based on the active tab.
+ */
+type VisualizationMode = 'scene' | 'library'
+
+function getVisualizationMode(activeTab: SidebarView | null): VisualizationMode {
+  if (activeTab === 'library') return 'library'
+  return 'scene'
+}
+
+/**
+ * Camera controls for the scene visualization mode.
+ * Animates camera target based on selection state.
+ */
+function SceneCameraControls() {
   const { state, getConceptLabels, getInstancePoints } = useQualityDomain()
   const controlsRef = useRef<any>(null)
   const animatingRef = useRef(false)
@@ -19,7 +39,7 @@ function CameraControls() {
 
   // Calculate position of selected item
   const targetPosition = useMemo(() => {
-    // Calculate domain positions (same as AllDomainsVisualization)
+    // Calculate domain positions (same as ConceptualSpaceVisualizer)
     const radius = 15
     const total = state.scene.domains.length
     const angleStep = (2 * Math.PI) / total
@@ -359,7 +379,95 @@ function CameraControls() {
   )
 }
 
-export default function Scene() {
+/**
+ * Camera controls for the library visualization mode.
+ * Centers on the origin where the word billboard is displayed.
+ */
+function LibraryCameraControls() {
+  const controlsRef = useRef<any>(null)
+
+  useEffect(() => {
+    if (controlsRef.current) {
+      controlsRef.current.target.set(0, 0, 0)
+      controlsRef.current.update()
+    }
+  }, [])
+
+  return (
+    <OrbitControls
+      ref={controlsRef}
+      enableDamping={false}
+      enableZoom
+      zoomToCursor
+      enablePan
+      makeDefault
+    />
+  )
+}
+
+/**
+ * Inner scene content that renders inside the Canvas.
+ * Receives resolved data from the outer Scene component.
+ */
+function SceneVisualization({
+  mode,
+  sceneState,
+  selectedWord,
+}: {
+  mode: VisualizationMode
+  sceneState: { domains: any[]; concepts: any[]; selectedDomainId: string | null; selectedConceptId: string | null }
+  selectedWord: Word | null
+}) {
+  if (mode === 'library') {
+    return (
+      <>
+        <WordVisualization word={selectedWord} />
+        <LibraryCameraControls />
+      </>
+    )
+  }
+
+  return (
+    <>
+      <ConceptualSpaceVisualizer
+        domains={sceneState.domains}
+        concepts={sceneState.concepts}
+        selectedDomainId={sceneState.selectedDomainId}
+        selectedConceptId={sceneState.selectedConceptId}
+      />
+      <SceneCameraControls />
+    </>
+  )
+}
+
+interface SceneProps {
+  activeTab?: SidebarView | null
+}
+
+export default function Scene({ activeTab = null }: SceneProps) {
+  const pathname = usePathname()
+  const { state } = useQualityDomain()
+
+  const mode = getVisualizationMode(activeTab)
+
+  // Derive the selected word from the URL when in library mode
+  const selectedWord = useMemo((): Word | null => {
+    if (mode !== 'library') return null
+    const wordRoute = getDictionaryWordFromPathname(pathname)
+    if (!wordRoute) return null
+    return state.library.words.find(
+      (w) => w.name.toLowerCase().replace(/\s+/g, '-') === wordRoute.wordSlug
+    ) || null
+  }, [mode, pathname, state.library.words])
+
+  // Pre-compute scene data to pass into the Canvas
+  const sceneData = useMemo(() => ({
+    domains: state.scene.domains,
+    concepts: state.scene.concepts,
+    selectedDomainId: state.scene.selectedDomainId,
+    selectedConceptId: state.scene.selectedConceptId,
+  }), [state.scene.domains, state.scene.concepts, state.scene.selectedDomainId, state.scene.selectedConceptId])
+
   return (
     <div className="w-full h-screen">
       <Canvas
@@ -370,8 +478,11 @@ export default function Scene() {
       >
         <ambientLight intensity={0.5} />
         <directionalLight position={[10, 10, 10]} intensity={0.8} />
-        <AllDomainsVisualization />
-        <CameraControls />
+        <SceneVisualization
+          mode={mode}
+          sceneState={sceneData}
+          selectedWord={selectedWord}
+        />
       </Canvas>
     </div>
   )

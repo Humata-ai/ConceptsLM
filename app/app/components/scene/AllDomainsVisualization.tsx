@@ -1,124 +1,26 @@
-import { useMemo, memo } from 'react'
-import { Text } from '@react-three/drei'
+import { memo } from 'react'
 import { useQualityDomain } from '@/app/store'
-import DomainVisualization from '../quality-domain/DomainVisualization'
-import ConceptVisualization3D from '../concept/ConceptVisualization3D'
-import type { QualityDomain } from '../shared/types'
-import { useCircularLayout } from '@/app/hooks/useCircularLayout'
-import { DOMAIN_SCALE } from '../quality-domain/visualizations/constants'
+import ConceptualSpaceVisualizer from './ConceptualSpaceVisualizer'
 
-// Custom comparison for domain items - only re-render if domain data actually changed
-const domainItemAreEqual = (
-  prevProps: { domain: QualityDomain; position: readonly [number, number, number]; scale: number },
-  nextProps: { domain: QualityDomain; position: readonly [number, number, number]; scale: number }
-) => {
-  return (
-    prevProps.domain.id === nextProps.domain.id &&
-    prevProps.domain.name === nextProps.domain.name &&
-    prevProps.position === nextProps.position &&
-    prevProps.scale === nextProps.scale &&
-    JSON.stringify(prevProps.domain.dimensions) === JSON.stringify(nextProps.domain.dimensions) &&
-    JSON.stringify(prevProps.domain.labels) === JSON.stringify(nextProps.domain.labels)
-  )
-}
-
-// Memoized individual domain component
-const DomainItem = memo(({
-  domain,
-  position,
-  scale
-}: {
-  domain: QualityDomain
-  position: readonly [number, number, number]
-  scale: number
-}) => {
-  const labelPosition = useMemo(() => [0, -12, 0] as const, [])
-
-  return (
-    <group position={position} scale={scale}>
-      <DomainVisualization domain={domain} />
-      <Text position={labelPosition} fontSize={2} color="black">
-        {domain.name}
-      </Text>
-    </group>
-  )
-}, domainItemAreEqual)
-DomainItem.displayName = 'DomainItem'
-
-const SelectedDomainItem = memo(({
-  domain,
-  position,
-  scale
-}: {
-  domain: QualityDomain
-  position: readonly [number, number, number]
-  scale: number
-}) => {
-  const labelPosition = useMemo(() => [0, -12, 0] as const, [])
-
-  return (
-    <group position={position} scale={scale}>
-      <DomainVisualization domain={domain} />
-      <Text position={labelPosition} fontSize={2} color="orange">
-        {domain.name}
-      </Text>
-    </group>
-  )
-}, domainItemAreEqual)
-SelectedDomainItem.displayName = 'SelectedDomainItem'
-
+/**
+ * AllDomainsVisualization
+ * 
+ * A store-connected wrapper around ConceptualSpaceVisualizer.
+ * Reads scene state from the store and passes it as props.
+ * 
+ * @deprecated Prefer using ConceptualSpaceVisualizer directly with explicit props
+ *   for better decoupling from the store.
+ */
 function AllDomainsVisualization() {
   const { state } = useQualityDomain()
-  const domains = state.scene.domains
-
-  // Calculate positions using shared hook
-  const domainPositions = useCircularLayout(domains.length)
-
-  const emptyPosition = useMemo(() => [0, 0, 0] as const, [])
-
-  // Handle empty state
-  if (domains.length === 0) {
-    return (
-      <Text position={emptyPosition} fontSize={1.5} color="gray">
-        No domains yet. Click &quot;+ Add Domain&quot; to create one.
-      </Text>
-    )
-  }
 
   return (
-    <group>
-      {/* Render each domain at its position */}
-      {domains.map((domain, index) => {
-        // Skip 4D+ domains as they're handled by TableView
-        if (domain.dimensions.length >= 4) {
-          return null
-        }
-
-        const position = domainPositions[index]
-        const isSelected = state.scene.selectedDomainId === domain.id
-        const scale = DOMAIN_SCALE.ALL_DOMAINS_VIEW
-
-        const Component = isSelected ? SelectedDomainItem : DomainItem
-
-        return (
-          <Component
-            key={domain.id}
-            domain={domain}
-            position={position}
-            scale={scale}
-          />
-        )
-      })}
-
-      {/* Render all concepts */}
-      {state.scene.concepts.map((concept) => (
-        <ConceptVisualization3D
-          key={concept.id}
-          concept={concept}
-          isSelected={state.scene.selectedConceptId === concept.id}
-        />
-      ))}
-    </group>
+    <ConceptualSpaceVisualizer
+      domains={state.scene.domains}
+      concepts={state.scene.concepts}
+      selectedDomainId={state.scene.selectedDomainId}
+      selectedConceptId={state.scene.selectedConceptId}
+    />
   )
 }
 
