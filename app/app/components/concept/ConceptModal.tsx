@@ -25,7 +25,7 @@ export default function ConceptModal({
   const [errors, setErrors] = useState<string[]>([])
 
   const editingConcept = editingConceptId
-    ? state.concepts.find((c) => c.id === editingConceptId)
+    ? state.scene.concepts.find((c) => c.id === editingConceptId)
     : null
 
   useEffect(() => {
@@ -38,10 +38,10 @@ export default function ConceptModal({
         setSelectedLabelRefs([])
       }
       // Expand all domains by default
-      setExpandedDomains(new Set(state.domains.map(d => d.id)))
+      setExpandedDomains(new Set(state.scene.domains.map(d => d.id)))
       setErrors([])
     }
-  }, [isOpen, editingConcept, state.domains])
+  }, [isOpen, editingConcept, state.scene.domains])
 
   const toggleDomain = (domainId: string) => {
     setExpandedDomains((prev) => {
@@ -143,7 +143,7 @@ export default function ConceptModal({
                 Select Labels
               </label>
               <div className="space-y-2 max-h-80 overflow-y-auto border border-gray-200 rounded p-2">
-                {state.domains.map((domain) => {
+                {state.scene.domains.map((domain) => {
                   const isExpanded = expandedDomains.has(domain.id)
                   const selectedCount = getSelectedCount(domain.id)
                   const totalCount = domain.labels.length

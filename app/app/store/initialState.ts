@@ -84,58 +84,63 @@ const jsonData: JsonState = defaultDataJson as JsonState
  * Loads default data from JSON and converts it to the proper runtime types.
  */
 export const initialState: AppState = {
-  domains: jsonData.domains.map(domain => ({
-    ...domain,
-    dimensions: domain.dimensions.map(dim => ({
-      ...dim,
-      range: toRangeTuple(dim.range),
-    })),
-    labels: domain.labels.map(label => {
-      if (label.type === 'region') {
-        return {
-          type: 'region' as const,
-          id: label.id,
-          name: label.name,
-          domainId: label.domainId,
-          dimensions: label.dimensions.map(d => {
-            if ('range' in d) {
-              return {
-                dimensionId: d.dimensionId,
-                range: toRangeTuple(d.range),
+  scene: {
+    domains: jsonData.domains.map(domain => ({
+      ...domain,
+      dimensions: domain.dimensions.map(dim => ({
+        ...dim,
+        range: toRangeTuple(dim.range),
+      })),
+      labels: domain.labels.map(label => {
+        if (label.type === 'region') {
+          return {
+            type: 'region' as const,
+            id: label.id,
+            name: label.name,
+            domainId: label.domainId,
+            dimensions: label.dimensions.map(d => {
+              if ('range' in d) {
+                return {
+                  dimensionId: d.dimensionId,
+                  range: toRangeTuple(d.range),
+                }
               }
-            }
-            return d as unknown as RegionDimensionRange
-          }),
-          createdAt: new Date(label.createdAt),
+              return d as unknown as RegionDimensionRange
+            }),
+            createdAt: new Date(label.createdAt),
+          }
+        } else {
+          return {
+            type: 'point' as const,
+            id: label.id,
+            name: label.name,
+            domainId: label.domainId,
+            dimensions: label.dimensions as PointDimensionValue[],
+            createdAt: new Date(label.createdAt),
+          }
         }
-      } else {
-        return {
-          type: 'point' as const,
-          id: label.id,
-          name: label.name,
-          domainId: label.domainId,
-          dimensions: label.dimensions as PointDimensionValue[],
-          createdAt: new Date(label.createdAt),
-        }
-      }
-    }),
-    createdAt: new Date(domain.createdAt),
-  })),
-  selectedDomainId: null,
-  selectedLabelId: null,
-  selectedLabelDomainId: null,
-  selectedConceptId: null,
-  selectedInstanceId: null,
-  concepts: jsonData.concepts.map(concept => ({
-    ...concept,
-    labelRefs: concept.labelRefs,
-    createdAt: new Date(concept.createdAt),
-  })),
-  instances: (jsonData.instances || []).map(instance => ({
-    ...instance,
-    pointRefs: instance.pointRefs,
-    createdAt: new Date(instance.createdAt),
-  })),
-  words: [],
-  hasRestoredState: false,
+      }),
+      createdAt: new Date(domain.createdAt),
+    })),
+    selectedDomainId: null,
+    selectedLabelId: null,
+    selectedLabelDomainId: null,
+    selectedConceptId: null,
+    selectedInstanceId: null,
+    concepts: jsonData.concepts.map(concept => ({
+      ...concept,
+      labelRefs: concept.labelRefs,
+      createdAt: new Date(concept.createdAt),
+    })),
+    instances: (jsonData.instances || []).map(instance => ({
+      ...instance,
+      pointRefs: instance.pointRefs,
+      createdAt: new Date(instance.createdAt),
+    })),
+    hasRestoredState: false,
+  },
+  library: {
+    words: [],
+    selectedWordId: null,
+  },
 }

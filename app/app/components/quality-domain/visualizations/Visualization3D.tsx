@@ -227,8 +227,8 @@ function Visualization3D({ domain }: Visualization3DProps) {
       {/* Render labels */}
       {domain.labels.map((label, index) => {
         const isLabelSelected =
-          state.selectedLabelId === label.id &&
-          state.selectedLabelDomainId === domain.id
+          state.scene.selectedLabelId === label.id &&
+          state.scene.selectedLabelDomainId === domain.id
 
         return (
           <LabelVisualization3D

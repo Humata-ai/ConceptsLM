@@ -138,12 +138,12 @@ export default function ImportExportSection() {
       }
 
       // Clear existing domains
-      state.domains.forEach((domain) => {
+      state.scene.domains.forEach((domain) => {
         deleteDomain(domain.id)
       })
 
       // Clear existing concepts
-      state.concepts.forEach((concept) => {
+      state.scene.concepts.forEach((concept) => {
         deleteConcept(concept.id)
       })
 

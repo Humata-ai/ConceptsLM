@@ -53,8 +53,9 @@ interface AppStoreContextType {
   addWord: (word: Word) => void
   updateWord: (word: Word) => void
   deleteWord: (id: string) => void
+  selectWord: (wordId: string | null) => void
   
-  // Selector methods
+  // Selector methods (operate on scene state)
   getSelectedDomain: () => QualityDomain | null
   getConceptLabels: (conceptId: string) => QualityDomainLabel[]
   getInstancePoints: (instanceId: string) => QualityDomainPoint[]
@@ -74,7 +75,7 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
 
   // Auto-save to localStorage on every state change, but only after restoration is done
   useEffect(() => {
-    if (!state.hasRestoredState) return
+    if (!state.scene.hasRestoredState) return
     saveToLocalStorage(state)
   }, [state])
 
@@ -159,22 +160,26 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
     dispatch({ type: 'DELETE_WORD', payload: id })
   }, [])
 
-  // Memoize selector methods
+  const selectWordMethod = useCallback((wordId: string | null) => {
+    dispatch({ type: 'SELECT_WORD', payload: wordId })
+  }, [])
+
+  // Memoize selector methods - selectors now operate on scene state
   const getSelectedDomainMethod = useCallback(() => {
-    return getSelectedDomain(state)
-  }, [state])
+    return getSelectedDomain(state.scene)
+  }, [state.scene])
 
   const getConceptLabelsMethod = useCallback((conceptId: string) => {
-    return getConceptLabels(state, conceptId)
-  }, [state])
+    return getConceptLabels(state.scene, conceptId)
+  }, [state.scene])
 
   const getInstancePointsMethod = useCallback((instanceId: string) => {
-    return getInstancePoints(state, instanceId)
-  }, [state])
+    return getInstancePoints(state.scene, instanceId)
+  }, [state.scene])
 
   const getConceptInstancesMethod = useCallback((conceptId: string) => {
-    return getConceptInstances(state, conceptId)
-  }, [state])
+    return getConceptInstances(state.scene, conceptId)
+  }, [state.scene])
 
   // Memoize context value to only recreate when necessary
   const value: AppStoreContextType = useMemo(() => ({
@@ -200,6 +205,7 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
     addWord: addWordMethod,
     updateWord: updateWordMethod,
     deleteWord: deleteWordMethod,
+    selectWord: selectWordMethod,
     getSelectedDomain: getSelectedDomainMethod,
     getConceptLabels: getConceptLabelsMethod,
     getInstancePoints: getInstancePointsMethod,
@@ -226,6 +232,7 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
     addWordMethod,
     updateWordMethod,
     deleteWordMethod,
+    selectWordMethod,
     getSelectedDomainMethod,
     getConceptLabelsMethod,
     getInstancePointsMethod,

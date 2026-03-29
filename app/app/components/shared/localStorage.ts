@@ -2,7 +2,7 @@ import type { QualityDomain, Concept, ConceptInstance, QualityDomainLabel, Prope
 import type { AppState } from '@/app/store'
 
 const STORAGE_KEY = 'quality-domain-state'
-const STATE_VERSION = 3 // Version 3 adds instances
+const STATE_VERSION = 4 // Version 4 adds nested scene/library state structure
 
 // Migration: Convert old Property to QualityDomainLabel (Region)
 function migratePropertyToLabel(oldProperty: Property): QualityDomainLabel {
@@ -27,7 +27,8 @@ function migratePropertyRefToLabelRef(oldRef: PropertyReference): LabelReference
 // Same logic as StateDebugPanel export
 export function serializeState(state: AppState): string {
   const stateWithVersion = {
-    ...state,
+    scene: state.scene,
+    library: state.library,
     version: STATE_VERSION
   }
 
@@ -38,6 +39,7 @@ export function serializeState(state: AppState): string {
         key === 'selectedLabelDomainId' ||
         key === 'selectedConceptId' ||
         key === 'selectedInstanceId' ||
+        key === 'selectedWordId' ||
         key === 'hasRestoredState') {
       return undefined
     }
@@ -52,13 +54,11 @@ export function serializeState(state: AppState): string {
   return persistableState
 }
 
-// Same logic as StateDebugPanel import (with migration support)
-export function deserializeState(jsonString: string): { domains: QualityDomain[], concepts: Concept[], instances: ConceptInstance[], words: Word[] } {
-  const parsed = JSON.parse(jsonString)
-  const version = parsed.version || 1 // Default to version 1 if not specified
-
-  // Convert date strings back to Date objects and Infinity strings to Infinity
-  const domains = parsed.domains.map((domain: any) => {
+/**
+ * Parse domains from raw JSON data, handling migrations from older formats.
+ */
+function parseDomains(rawDomains: any[], version: number): QualityDomain[] {
+  return rawDomains.map((domain: any) => {
     const baseDomain = {
       ...domain,
       createdAt: new Date(domain.createdAt),
@@ -92,7 +92,7 @@ export function deserializeState(jsonString: string): { domains: QualityDomain[]
       }
     }
 
-    // Handle new format (version 2) with labels field
+    // Handle new format (version 2+) with labels field
     const labels = (domain.labels || []).map((label: any) => ({
       ...label,
       createdAt: new Date(label.createdAt),
@@ -117,8 +117,13 @@ export function deserializeState(jsonString: string): { domains: QualityDomain[]
       labels
     }
   })
+}
 
-  const concepts = (parsed.concepts || []).map((concept: any) => {
+/**
+ * Parse concepts from raw JSON data, handling migrations from older formats.
+ */
+function parseConcepts(rawConcepts: any[], version: number): Concept[] {
+  return (rawConcepts || []).map((concept: any) => {
     const baseConcept = {
       ...concept,
       createdAt: new Date(concept.createdAt)
@@ -135,18 +140,47 @@ export function deserializeState(jsonString: string): { domains: QualityDomain[]
     // New format already has labelRefs
     return baseConcept
   })
+}
 
-  // Handle instances (version 3+)
-  const instances = (parsed.instances || []).map((instance: any) => ({
+/**
+ * Parse instances from raw JSON data.
+ */
+function parseInstances(rawInstances: any[]): ConceptInstance[] {
+  return (rawInstances || []).map((instance: any) => ({
     ...instance,
     createdAt: new Date(instance.createdAt)
   }))
+}
 
-  // Handle words
-  const words = (parsed.words || []).map((word: any) => ({
+/**
+ * Parse words from raw JSON data.
+ */
+function parseWords(rawWords: any[]): Word[] {
+  return (rawWords || []).map((word: any) => ({
     ...word,
     createdAt: new Date(word.createdAt)
   }))
+}
+
+// Deserialize with migration support
+export function deserializeState(jsonString: string): { domains: QualityDomain[], concepts: Concept[], instances: ConceptInstance[], words: Word[] } {
+  const parsed = JSON.parse(jsonString)
+  const version = parsed.version || 1 // Default to version 1 if not specified
+
+  // Version 4+ uses nested scene/library structure
+  if (version >= 4 && parsed.scene) {
+    const domains = parseDomains(parsed.scene.domains || [], version)
+    const concepts = parseConcepts(parsed.scene.concepts || [], version)
+    const instances = parseInstances(parsed.scene.instances || [])
+    const words = parseWords(parsed.library?.words || [])
+    return { domains, concepts, instances, words }
+  }
+
+  // Versions 1-3: flat structure (backwards compatible migration)
+  const domains = parseDomains(parsed.domains || [], version)
+  const concepts = parseConcepts(parsed.concepts || [], version)
+  const instances = parseInstances(parsed.instances || [])
+  const words = parseWords(parsed.words || [])
 
   return { domains, concepts, instances, words }
 }

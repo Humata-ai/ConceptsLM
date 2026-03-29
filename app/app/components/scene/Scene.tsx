@@ -21,11 +21,11 @@ function CameraControls() {
   const targetPosition = useMemo(() => {
     // Calculate domain positions (same as AllDomainsVisualization)
     const radius = 15
-    const total = state.domains.length
+    const total = state.scene.domains.length
     const angleStep = (2 * Math.PI) / total
 
     const domainPositions = new Map<string, readonly [number, number, number]>()
-    state.domains.forEach((domain, index) => {
+    state.scene.domains.forEach((domain, index) => {
       const angle = index * angleStep
       const x = radius * Math.cos(angle)
       const z = radius * Math.sin(angle) - 15
@@ -33,16 +33,16 @@ function CameraControls() {
     })
 
     // If domain is selected
-    if (state.selectedDomainId) {
-      const pos = domainPositions.get(state.selectedDomainId)
+    if (state.scene.selectedDomainId) {
+      const pos = domainPositions.get(state.scene.selectedDomainId)
       if (pos) return new Vector3(pos[0], pos[1], pos[2])
     }
 
     // If label is selected
-    if (state.selectedLabelId && state.selectedLabelDomainId) {
-      const domain = state.domains.find(d => d.id === state.selectedLabelDomainId)
-      const label = domain?.labels.find(p => p.id === state.selectedLabelId)
-      const domainPos = domainPositions.get(state.selectedLabelDomainId)
+    if (state.scene.selectedLabelId && state.scene.selectedLabelDomainId) {
+      const domain = state.scene.domains.find(d => d.id === state.scene.selectedLabelDomainId)
+      const label = domain?.labels.find(p => p.id === state.scene.selectedLabelId)
+      const domainPos = domainPositions.get(state.scene.selectedLabelDomainId)
 
       if (domain && label && domainPos) {
         const scale = 0.5
@@ -115,8 +115,8 @@ function CameraControls() {
     }
 
     // If instance is selected
-    if (state.selectedInstanceId) {
-      const instance = state.instances.find(i => i.id === state.selectedInstanceId)
+    if (state.scene.selectedInstanceId) {
+      const instance = state.scene.instances.find(i => i.id === state.scene.selectedInstanceId)
       if (instance) {
         const points = getInstancePoints(instance.id)
         const positions: Vector3[] = []
@@ -130,7 +130,7 @@ function CameraControls() {
         }
 
         points.forEach(point => {
-          const domain = state.domains.find(d => d.id === point.domainId)
+          const domain = state.scene.domains.find(d => d.id === point.domainId)
           if (!domain || domain.dimensions.length >= 4) return
 
           const domainPos = domainPositions.get(domain.id)
@@ -212,14 +212,14 @@ function CameraControls() {
     }
 
     // If concept is selected
-    if (state.selectedConceptId) {
-      const concept = state.concepts.find(c => c.id === state.selectedConceptId)
+    if (state.scene.selectedConceptId) {
+      const concept = state.scene.concepts.find(c => c.id === state.scene.selectedConceptId)
       if (concept) {
         const labels = getConceptLabels(concept.id)
         const positions: Vector3[] = []
 
         labels.forEach(label => {
-          const domain = state.domains.find(d => d.id === label.domainId)
+          const domain = state.scene.domains.find(d => d.id === label.domainId)
           if (!domain || domain.dimensions.length >= 4) return
 
           const domainPos = domainPositions.get(domain.id)
@@ -303,7 +303,7 @@ function CameraControls() {
 
     // Default position
     return new Vector3(0, 0, 0)
-  }, [state.selectedDomainId, state.selectedLabelId, state.selectedLabelDomainId, state.selectedInstanceId, state.selectedConceptId, state.domains, state.concepts, state.instances, getConceptLabels, getInstancePoints])
+  }, [state.scene.selectedDomainId, state.scene.selectedLabelId, state.scene.selectedLabelDomainId, state.scene.selectedInstanceId, state.scene.selectedConceptId, state.scene.domains, state.scene.concepts, state.scene.instances, getConceptLabels, getInstancePoints])
 
   // Update controls target when selection changes with smooth animation
   useEffect(() => {

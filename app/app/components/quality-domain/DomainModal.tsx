@@ -22,7 +22,7 @@ export default function DomainModal({ isOpen, editingDomainId, onClose }: Domain
   const [errors, setErrors] = useState<string[]>([])
 
   const editingDomain = editingDomainId
-    ? state.domains.find((d) => d.id === editingDomainId)
+    ? state.scene.domains.find((d) => d.id === editingDomainId)
     : null
 
   useEffect(() => {

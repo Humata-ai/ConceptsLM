@@ -156,12 +156,12 @@ export default function StateDebugPanel() {
       }
 
       // Clear existing domains
-      state.domains.forEach(domain => {
+      state.scene.domains.forEach(domain => {
         deleteDomain(domain.id)
       })
 
       // Clear existing concepts
-      state.concepts.forEach(concept => {
+      state.scene.concepts.forEach(concept => {
         deleteConcept(concept.id)
       })
 
@@ -250,24 +250,24 @@ export default function StateDebugPanel() {
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-4 text-xs sm:text-sm">
               <div>
                 <span className="font-semibold text-gray-700">Domains:</span>{" "}
-                <span className="text-gray-900">{state.domains.length}</span>
+                <span className="text-gray-900">{state.scene.domains.length}</span>
               </div>
               <div>
                 <span className="font-semibold text-gray-700">Labels:</span>{" "}
                 <span className="text-gray-900">
-                  {state.domains.reduce((total, d) => total + d.labels.length, 0)}
+                  {state.scene.domains.reduce((total, d) => total + d.labels.length, 0)}
                 </span>
               </div>
               <div>
                 <span className="font-semibold text-purple-700">Concepts:</span>{" "}
-                <span className="text-purple-900">{state.concepts.length}</span>
+                <span className="text-purple-900">{state.scene.concepts.length}</span>
               </div>
             </div>
-            {state.concepts.length > 0 && (
+            {state.scene.concepts.length > 0 && (
               <div className="mt-2 pt-2 border-t border-gray-200">
                 <div className="text-xs text-gray-700 font-semibold mb-1">Concepts:</div>
                 <div className="flex flex-wrap gap-2">
-                  {state.concepts.map((concept) => (
+                  {state.scene.concepts.map((concept) => (
                     <div
                       key={concept.id}
                       className="px-2 py-1 bg-purple-100 text-purple-900 rounded text-xs"

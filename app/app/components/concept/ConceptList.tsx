@@ -18,18 +18,18 @@ export default function ConceptList() {
           <h2 className="text-lg font-bold">Concepts</h2>
         </div>
 
-        {state.concepts.length === 0 ? (
+        {state.scene.concepts.length === 0 ? (
           <div className="text-center py-8 text-gray-500">
             <p className="text-sm">No concepts yet.</p>
             <p className="text-xs mt-1">Click "+ Add Concept" to create one.</p>
           </div>
         ) : (
           <div className="space-y-2">
-            {state.concepts.map((concept) => (
+            {state.scene.concepts.map((concept) => (
               <ConceptCard
                 key={concept.id}
                 concept={concept}
-                isSelected={state.selectedConceptId === concept.id && !state.selectedInstanceId}
+                isSelected={state.scene.selectedConceptId === concept.id && !state.scene.selectedInstanceId}
                 onEdit={(id) => {
                   setEditingConceptId(id)
                   setIsModalOpen(true)

@@ -1,11 +1,11 @@
 import type { QualityDomain, QualityDomainLabel, Concept, ConceptInstance, Word } from '../components/shared/types'
 
 /**
- * App Store Action Types
+ * Scene Action Types
  * 
- * These actions define all state mutations that can occur in the application.
+ * Actions for state mutations related to the scene (domains, concepts, instances, selections).
  */
-export type AppAction =
+export type SceneAction =
   // Domain actions
   | { type: 'ADD_DOMAIN'; payload: QualityDomain }
   | { type: 'UPDATE_DOMAIN'; payload: QualityDomain }
@@ -33,22 +33,39 @@ export type AppAction =
   | { type: 'UPDATE_INSTANCE'; payload: ConceptInstance }
   | { type: 'DELETE_INSTANCE'; payload: string }
   
+  // State restoration
+  | { type: 'RESTORE_SCENE_STATE'; payload: { domains: QualityDomain[]; concepts: Concept[]; instances: ConceptInstance[] } }
+  | { type: 'MARK_RESTORED' }
+
+/**
+ * Library Action Types
+ * 
+ * Actions for state mutations related to the library (words).
+ */
+export type LibraryAction =
   // Word actions
   | { type: 'ADD_WORD'; payload: Word }
   | { type: 'UPDATE_WORD'; payload: Word }
   | { type: 'DELETE_WORD'; payload: string }
+  | { type: 'SELECT_WORD'; payload: string | null }
   
   // State restoration
-  | { type: 'RESTORE_STATE'; payload: { domains: QualityDomain[]; concepts: Concept[]; instances: ConceptInstance[]; words?: Word[] } }
-  | { type: 'MARK_RESTORED' }
+  | { type: 'RESTORE_LIBRARY_STATE'; payload: { words: Word[] } }
 
 /**
- * App State
+ * App Action
  * 
- * The root state of the application containing all domains, concepts, instances,
+ * Union of all action types across all state slices.
+ */
+export type AppAction = SceneAction | LibraryAction
+
+/**
+ * Scene State
+ * 
+ * State for the scene view containing domains, concepts, instances,
  * and UI selection state.
  */
-export interface AppState {
+export interface SceneState {
   domains: QualityDomain[]
   selectedDomainId: string | null
   selectedLabelId: string | null
@@ -57,6 +74,25 @@ export interface AppState {
   selectedInstanceId: string | null
   concepts: Concept[]
   instances: ConceptInstance[]
-  words: Word[]
   hasRestoredState: boolean
+}
+
+/**
+ * Library State
+ * 
+ * State for the library view containing words and word selection.
+ */
+export interface LibraryState {
+  words: Word[]
+  selectedWordId: string | null
+}
+
+/**
+ * App State
+ * 
+ * The root state of the application, composed of scene and library slices.
+ */
+export interface AppState {
+  scene: SceneState
+  library: LibraryState
 }

@@ -1,12 +1,11 @@
-import type { AppState, AppAction } from './types'
+import type { AppState, AppAction, SceneState, SceneAction, LibraryState, LibraryAction } from './types'
 
 /**
- * App Store Reducer
+ * Scene Reducer
  * 
- * Pure function that takes the current state and an action, and returns the next state.
- * Handles all state mutations for domains, concepts, instances, and selections.
+ * Handles all state mutations for the scene slice: domains, concepts, instances, and selections.
  */
-export function appReducer(state: AppState, action: AppAction): AppState {
+export function sceneReducer(state: SceneState, action: SceneAction): SceneState {
   switch (action.type) {
     // Domain actions
     case 'ADD_DOMAIN':
@@ -176,7 +175,39 @@ export function appReducer(state: AppState, action: AppAction): AppState {
         instances: state.instances.filter((instance) => instance.id !== action.payload),
       }
 
-    // Word actions
+    // State restoration
+    case 'RESTORE_SCENE_STATE':
+      return {
+        ...state,
+        domains: action.payload.domains,
+        concepts: action.payload.concepts,
+        instances: action.payload.instances || [],
+        selectedDomainId: null,
+        selectedLabelId: null,
+        selectedLabelDomainId: null,
+        selectedConceptId: null,
+        selectedInstanceId: null,
+        hasRestoredState: true,
+      }
+
+    case 'MARK_RESTORED':
+      return {
+        ...state,
+        hasRestoredState: true,
+      }
+
+    default:
+      return state
+  }
+}
+
+/**
+ * Library Reducer
+ * 
+ * Handles all state mutations for the library slice: words.
+ */
+export function libraryReducer(state: LibraryState, action: LibraryAction): LibraryState {
+  switch (action.type) {
     case 'ADD_WORD':
       return {
         ...state,
@@ -195,31 +226,61 @@ export function appReducer(state: AppState, action: AppAction): AppState {
       return {
         ...state,
         words: state.words.filter((word) => word.id !== action.payload),
+        selectedWordId:
+          state.selectedWordId === action.payload ? null : state.selectedWordId,
       }
 
-    // State restoration
-    case 'RESTORE_STATE':
+    case 'SELECT_WORD':
       return {
         ...state,
-        domains: action.payload.domains,
-        concepts: action.payload.concepts,
-        instances: action.payload.instances || [],
+        selectedWordId: action.payload,
+      }
+
+    case 'RESTORE_LIBRARY_STATE':
+      return {
+        ...state,
         words: action.payload.words || [],
-        selectedDomainId: null,
-        selectedLabelId: null,
-        selectedLabelDomainId: null,
-        selectedConceptId: null,
-        selectedInstanceId: null,
-        hasRestoredState: true,
-      }
-
-    case 'MARK_RESTORED':
-      return {
-        ...state,
-        hasRestoredState: true,
       }
 
     default:
       return state
   }
+}
+
+/**
+ * App Reducer
+ * 
+ * Composite reducer that delegates to scene and library sub-reducers.
+ */
+export function appReducer(state: AppState, action: AppAction): AppState {
+  // Determine which sub-reducer handles the action
+  const sceneActionTypes = [
+    'ADD_DOMAIN', 'UPDATE_DOMAIN', 'DELETE_DOMAIN',
+    'SELECT_DOMAIN', 'SELECT_LABEL', 'SELECT_CONCEPT', 'SELECT_INSTANCE', 'CLEAR_SELECTION',
+    'ADD_LABEL', 'UPDATE_LABEL', 'DELETE_LABEL',
+    'ADD_CONCEPT', 'UPDATE_CONCEPT', 'DELETE_CONCEPT',
+    'ADD_INSTANCE', 'UPDATE_INSTANCE', 'DELETE_INSTANCE',
+    'RESTORE_SCENE_STATE', 'MARK_RESTORED',
+  ]
+
+  const libraryActionTypes = [
+    'ADD_WORD', 'UPDATE_WORD', 'DELETE_WORD', 'SELECT_WORD',
+    'RESTORE_LIBRARY_STATE',
+  ]
+
+  if (sceneActionTypes.includes(action.type)) {
+    return {
+      ...state,
+      scene: sceneReducer(state.scene, action as SceneAction),
+    }
+  }
+
+  if (libraryActionTypes.includes(action.type)) {
+    return {
+      ...state,
+      library: libraryReducer(state.library, action as LibraryAction),
+    }
+  }
+
+  return state
 }

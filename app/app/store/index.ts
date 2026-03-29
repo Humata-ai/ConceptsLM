@@ -2,17 +2,17 @@
  * App Store
  * 
  * Central state management for the application.
- * Manages domains, concepts, instances, and UI selection state.
+ * Manages scene state (domains, concepts, instances) and library state (words).
  */
 
 // Context and hooks
 export { AppStoreProvider, useAppStore, useQualityDomain } from './AppStoreContext'
 
 // Types
-export type { AppState, AppAction } from './types'
+export type { AppState, AppAction, SceneState, SceneAction, LibraryState, LibraryAction } from './types'
 
 // Reducer
-export { appReducer } from './reducer'
+export { appReducer, sceneReducer, libraryReducer } from './reducer'
 
 // Initial state
 export { initialState } from './initialState'

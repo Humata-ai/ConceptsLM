@@ -1,18 +1,17 @@
-import type { AppState } from './types'
-import type { QualityDomain, QualityDomainLabel, QualityDomainPoint, ConceptInstance } from '../components/shared/types'
+import type { SceneState, LibraryState } from './types'
+import type { QualityDomain, QualityDomainLabel, QualityDomainPoint, ConceptInstance, Word } from '../components/shared/types'
 import { isPoint } from '../components/shared/types'
 
 /**
- * App Store Selectors
+ * Scene Selectors
  * 
- * Pure functions for deriving data from the app state.
- * Selectors help encapsulate state access logic and can be memoized for performance.
+ * Pure functions for deriving data from the scene state.
  */
 
 /**
  * Get the currently selected domain
  */
-export function getSelectedDomain(state: AppState): QualityDomain | null {
+export function getSelectedDomain(state: SceneState): QualityDomain | null {
   if (!state.selectedDomainId) return null
   return state.domains.find((d) => d.id === state.selectedDomainId) || null
 }
@@ -20,7 +19,7 @@ export function getSelectedDomain(state: AppState): QualityDomain | null {
 /**
  * Get all labels for a given concept
  */
-export function getConceptLabels(state: AppState, conceptId: string): QualityDomainLabel[] {
+export function getConceptLabels(state: SceneState, conceptId: string): QualityDomainLabel[] {
   const concept = state.concepts.find((c) => c.id === conceptId)
   if (!concept) return []
 
@@ -40,7 +39,7 @@ export function getConceptLabels(state: AppState, conceptId: string): QualityDom
 /**
  * Get all points for a given instance
  */
-export function getInstancePoints(state: AppState, instanceId: string): QualityDomainPoint[] {
+export function getInstancePoints(state: SceneState, instanceId: string): QualityDomainPoint[] {
   const instance = state.instances.find((i) => i.id === instanceId)
   if (!instance) return []
 
@@ -57,21 +56,21 @@ export function getInstancePoints(state: AppState, instanceId: string): QualityD
 /**
  * Get all instances for a given concept
  */
-export function getConceptInstances(state: AppState, conceptId: string): ConceptInstance[] {
+export function getConceptInstances(state: SceneState, conceptId: string): ConceptInstance[] {
   return state.instances.filter((i) => i.conceptId === conceptId)
 }
 
 /**
  * Get a domain by ID
  */
-export function getDomainById(state: AppState, domainId: string): QualityDomain | null {
+export function getDomainById(state: SceneState, domainId: string): QualityDomain | null {
   return state.domains.find((d) => d.id === domainId) || null
 }
 
 /**
  * Get a label by domain ID and label ID
  */
-export function getLabelById(state: AppState, domainId: string, labelId: string): QualityDomainLabel | null {
+export function getLabelById(state: SceneState, domainId: string, labelId: string): QualityDomainLabel | null {
   const domain = getDomainById(state, domainId)
   if (!domain) return null
   return domain.labels.find((l) => l.id === labelId) || null
@@ -80,34 +79,62 @@ export function getLabelById(state: AppState, domainId: string, labelId: string)
 /**
  * Get a concept by ID
  */
-export function getConceptById(state: AppState, conceptId: string) {
+export function getConceptById(state: SceneState, conceptId: string) {
   return state.concepts.find((c) => c.id === conceptId) || null
 }
 
 /**
  * Get an instance by ID
  */
-export function getInstanceById(state: AppState, instanceId: string) {
+export function getInstanceById(state: SceneState, instanceId: string) {
   return state.instances.find((i) => i.id === instanceId) || null
 }
 
 /**
  * Get all domains
  */
-export function getAllDomains(state: AppState): QualityDomain[] {
+export function getAllDomains(state: SceneState): QualityDomain[] {
   return state.domains
 }
 
 /**
  * Get all concepts
  */
-export function getAllConcepts(state: AppState) {
+export function getAllConcepts(state: SceneState) {
   return state.concepts
 }
 
 /**
  * Get all instances
  */
-export function getAllInstances(state: AppState) {
+export function getAllInstances(state: SceneState) {
   return state.instances
+}
+
+/**
+ * Library Selectors
+ * 
+ * Pure functions for deriving data from the library state.
+ */
+
+/**
+ * Get all words
+ */
+export function getAllWords(state: LibraryState): Word[] {
+  return state.words
+}
+
+/**
+ * Get a word by ID
+ */
+export function getWordById(state: LibraryState, wordId: string): Word | null {
+  return state.words.find((w) => w.id === wordId) || null
+}
+
+/**
+ * Get the currently selected word
+ */
+export function getSelectedWord(state: LibraryState): Word | null {
+  if (!state.selectedWordId) return null
+  return state.words.find((w) => w.id === state.selectedWordId) || null
 }

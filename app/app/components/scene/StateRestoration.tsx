@@ -11,13 +11,22 @@ export function StateRestoration() {
 
   // Check localStorage on mount — only runs once thanks to hasRestoredState in the store
   useEffect(() => {
-    if (state.hasRestoredState) return
+    if (state.scene.hasRestoredState) return
 
     const savedState = loadFromLocalStorage()
 
     if (savedState) {
-      // Restore state (also sets hasRestoredState: true)
-      dispatch({ type: 'RESTORE_STATE', payload: savedState })
+      // Restore scene state (also sets hasRestoredState: true)
+      dispatch({ type: 'RESTORE_SCENE_STATE', payload: {
+        domains: savedState.domains,
+        concepts: savedState.concepts,
+        instances: savedState.instances,
+      } })
+
+      // Restore library state
+      dispatch({ type: 'RESTORE_LIBRARY_STATE', payload: {
+        words: savedState.words,
+      } })
 
       // Show toast with undo button
       showToast('Loaded state from previous session', () => {
@@ -31,7 +40,7 @@ export function StateRestoration() {
       // Nothing to restore, but mark as checked so we don't re-run
       dispatch({ type: 'MARK_RESTORED' })
     }
-  }, [state.hasRestoredState, dispatch, showToast])
+  }, [state.scene.hasRestoredState, dispatch, showToast])
 
   return null // This component doesn't render anything
 }

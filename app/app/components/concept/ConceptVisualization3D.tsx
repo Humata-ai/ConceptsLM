@@ -27,7 +27,7 @@ function ConceptVisualization3D({ concept, isSelected = false }: ConceptVisualiz
   }
 
   // Calculate domain positions using shared hook
-  const domainPositions = useCircularLayoutMap(state.domains)
+  const domainPositions = useCircularLayoutMap(state.scene.domains)
 
   // Calculate instance point positions for all instances
   const allInstancesData = useMemo(() => {
@@ -44,7 +44,7 @@ function ConceptVisualization3D({ concept, isSelected = false }: ConceptVisualiz
       }
 
       points.forEach((point) => {
-        const domain = state.domains.find((d) => d.id === point.domainId)
+        const domain = state.scene.domains.find((d) => d.id === point.domainId)
         if (!domain) return
 
         // Skip 4D+ points (can't visualize in 3D)
@@ -123,10 +123,10 @@ function ConceptVisualization3D({ concept, isSelected = false }: ConceptVisualiz
       return {
         instance,
         positions,
-        isSelected: state.selectedInstanceId === instance.id
+        isSelected: state.scene.selectedInstanceId === instance.id
       }
     }).filter(data => data.positions.length > 0)
-  }, [instances, getInstancePoints, state.domains, state.selectedInstanceId, domainPositions])
+  }, [instances, getInstancePoints, state.scene.domains, state.scene.selectedInstanceId, domainPositions])
 
   // Calculate label world positions and centroid
   const { labelPositions, conceptPosition } = useMemo(() => {
@@ -147,7 +147,7 @@ function ConceptVisualization3D({ concept, isSelected = false }: ConceptVisualiz
     }
 
     labels.forEach((label) => {
-      const domain = state.domains.find((d) => d.id === label.domainId)
+      const domain = state.scene.domains.find((d) => d.id === label.domainId)
       if (!domain) return
 
       // Skip 4D+ labels (can't visualize in 3D)
@@ -158,7 +158,7 @@ function ConceptVisualization3D({ concept, isSelected = false }: ConceptVisualiz
       if (!domainPos) return
 
       // Scale by domain scale (0.5 or 0.55)
-      const scale = state.selectedDomainId === domain.id ? 0.55 : 0.5
+      const scale = state.scene.selectedDomainId === domain.id ? 0.55 : 0.5
 
       let worldPosition: Vector3
 
@@ -244,7 +244,7 @@ function ConceptVisualization3D({ concept, isSelected = false }: ConceptVisualiz
       labelPositions: positions,
       conceptPosition: centroid,
     }
-  }, [labels, state.domains, state.selectedDomainId, domainPositions])
+  }, [labels, state.scene.domains, state.scene.selectedDomainId, domainPositions])
 
   // If no valid labels to visualize, don't render
   if (labelPositions.length === 0) {

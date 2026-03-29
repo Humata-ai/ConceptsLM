@@ -29,7 +29,7 @@ export default function ConceptCard({ concept, onEdit, isSelected }: ConceptCard
   const instances = getConceptInstances(concept.id)
 
   // Concept is expanded if it's selected (either directly or via an instance)
-  const isExpanded = state.selectedConceptId === concept.id
+  const isExpanded = state.scene.selectedConceptId === concept.id
 
   const handleClick = (e: React.MouseEvent) => {
     e.stopPropagation()
@@ -169,7 +169,7 @@ export default function ConceptCard({ concept, onEdit, isSelected }: ConceptCard
                       key={instance.id}
                       instance={instance}
                       onEdit={handleEditInstance}
-                      isSelected={state.selectedInstanceId === instance.id}
+                      isSelected={state.scene.selectedInstanceId === instance.id}
                     />
                   ))}
                 </div>

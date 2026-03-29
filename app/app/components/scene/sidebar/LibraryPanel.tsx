@@ -55,7 +55,7 @@ function DictionaryView() {
   const router = useRouter()
   const { state } = useAppStore()
 
-  if (state.words.length === 0) {
+  if (state.library.words.length === 0) {
     return (
       <div className="px-4 py-8 text-center text-gray-500">
         <p className="text-sm">No words yet. Click + to add one.</p>
@@ -65,7 +65,7 @@ function DictionaryView() {
 
   return (
     <div className="px-4 py-2 space-y-2">
-      {state.words.map((word) => {
+      {state.library.words.map((word) => {
         const slug = word.name.toLowerCase().replace(/\s+/g, '-')
         return (
           <button

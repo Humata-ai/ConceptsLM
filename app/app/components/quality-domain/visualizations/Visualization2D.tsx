@@ -151,8 +151,8 @@ export default function Visualization2D({ domain }: Visualization2DProps) {
       {/* Render labels */}
       {domain.labels.map((label, index) => {
         const isLabelSelected =
-          state.selectedLabelId === label.id &&
-          state.selectedLabelDomainId === domain.id
+          state.scene.selectedLabelId === label.id &&
+          state.scene.selectedLabelDomainId === domain.id
 
         return (
           <LabelVisualization2D

@@ -18,7 +18,7 @@ const WordEditView = forwardRef<WordEditViewHandle, WordEditViewProps>(function 
   const router = useRouter()
   const { state, updateWord } = useAppStore()
 
-  const word = state.words.find(
+  const word = state.library.words.find(
     (w) => w.name.toLowerCase().replace(/\s+/g, '-') === wordSlug
   )
 

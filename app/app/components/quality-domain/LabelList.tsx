@@ -41,8 +41,8 @@ export default function LabelList() {
                 label={label}
                 domain={selectedDomain}
                 isSelected={
-                  state.selectedLabelId === label.id &&
-                  state.selectedLabelDomainId === selectedDomain.id
+                  state.scene.selectedLabelId === label.id &&
+                  state.scene.selectedLabelDomainId === selectedDomain.id
                 }
                 onEdit={(id) => {
                   setEditingLabelId(id)

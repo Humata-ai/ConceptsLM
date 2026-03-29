@@ -26,15 +26,15 @@ export default function InstanceModal({
   const [selectedPoints, setSelectedPoints] = useState<Record<string, string>>({})
   const [errors, setErrors] = useState<string[]>([])
 
-  const concept = conceptId ? state.concepts.find((c) => c.id === conceptId) : null
+  const concept = conceptId ? state.scene.concepts.find((c) => c.id === conceptId) : null
   const editingInstance = editingInstanceId
-    ? state.instances.find((i) => i.id === editingInstanceId)
+    ? state.scene.instances.find((i) => i.id === editingInstanceId)
     : null
 
   // Get unique domains referenced by the concept
   const referencedDomains: QualityDomain[] = concept
     ? Array.from(new Set(concept.labelRefs.map(ref => ref.domainId)))
-        .map(domainId => state.domains.find(d => d.id === domainId))
+        .map(domainId => state.scene.domains.find(d => d.id === domainId))
         .filter((d): d is QualityDomain => d !== undefined)
     : []
 

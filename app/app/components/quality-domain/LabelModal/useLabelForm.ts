@@ -20,7 +20,7 @@ export default function useLabelForm({ isOpen, domainId, editingLabelId }: UseLa
   const [errors, setErrors] = useState<string[]>([])
   const [isGenerating, setIsGenerating] = useState(false)
 
-  const domain = domainId ? state.domains.find((d) => d.id === domainId) : null
+  const domain = domainId ? state.scene.domains.find((d) => d.id === domainId) : null
   const editingLabel = editingLabelId && domain
     ? domain.labels.find((l) => l.id === editingLabelId)
     : null

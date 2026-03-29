@@ -26,9 +26,9 @@ export default function EventModal({ isOpen, onClose }: EventModalProps) {
   }, [isOpen])
 
   // Group instances by their parent concept for the dropdown
-  const instancesByConcept = state.concepts.map((concept) => ({
+  const instancesByConcept = state.scene.concepts.map((concept) => ({
     concept,
-    instances: state.instances.filter((i) => i.conceptId === concept.id),
+    instances: state.scene.instances.filter((i) => i.conceptId === concept.id),
   })).filter((group) => group.instances.length > 0)
 
   const handleSubmit = (e: React.FormEvent) => {

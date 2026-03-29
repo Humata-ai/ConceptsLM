@@ -10,7 +10,7 @@ interface WordDetailViewProps {
 export default function WordDetailView({ wordSlug }: WordDetailViewProps) {
   const { state } = useAppStore()
 
-  const word = state.words.find(
+  const word = state.library.words.find(
     (w) => w.name.toLowerCase().replace(/\s+/g, '-') === wordSlug
   )
 

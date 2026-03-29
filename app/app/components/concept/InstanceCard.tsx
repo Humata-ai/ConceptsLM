@@ -60,7 +60,7 @@ export default function InstanceCard({ instance, onEdit, isSelected }: InstanceC
   // Get point information for display
   const getPointInfo = () => {
     return instance.pointRefs.map(ref => {
-      const domain = state.domains.find(d => d.id === ref.domainId)
+      const domain = state.scene.domains.find(d => d.id === ref.domainId)
       if (!domain) return null
 
       const point = domain.labels.find(l => l.id === ref.pointId)

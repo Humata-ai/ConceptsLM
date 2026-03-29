@@ -19,24 +19,24 @@ export default function QualityDomainsSection() {
   return (
     <>
       <CollapsibleSection title="Quality Domains" borderBottom>
-        {state.domains.length === 0 ? (
+        {state.scene.domains.length === 0 ? (
           <div className="text-center py-8 text-gray-500">
             <p className="text-sm">No domains yet.</p>
             <p className="text-xs mt-1">Click &quot;New domain&quot; to create one.</p>
           </div>
         ) : (
           <div className="space-y-2">
-            {state.domains.map((domain) => (
+            {state.scene.domains.map((domain) => (
               <DomainCard
                 key={domain.id}
                 domain={domain}
-                isSelected={state.selectedDomainId === domain.id}
+                isSelected={state.scene.selectedDomainId === domain.id}
                 onEdit={(id) => {
                   setEditingDomainId(id)
                   setIsModalOpen(true)
                 }}
               >
-                {(state.selectedDomainId === domain.id || state.selectedLabelDomainId === domain.id) && (
+                {(state.scene.selectedDomainId === domain.id || state.scene.selectedLabelDomainId === domain.id) && (
                   <div className="pl-2">
                     {domain.labels.length === 0 ? (
                       <div className="text-center py-4 text-gray-500">
@@ -50,8 +50,8 @@ export default function QualityDomainsSection() {
                             label={label}
                             domain={domain}
                             isSelected={
-                              state.selectedLabelId === label.id &&
-                              state.selectedLabelDomainId === domain.id
+                              state.scene.selectedLabelId === label.id &&
+                              state.scene.selectedLabelDomainId === domain.id
                             }
                             onEdit={(id) => {
                               setEditingLabelId(id)
@@ -101,10 +101,10 @@ export default function QualityDomainsSection() {
         onClose={() => setIsModalOpen(false)}
       />
 
-      {(state.selectedDomainId || state.selectedLabelDomainId) && (
+      {(state.scene.selectedDomainId || state.scene.selectedLabelDomainId) && (
         <LabelModal
           isOpen={isLabelModalOpen}
-          domainId={state.selectedDomainId || state.selectedLabelDomainId}
+          domainId={state.scene.selectedDomainId || state.scene.selectedLabelDomainId}
           editingLabelId={editingLabelId}
           onClose={() => setIsLabelModalOpen(false)}
         />

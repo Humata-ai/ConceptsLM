@@ -69,7 +69,7 @@ SelectedDomainItem.displayName = 'SelectedDomainItem'
 
 function AllDomainsVisualization() {
   const { state } = useQualityDomain()
-  const domains = state.domains
+  const domains = state.scene.domains
 
   // Calculate positions using shared hook
   const domainPositions = useCircularLayout(domains.length)
@@ -95,7 +95,7 @@ function AllDomainsVisualization() {
         }
 
         const position = domainPositions[index]
-        const isSelected = state.selectedDomainId === domain.id
+        const isSelected = state.scene.selectedDomainId === domain.id
         const scale = DOMAIN_SCALE.ALL_DOMAINS_VIEW
 
         const Component = isSelected ? SelectedDomainItem : DomainItem
@@ -111,11 +111,11 @@ function AllDomainsVisualization() {
       })}
 
       {/* Render all concepts */}
-      {state.concepts.map((concept) => (
+      {state.scene.concepts.map((concept) => (
         <ConceptVisualization3D
           key={concept.id}
           concept={concept}
-          isSelected={state.selectedConceptId === concept.id}
+          isSelected={state.scene.selectedConceptId === concept.id}
         />
       ))}
     </group>
