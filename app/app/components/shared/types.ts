@@ -1,22 +1,33 @@
-export interface QualityDimension {
-  id: string
-  name: string
-  range: readonly [number, number]
-}
+import { z } from 'zod'
+import {
+  QualityDimensionSchema,
+  RegionDimensionRangeSchema,
+  PointDimensionValueSchema,
+  QualityDomainRegionSchema,
+  QualityDomainPointSchema,
+  QualityDomainLabelSchema,
+  PropertyDimensionRangeSchema,
+  PropertySchema,
+  QualityDomainSchema,
+  LabelReferenceSchema,
+  PropertyReferenceSchema,
+  PointReferenceSchema,
+  ConceptSchema,
+  ConceptInstanceSchema,
+  WordClassSchema,
+  WordSchema,
+} from './schemas'
 
-// ===== Region/Point Label Types (New Discriminated Union) =====
+// ===== Inferred Types from Zod Schemas =====
 
-export interface RegionDimensionRange {
-  dimensionId: string
-  range: readonly [number, number]
-}
+export type QualityDimension = z.infer<typeof QualityDimensionSchema>
 
-export interface PointDimensionValue {
-  dimensionId: string
-  value: number
-}
+// ===== Region/Point Label Types (Discriminated Union) =====
 
-// Base interface for labels
+export type RegionDimensionRange = z.infer<typeof RegionDimensionRangeSchema>
+export type PointDimensionValue = z.infer<typeof PointDimensionValueSchema>
+
+// Base interface for labels (kept as manual type since it's not directly used by consumers)
 export interface QualityDomainLabelBase {
   id: string
   name: string
@@ -24,18 +35,11 @@ export interface QualityDomainLabelBase {
   createdAt: Date
 }
 
-export interface QualityDomainRegion extends QualityDomainLabelBase {
-  type: 'region'
-  dimensions: RegionDimensionRange[]
-}
-
-export interface QualityDomainPoint extends QualityDomainLabelBase {
-  type: 'point'
-  dimensions: PointDimensionValue[]
-}
+export type QualityDomainRegion = z.infer<typeof QualityDomainRegionSchema>
+export type QualityDomainPoint = z.infer<typeof QualityDomainPointSchema>
 
 // Union type
-export type QualityDomainLabel = QualityDomainRegion | QualityDomainPoint
+export type QualityDomainLabel = z.infer<typeof QualityDomainLabelSchema>
 
 // Type guards
 export function isRegion(label: QualityDomainLabel): label is QualityDomainRegion {
@@ -48,62 +52,23 @@ export function isPoint(label: QualityDomainLabel): label is QualityDomainPoint 
 
 // ===== Backward Compatibility Aliases =====
 
-export interface PropertyDimensionRange {
-  dimensionId: string
-  range: readonly [number, number]
-}
+export type PropertyDimensionRange = z.infer<typeof PropertyDimensionRangeSchema>
+export type Property = z.infer<typeof PropertySchema>
 
-export interface Property {
-  id: string
-  name: string
-  domainId: string
-  dimensions: PropertyDimensionRange[]
-  createdAt: Date
-}
+export type QualityDomain = z.infer<typeof QualityDomainSchema>
 
-export interface QualityDomain {
-  id: string
-  name: string
-  dimensions: QualityDimension[]
-  labels: QualityDomainLabel[]
-  properties?: Property[]
-  createdAt: Date
-}
+export type LabelReference = z.infer<typeof LabelReferenceSchema>
+export type PropertyReference = z.infer<typeof PropertyReferenceSchema>
 
-export interface LabelReference {
-  domainId: string
-  labelId: string
-}
+export type Concept = z.infer<typeof ConceptSchema>
 
-export interface PropertyReference {
-  domainId: string
-  propertyId: string
-}
+export type PointReference = z.infer<typeof PointReferenceSchema>
 
-export interface Concept {
-  id: string
-  name: string
-  labelRefs: LabelReference[]
-  propertyRefs?: PropertyReference[]
-  createdAt: Date
-}
-
-export interface PointReference {
-  domainId: string
-  pointId: string
-}
-
-export interface ConceptInstance {
-  id: string
-  conceptId: string
-  name: string
-  pointRefs: PointReference[]
-  createdAt: Date
-}
+export type ConceptInstance = z.infer<typeof ConceptInstanceSchema>
 
 // ===== Dictionary Word Types =====
 
-export type WordClass = 'noun' | 'adjective' | 'verb' | 'adverb' | 'preposition'
+export type WordClass = z.infer<typeof WordClassSchema>
 
 export const WORD_CLASS_LABELS: Record<WordClass, string> = {
   noun: 'Noun',
@@ -115,13 +80,7 @@ export const WORD_CLASS_LABELS: Record<WordClass, string> = {
 
 export const WORD_CLASSES: WordClass[] = ['noun', 'adjective', 'verb', 'adverb', 'preposition']
 
-export interface Word {
-  id: string
-  name: string
-  wordClass: WordClass
-  definition: string
-  createdAt: Date
-}
+export type Word = z.infer<typeof WordSchema>
 
 export interface QualityDomainState {
   domains: QualityDomain[]
