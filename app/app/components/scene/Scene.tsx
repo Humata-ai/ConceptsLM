@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useMemo, useRef } from 'react'
+import { usePathname } from 'next/navigation'
 import { Canvas } from '@react-three/fiber'
 import { OrbitControls } from '@react-three/drei'
 import ConceptualSpaceVisualizer from './ConceptualSpaceVisualizer'
@@ -10,6 +11,7 @@ import type { QualityDomain, Concept } from '../shared/types'
 import { normalizeToRange } from '@/app/utils/positionCalculations'
 import { Vector3 } from 'three'
 import type { SidebarView } from './sidebar/types'
+import { getDictionaryWordFromPathname } from './sidebar/types'
 
 /**
  * Determines which visualization mode the 3D viewer should be in
@@ -416,14 +418,33 @@ interface SceneProps {
 
 export default function Scene({ activeTab = null }: SceneProps) {
   const { state } = useQualityDomain()
+  const pathname = usePathname()
 
   const mode = getVisualizationMode(activeTab)
 
+  // Find the selected word from the URL when in library mode
+  const selectedWord = useMemo(() => {
+    if (mode !== 'library') return null
+    const wordRoute = getDictionaryWordFromPathname(pathname)
+    if (!wordRoute) return null
+    return state.library.words.find(
+      (w) => w.name.toLowerCase().replace(/\s+/g, '-') === wordRoute.wordSlug
+    ) || null
+  }, [mode, pathname, state.library.words])
+
   // Select the conceptual space data based on the active tab.
   // Scene tab: uses scene state from the store.
-  // Library tab: empty for now -- will be wired to the selected word's conceptual space.
+  // Library tab: uses the selected word's conceptual structure.
   const visualizationData = useMemo(() => {
     if (mode === 'library') {
+      if (selectedWord) {
+        return {
+          domains: selectedWord.conceptualStructure.domains,
+          concepts: selectedWord.conceptualStructure.concepts,
+          selectedDomainId: null,
+          selectedConceptId: null,
+        }
+      }
       return EMPTY_CONCEPTUAL_SPACE
     }
 
@@ -433,7 +454,7 @@ export default function Scene({ activeTab = null }: SceneProps) {
       selectedDomainId: state.scene.selectedDomainId,
       selectedConceptId: state.scene.selectedConceptId,
     }
-  }, [mode, state.scene.domains, state.scene.concepts, state.scene.selectedDomainId, state.scene.selectedConceptId])
+  }, [mode, selectedWord, state.scene.domains, state.scene.concepts, state.scene.selectedDomainId, state.scene.selectedConceptId])
 
   const CameraControls = mode === 'library' ? LibraryCameraControls : SceneCameraControls
 
@@ -454,7 +475,9 @@ export default function Scene({ activeTab = null }: SceneProps) {
           selectedDomainId={visualizationData.selectedDomainId}
           selectedConceptId={visualizationData.selectedConceptId}
           emptyMessage={mode === 'library'
-            ? 'Select a word to visualize its conceptual space.'
+            ? (selectedWord
+              ? 'This word has no conceptual structure defined yet.'
+              : 'Select a word to visualize its conceptual space.')
             : 'No domains yet. Click "+ Add Domain" to create one.'}
         />
         <CameraControls />
