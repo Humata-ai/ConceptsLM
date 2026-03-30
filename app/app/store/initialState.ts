@@ -1,5 +1,5 @@
 import type { AppState } from './types'
-import type { QualityDomain, Concept, ConceptInstance, QualityDomainLabel, RegionDimensionRange, PointDimensionValue } from '../components/shared/types'
+import type { QualityDomain, Concept, ConceptInstance, QualityDomainLabel, ConceptualStructure, RegionDimensionRange, PointDimensionValue } from '../components/shared/types'
 import defaultDataJson from '../components/shared/defaultData.json'
 
 /**
@@ -57,10 +57,26 @@ interface JsonInstance {
   createdAt: string
 }
 
+interface JsonConceptualStructure {
+  domains: JsonDomain[]
+  concepts: JsonConcept[]
+  instances: JsonInstance[]
+}
+
+interface JsonWord {
+  id: string
+  name: string
+  wordClass: string
+  definition: string
+  conceptualStructure: JsonConceptualStructure
+  createdAt: string
+}
+
 interface JsonState {
   domains: JsonDomain[]
   concepts: JsonConcept[]
   instances: JsonInstance[]
+  words: JsonWord[]
 }
 
 /**
@@ -74,9 +90,94 @@ function toRangeTuple(arr: number[]): readonly [number, number] {
 }
 
 /**
+ * Helper to handle Infinity string values from JSON
+ */
+function parseRangeValue(val: number | string): number {
+  if (val === "Infinity") return Infinity
+  if (val === "-Infinity") return -Infinity
+  return val as number
+}
+
+/**
+ * Parse JSON domains into runtime QualityDomain objects
+ */
+function parseDomains(jsonDomains: JsonDomain[]): QualityDomain[] {
+  return jsonDomains.map(domain => ({
+    ...domain,
+    dimensions: domain.dimensions.map(dim => ({
+      ...dim,
+      range: toRangeTuple(dim.range.map(parseRangeValue)),
+    })),
+    labels: domain.labels.map(label => {
+      if (label.type === 'region') {
+        return {
+          type: 'region' as const,
+          id: label.id,
+          name: label.name,
+          domainId: label.domainId,
+          dimensions: label.dimensions.map(d => {
+            if ('range' in d) {
+              return {
+                dimensionId: d.dimensionId,
+                range: toRangeTuple((d.range as (number | string)[]).map(parseRangeValue)),
+              }
+            }
+            return d as unknown as RegionDimensionRange
+          }),
+          createdAt: new Date(label.createdAt),
+        }
+      } else {
+        return {
+          type: 'point' as const,
+          id: label.id,
+          name: label.name,
+          domainId: label.domainId,
+          dimensions: label.dimensions as PointDimensionValue[],
+          createdAt: new Date(label.createdAt),
+        }
+      }
+    }),
+    createdAt: new Date(domain.createdAt),
+  }))
+}
+
+/**
+ * Parse JSON concepts into runtime Concept objects
+ */
+function parseConcepts(jsonConcepts: JsonConcept[]): Concept[] {
+  return jsonConcepts.map(concept => ({
+    ...concept,
+    labelRefs: concept.labelRefs,
+    createdAt: new Date(concept.createdAt),
+  }))
+}
+
+/**
+ * Parse JSON instances into runtime ConceptInstance objects
+ */
+function parseInstances(jsonInstances: JsonInstance[]): ConceptInstance[] {
+  return (jsonInstances || []).map(instance => ({
+    ...instance,
+    pointRefs: instance.pointRefs,
+    createdAt: new Date(instance.createdAt),
+  }))
+}
+
+/**
+ * Parse a JSON conceptual structure into a runtime ConceptualStructure
+ */
+function parseConceptualStructure(json: JsonConceptualStructure): ConceptualStructure {
+  return {
+    domains: parseDomains(json.domains || []),
+    concepts: parseConcepts(json.concepts || []),
+    instances: parseInstances(json.instances || []),
+  }
+}
+
+/**
  * Load and convert default data from JSON file
  */
-const jsonData: JsonState = defaultDataJson as JsonState
+const jsonData: JsonState = defaultDataJson as unknown as JsonState
 
 /**
  * Initial application state
@@ -85,62 +186,23 @@ const jsonData: JsonState = defaultDataJson as JsonState
  */
 export const initialState: AppState = {
   scene: {
-    domains: jsonData.domains.map(domain => ({
-      ...domain,
-      dimensions: domain.dimensions.map(dim => ({
-        ...dim,
-        range: toRangeTuple(dim.range),
-      })),
-      labels: domain.labels.map(label => {
-        if (label.type === 'region') {
-          return {
-            type: 'region' as const,
-            id: label.id,
-            name: label.name,
-            domainId: label.domainId,
-            dimensions: label.dimensions.map(d => {
-              if ('range' in d) {
-                return {
-                  dimensionId: d.dimensionId,
-                  range: toRangeTuple(d.range),
-                }
-              }
-              return d as unknown as RegionDimensionRange
-            }),
-            createdAt: new Date(label.createdAt),
-          }
-        } else {
-          return {
-            type: 'point' as const,
-            id: label.id,
-            name: label.name,
-            domainId: label.domainId,
-            dimensions: label.dimensions as PointDimensionValue[],
-            createdAt: new Date(label.createdAt),
-          }
-        }
-      }),
-      createdAt: new Date(domain.createdAt),
-    })),
+    domains: parseDomains(jsonData.domains),
     selectedDomainId: null,
     selectedLabelId: null,
     selectedLabelDomainId: null,
     selectedConceptId: null,
     selectedInstanceId: null,
-    concepts: jsonData.concepts.map(concept => ({
-      ...concept,
-      labelRefs: concept.labelRefs,
-      createdAt: new Date(concept.createdAt),
-    })),
-    instances: (jsonData.instances || []).map(instance => ({
-      ...instance,
-      pointRefs: instance.pointRefs,
-      createdAt: new Date(instance.createdAt),
-    })),
+    concepts: parseConcepts(jsonData.concepts),
+    instances: parseInstances(jsonData.instances || []),
     hasRestoredState: false,
   },
   library: {
-    words: [],
+    words: (jsonData.words || []).map(word => ({
+      ...word,
+      wordClass: word.wordClass as import('../components/shared/types').WordClass,
+      conceptualStructure: parseConceptualStructure(word.conceptualStructure || { domains: [], concepts: [], instances: [] }),
+      createdAt: new Date(word.createdAt),
+    })),
     selectedWordId: null,
   },
 }

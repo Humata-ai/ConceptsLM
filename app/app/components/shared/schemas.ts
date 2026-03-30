@@ -109,6 +109,14 @@ export const ConceptInstanceSchema = z.object({
   createdAt: z.date(),
 })
 
+// ===== Conceptual Structure =====
+
+export const ConceptualStructureSchema = z.object({
+  domains: z.array(QualityDomainSchema),
+  concepts: z.array(ConceptSchema),
+  instances: z.array(ConceptInstanceSchema),
+})
+
 // ===== Dictionary Word Types =====
 
 export const WordClassSchema = z.enum(['noun', 'adjective', 'verb', 'adverb', 'preposition'])
@@ -118,6 +126,7 @@ export const WordSchema = z.object({
   name: z.string(),
   wordClass: WordClassSchema,
   definition: z.string(),
+  conceptualStructure: ConceptualStructureSchema,
   createdAt: z.date(),
 })
 

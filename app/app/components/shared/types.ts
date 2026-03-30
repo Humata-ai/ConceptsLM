@@ -14,6 +14,7 @@ import {
   PointReferenceSchema,
   ConceptSchema,
   ConceptInstanceSchema,
+  ConceptualStructureSchema,
   WordClassSchema,
   WordSchema,
 } from './schemas'
@@ -65,6 +66,15 @@ export type Concept = z.infer<typeof ConceptSchema>
 export type PointReference = z.infer<typeof PointReferenceSchema>
 
 export type ConceptInstance = z.infer<typeof ConceptInstanceSchema>
+
+// ===== Conceptual Structure =====
+
+/**
+ * ConceptualStructure represents the conceptual space definition for a word.
+ * It mirrors the same structure as SceneState (domains, concepts, instances)
+ * but without UI selection state or transient flags.
+ */
+export type ConceptualStructure = z.infer<typeof ConceptualStructureSchema>
 
 // ===== Dictionary Word Types =====
 

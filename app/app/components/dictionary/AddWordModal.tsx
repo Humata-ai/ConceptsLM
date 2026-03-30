@@ -49,6 +49,7 @@ export default function AddWordModal({ isOpen, onClose }: AddWordModalProps) {
       name: name.trim(),
       wordClass,
       definition: '',
+      conceptualStructure: { domains: [], concepts: [], instances: [] },
       createdAt: new Date(),
     })
 

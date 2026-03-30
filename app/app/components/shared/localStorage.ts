@@ -1,4 +1,4 @@
-import type { QualityDomain, Concept, ConceptInstance, QualityDomainLabel, Property, PropertyReference, LabelReference, Word } from './types'
+import type { QualityDomain, Concept, ConceptInstance, ConceptualStructure, QualityDomainLabel, Property, PropertyReference, LabelReference, Word } from './types'
 import type { AppState } from '@/app/store'
 
 const STORAGE_KEY = 'quality-domain-state'
@@ -153,11 +153,26 @@ function parseInstances(rawInstances: any[]): ConceptInstance[] {
 }
 
 /**
+ * Parse a conceptual structure from raw JSON data.
+ */
+function parseConceptualStructure(raw: any): ConceptualStructure {
+  if (!raw) {
+    return { domains: [], concepts: [], instances: [] }
+  }
+  return {
+    domains: parseDomains(raw.domains || [], 4),
+    concepts: parseConcepts(raw.concepts || [], 4),
+    instances: parseInstances(raw.instances || []),
+  }
+}
+
+/**
  * Parse words from raw JSON data.
  */
 function parseWords(rawWords: any[]): Word[] {
   return (rawWords || []).map((word: any) => ({
     ...word,
+    conceptualStructure: parseConceptualStructure(word.conceptualStructure),
     createdAt: new Date(word.createdAt)
   }))
 }
