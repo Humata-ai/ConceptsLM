@@ -3,7 +3,6 @@
 import Tooltip from '@mui/material/Tooltip'
 import IconButton from '@mui/material/IconButton'
 import LayersIcon from '@mui/icons-material/Layers'
-import TimelineIcon from '@mui/icons-material/Timeline'
 import CollectionsBookmarkIcon from '@mui/icons-material/CollectionsBookmark'
 import ImportExportIcon from '@mui/icons-material/ImportExport'
 import type { SidebarView } from './types'
@@ -16,7 +15,6 @@ interface TabConfig {
 
 const TABS: TabConfig[] = [
   { id: 'scene', label: 'Scene', icon: <LayersIcon fontSize="small" /> },
-  { id: 'timeline', label: 'Timeline', icon: <TimelineIcon fontSize="small" /> },
   { id: 'library', label: 'Library', icon: <CollectionsBookmarkIcon fontSize="small" /> },
   { id: 'import-export', label: 'Import / Export', icon: <ImportExportIcon fontSize="small" /> },
 ]

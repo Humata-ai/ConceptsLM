@@ -1,8 +1,8 @@
-export type SidebarView = 'scene' | 'import-export' | 'timeline' | 'library'
+export type SidebarView = 'scene' | 'import-export' | 'library'
 
 export type LibrarySection = 'dictionary' | 'quality-domains' | 'quality-dimensions'
 
-export const VALID_TABS: SidebarView[] = ['scene', 'import-export', 'timeline', 'library']
+export const VALID_TABS: SidebarView[] = ['scene', 'import-export', 'library']
 
 export const VALID_LIBRARY_SECTIONS: LibrarySection[] = ['dictionary', 'quality-domains', 'quality-dimensions']
 
