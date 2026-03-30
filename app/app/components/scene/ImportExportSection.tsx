@@ -6,8 +6,6 @@ import Button from '@mui/material/Button'
 import Alert from '@mui/material/Alert'
 import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
-import ToggleButton from '@mui/material/ToggleButton'
-import ToggleButtonGroup from '@mui/material/ToggleButtonGroup'
 import DownloadIcon from '@mui/icons-material/Download'
 import UploadFileIcon from '@mui/icons-material/UploadFile'
 
@@ -31,7 +29,6 @@ export default function ImportExportSection() {
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState<string | null>(null)
   const [isDragOver, setIsDragOver] = useState(false)
-  const [exportType, setExportType] = useState<ExportType>('scene')
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   // ---------- helpers ----------
@@ -44,8 +41,8 @@ export default function ImportExportSection() {
 
   // ---------- export ----------
 
-  const buildExportPayload = (): string => {
-    if (exportType === 'library') {
+  const buildExportPayload = (type: ExportType): string => {
+    if (type === 'library') {
       const payload: ExportEnvelope = {
         exportType: 'library',
         version: EXPORT_VERSION,
@@ -54,7 +51,6 @@ export default function ImportExportSection() {
       return JSON.stringify(payload, infinityReplacer, 2)
     }
 
-    // Scene export includes both scene AND library state
     const payload: ExportEnvelope = {
       exportType: 'scene',
       version: EXPORT_VERSION,
@@ -66,20 +62,19 @@ export default function ImportExportSection() {
     return JSON.stringify(payload, infinityReplacer, 2)
   }
 
-  const handleDownload = () => {
+  const handleDownload = (type: ExportType) => {
     try {
-      const json = buildExportPayload()
+      const json = buildExportPayload(type)
       const blob = new Blob([json], { type: 'application/json' })
       const url = URL.createObjectURL(blob)
       const a = document.createElement('a')
       a.href = url
-      const label = exportType === 'library' ? 'library' : 'scene'
-      a.download = `conceptslm-${label}-${new Date().toISOString().slice(0, 10)}.json`
+      a.download = `conceptslm-${type}-${new Date().toISOString().slice(0, 10)}.json`
       document.body.appendChild(a)
       a.click()
       document.body.removeChild(a)
       URL.revokeObjectURL(url)
-      setSuccess(`${exportType === 'library' ? 'Library' : 'Scene'} state downloaded!`)
+      setSuccess(`${type === 'library' ? 'Library' : 'Scene'} state downloaded!`)
       setTimeout(() => setSuccess(null), 2000)
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : String(err)
@@ -404,51 +399,26 @@ export default function ImportExportSection() {
       )}
 
       {/* Export */}
-      <Typography variant="subtitle2" color="text.secondary" sx={{ mb: 1 }}>
-        Export State
+      <Typography variant="subtitle2" color="text.secondary" sx={{ mb: 1.5 }}>
+        Export
       </Typography>
 
-      {/* Export type selector */}
-      <ToggleButtonGroup
-        value={exportType}
-        exclusive
-        onChange={(_e, value) => {
-          if (value !== null) setExportType(value as ExportType)
-        }}
-        size="small"
-        fullWidth
-        sx={{ mb: 1.5 }}
-      >
-        <ToggleButton value="library" sx={{ textTransform: 'none', fontSize: '0.8rem' }}>
-          Library Only
-        </ToggleButton>
-        <ToggleButton value="scene" sx={{ textTransform: 'none', fontSize: '0.8rem' }}>
-          Scene (includes Library)
-        </ToggleButton>
-      </ToggleButtonGroup>
-
-      <Typography variant="caption" color="text.disabled" sx={{ display: 'block', mb: 1.5, lineHeight: 1.3 }}>
-        {exportType === 'library'
-          ? 'Exports only library data (words).'
-          : 'Exports scene data (domains, concepts, instances) and library data (words).'}
-      </Typography>
-
-      <Box
-        sx={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'flex-end',
-          mb: 3,
-        }}
-      >
+      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5, mb: 3 }}>
         <Button
-          onClick={handleDownload}
+          onClick={() => handleDownload('scene')}
           variant="outlined"
-          size="small"
           startIcon={<DownloadIcon />}
           sx={{ textTransform: 'none' }}
         >
-          Download {exportType === 'library' ? 'Library' : 'Scene'}
+          Export Scene
+        </Button>
+        <Button
+          onClick={() => handleDownload('library')}
+          variant="outlined"
+          startIcon={<DownloadIcon />}
+          sx={{ textTransform: 'none' }}
+        >
+          Export Library
         </Button>
       </Box>
 
